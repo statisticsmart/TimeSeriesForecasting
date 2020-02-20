@@ -18,19 +18,28 @@ Time: [here](/timeslots/)
 
 ### Schedule
 
-Week 1: 
+Here's your roadmap for the semester!
+
+**Week 1:**
+
+📈 Slides 📚 Reading 📋 Exercises
+
+**Week 2:**  
 
 
+📈 Slides 📚 Reading 📋 Exercises
 
-Week 2:  
-
-
-
-Week 3: 
+**Week 3:** 
 
 
+📈 Slides 📚 Reading 📋 Exercises
 
-Week 4: 
+**Week 4:** 
 
 
-Week 5:  
+📈 Slides 📚 Reading 📋 Exercises
+
+**Week 5:** 
+
+
+📈 Slides 📚 Reading 📋 Exercises
