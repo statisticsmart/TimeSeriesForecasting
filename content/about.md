@@ -9,7 +9,7 @@ title: Applied Time Series Forecasting
 
 Course outline: here
 
-Lecturer-in-charge: Dr Thiyanga Talagala
+Lecturer-in-charge: [Dr Thiyanga Talagala](https://thiyanga.netlify.com/)
 
 Location: Department of Mathematics, Faculty of Applied Sciences, University of Sri Jayewardenepura
 
