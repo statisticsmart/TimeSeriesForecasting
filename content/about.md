@@ -13,22 +13,24 @@ Lecturer-in-charge: [Dr Thiyanga Talagala](https://thiyanga.netlify.com/)
 
 Location: Department of Mathematics, Faculty of Applied Sciences, University of Sri Jayewardenepura
 
+Time: [here](/timeslots/)
+
 
 ### Schedule
 
-Week 1: `1 March 2020, 1pm - 4pm`,
+Week 1: 
 
 
 
-Week 2: `8 March 2020, 1pm - 4pm`, 
+Week 2:  
 
 
 
-Week 3: `15 March 2020, 2pm - 5pm`,
+Week 3: 
 
 
 
-Week 4: `22 March 2020, 2pm - 5pm`,
+Week 4: 
 
 
-Week 5:  `29 March 2020, 2pm - 5pm`
+Week 5:  

@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>A Hugo website</title>
+    <title>Time Series Forecasting</title>
     <link>/</link>
-    <description>Recent content on A Hugo website</description>
+    <description>Recent content on Time Series Forecasting</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 30 Dec 2016 21:49:57 -0700</lastBuildDate>
+    <lastBuildDate>Thu, 20 Feb 2020 21:48:51 -0700</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Applied Time Series Forecasting</title>
+      <link>/timeslots/</link>
+      <pubDate>Thu, 20 Feb 2020 21:48:51 -0700</pubDate>
+      
+      <guid>/timeslots/</guid>
+      <description>(IM532 3.0 Applied Time Series Forecasting, Stochastic Processes, and Statistical Quality Control)
+Time Table - 2020 Week 1: 1 March 2020, 1pm - 4pm
+Week 2: 8 March 2020, 1pm - 4pm
+Week 3: 15 March 2020, 2pm - 5pm
+Week 4: 22 March 2020, 2pm - 5pm
+Week 5: 29 March 2020, 2pm - 5pm</description>
+    </item>
     
     <item>
       <title>A Plain Markdown Post</title>
@@ -31,11 +45,12 @@
 Course Information Course outline: here
 Lecturer-in-charge: Dr Thiyanga Talagala
 Location: Department of Mathematics, Faculty of Applied Sciences, University of Sri Jayewardenepura
-Schedule Week 1: 1 March 2020, 1pm - 4pm,
-Week 2: 8 March 2020, 1pm - 4pm,
-Week 3: 15 March 2020, 2pm - 5pm,
-Week 4: 22 March 2020, 2pm - 5pm,
-Week 5: 29 March 2020, 2pm - 5pm</description>
+Time: here
+Schedule Week 1:
+Week 2:
+Week 3:
+Week 4:
+Week 5:</description>
     </item>
     
     <item>
