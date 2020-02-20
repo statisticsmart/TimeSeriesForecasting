@@ -3,7 +3,7 @@ date: "2020-02-20T21:48:51-07:00"
 title: Applied Time Series Forecasting 
 ---
 
-(IM532 3.0 **Applied Time Series Forecasting**, Stochastic Processes, and Statistical Quality Control)
+(IM532 3.0 **Applied Time Series Forecasting**, Stochastic Processes, and Statistical Quality Control/ MSc in Industrial Mathematics, Department of Mathematics, University of Sri Jayewardenepura)
 
 ### Course Information
 

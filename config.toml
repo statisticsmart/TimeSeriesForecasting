@@ -11,7 +11,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
     name = "About"
     url = "/about/"
 [[menu.main]]
-    name = "Programming with R"
+    name = "To learn Programming with R"
     url = "https://hellor.netlify.com/"
 [[menu.main]]
     name = "Resources"
