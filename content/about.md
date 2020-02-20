@@ -1,5 +1,5 @@
 ---
-date: "2016-05-05T21:48:51-07:00"
+date: "2020-02-20T21:48:51-07:00"
 title: Applied Time Series Forecasting 
 ---
 
