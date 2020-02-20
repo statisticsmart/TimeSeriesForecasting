@@ -22,7 +22,7 @@ Here's your roadmap for the semester!
 
 **Week 1:**
 
-📈 Slides 📚 Reading 📋 Exercises
+📈 Slides 📚 [Reading: Ch. 1 and Ch. 2](https://otexts.com/fpp2/intro.html) 📋 Exercises
 
 **Week 2:**  
 
