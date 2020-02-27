@@ -15,7 +15,6 @@ date: "2020-02-20T21:48:51-07:00"
 
 ![](/img/datacampts.png)
 
-
 ## R and RStudio
 
 - [Download R](https://cran.r-project.org/) 
