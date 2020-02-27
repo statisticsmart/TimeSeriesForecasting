@@ -20,26 +20,26 @@ Time: [here](/timeslots/)
 
 Here's your roadmap for the semester!
 
-**Week 1:**
+**Week 1:** Exploring and visualizing time series  using R and Beginning to model time series
 
 📈 Slides 📚 [Reading: Ch. 1 and Ch. 2](https://otexts.com/fpp2/intro.html) 📋 Exercises
 
-**Week 2:**  
+**Week 2:**  Forecasting with (S)ARIMA models
 
 
 📈 Slides 📚 Reading 📋 Exercises
 
-**Week 3:** 
+**Week 3:** Forecasting with Exponential smoothing models
 
 
 📈 Slides 📚 Reading 📋 Exercises
 
-**Week 4:** 
+**Week 4:** Dynamic regression models
 
 
 📈 Slides 📚 Reading 📋 Exercises
 
-**Week 5:** 
+**Week 5:**  Advanced forecasting methods
 
 
 📈 Slides 📚 Reading 📋 Exercises
