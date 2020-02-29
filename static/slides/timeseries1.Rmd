@@ -254,6 +254,7 @@ class: duke-orange
 
 # `ts` object in R
 
+- Annual time series
 
 ```{r, comment=NA, echo=FALSE}
 library(knitr)
@@ -270,6 +271,324 @@ kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
 y <- ts(c(120, 122, 140, 150), start=2012)
 y
 ```
+
+---
+
+# `ts` object in R
+
+- Quarterly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Quarter=c("2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1"),
+                 Values =c(120, 122, 140, 150, 200))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150, 200), start=c(2012, 1), frequency = 4)
+y
+```
+
+
+
+---
+# `ts` object in R
+
+- Monthly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Month=c("2012-Jan", "2012-Feb", "2012-March", "2012-April"),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 12)
+y
+```
+
+---
+# `ts` object in R
+
+- Weekly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Week=c("2012-W1", "2012-W2", "2012-W3", "2012-W4"),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 52)
+y
+```
+
+---
+
+## Time series plots
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Year=c(2012, 2013, 2014, 2015, 2016, 2017),
+                 Values =c(120, 122, 140, 150, 200, 250))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150, 200, 250), start=2012)
+y
+class(y)
+```
+
+]
+
+
+.pull-right[
+
+```{r, comment=NA}
+autoplot(y)
+```
+
+
+]
+
+---
+
+## Add title and labels 
+
+.pull-left[
+
+```{r, comment=NA}
+autoplot(y)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+autoplot(y)+ylab("Number of sales")+
+  xlab("Year")+
+  ggtitle("Time series plot of sales from 2012 to 2017")
+```
+
+]
+
+---
+
+class: duke-orange
+
+## Your turn
+
+Create plots of the following time series: dengue counts in Gampaha (Use `mozzie` package), a10 series (`fpp2` package). 
+
+Use help() to find out about the data in each series.
+
+Modify the axis labels and title.
+
+---
+
+# Time series patterns
+
+### Trend
+
+- Long-term increase or decrease in the data.
+
+### Seasonal
+
+
+- A seasonal pattern exists when a series is influenced by seasonal factors (e.g.,
+the quarter of the year, the month, or day of the week). Seasonality is always
+of a **fixed** and **known period**. Hence, seasonal time series are sometimes called
+periodic time series.
+
+- Period is unchanging and associated with some aspect of the
+calendar.
+
+
+### Cyclic
+
+- A cyclic pattern exists when data exhibit rises and falls that are not of fixed
+period. The duration of these fluctuations is usually of at least 2 years.
+
+
+
+In general, 
+
+  - the average length of cycles is longer than the length of a seasonal pattern.
+
+  - the magnitude of cycles tends to be more variable than the magnitude of seasonal patterns.
+  
+---
+
+## Cyclic pattern
+
+```{r, echo=FALSE, comment=NA, message=F}
+library(fpp2)
+autoplot(lynx) + xlab("Year") + ylab("Number of lynx trapped")
+
+```
+  
+---
+
+## Cyclic and seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+autoplot(hsales) + xlab("Year") + ylab("Monthly housing sales
+(millions)")
+
+```
+
+---
+
+
+## Multiple seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+autoplot(taylor) + xlab("Week") + ylab("Electricity demand (GW)")
+
+```
+  
+---
+
+## Seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+```  
+---
+
+## Trend
+
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+x <- 1:20
+y <- 5*x+rnorm(20)
+y <- ts(y, frequency = 1, start=1980)
+autoplot(y)
+
+```
+
+---
+
+## Trend and seasonal
+
+```{r, comment=NA, echo=FALSE}
+autoplot(a10) + ylab("$ million") + xlab("Year") +
+ggtitle("Antidiabetic drug sales")
+```
+
+---
+
+## What about this?
+
+- Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
+
+```{r, comment=F, echo=F}
+gold <- msts(gold, seasonal.periods = c(7, 365.25), start=c(1985, 1))
+autoplot(gold)
+```
+
+
+---
+
+## What about this?
+
+```{r, comment=NA, echo=F}
+set.seed(132020)
+a <-  rnorm(50)+100
+a <- ts(a, frequency = 1, start=1940)
+autoplot(a)+ylab("Values")
+```
+
+---
+
+## Autocorrelation function: ACF
+
+- **correlation** measures the strength of linear relationship between two variables.
+
+- **autocorrelation** measures the strength of linear relationship between lagged values of a time series.
+
+
+.pull-left[
+## Lagged values
+
+```{r, comment=NA, echo=F}
+df <- data.frame(t=1:6,
+                 yt=c(3, 9, 8, 4, 2, 7),
+                 yt1=c(NA, 3, 9, 8, 4, 2),
+                 yt2=c(NA, NA, 3, 9, 8, 4),
+                 yt3=c(NA, NA, NA, 3, 9, 8))
+colnames(df) <- c("$$t$$", "$$Y_t$$", "$$Y_{t-1}$$", "$$Y_{t-2}$$", "$$Y_{t-3}$$")
+kable(df, format="html", align = "c", escape = T)%>%
+  kable_styling(full_width = T)
+
+```
+
+]
+
+.pull-right[
+
+## Autocorrelation coefficient
+
+$$r_k=\frac{\sum_{t=k+1}^{T}(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}$$
+
+measures the linear relationship between $y_t$ and $y_{t-k}$.
+
+]
+
+---
+## Quarterly beer production
+
+.pull-left[
+
+Time series plot
+
+```{r, echo=FALSE, comment=NA}
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+```  
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(beer)
+```  
+
+]
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(beer, plot=FALSE)
+```  
+
 
 ---
 class: center, middle

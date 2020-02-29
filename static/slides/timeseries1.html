@@ -9,6 +9,7 @@
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
     <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
     <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
     <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
   </head>
@@ -377,6 +378,7 @@ class: duke-orange
 
 # `ts` object in R
 
+- Annual time series
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -420,6 +422,467 @@ End = 2015
 Frequency = 1 
 [1] 120 122 140 150
 ```
+
+---
+
+# `ts` object in R
+
+- Quarterly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Quarter &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013-Q1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150, 200), start=c(2012, 1), frequency = 4)
+y
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2012  120  122  140  150
+2013  200               
+```
+
+
+
+---
+# `ts` object in R
+
+- Monthly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Month &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Jan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Feb &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-March &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-April &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 12)
+y
+```
+
+```
+     Jan Feb Mar Apr
+2012 120 122 140 150
+```
+
+---
+# `ts` object in R
+
+- Weekly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Week &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 52)
+y
+```
+
+```
+Time Series:
+Start = c(2012, 1) 
+End = c(2012, 4) 
+Frequency = 52 
+[1] 120 122 140 150
+```
+
+---
+
+## Time series plots
+
+.pull-left[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2016 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150, 200, 250), start=2012)
+y
+```
+
+```
+Time Series:
+Start = 2012 
+End = 2017 
+Frequency = 1 
+[1] 120 122 140 150 200 250
+```
+
+```r
+class(y)
+```
+
+```
+[1] "ts"
+```
+
+]
+
+
+.pull-right[
+
+
+```r
+autoplot(y)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Add title and labels 
+
+.pull-left[
+
+
+```r
+autoplot(y)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+```r
+autoplot(y)+ylab("Number of sales")+
+  xlab("Year")+
+  ggtitle("Time series plot of sales from 2012 to 2017")
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+class: duke-orange
+
+## Your turn
+
+Create plots of the following time series: dengue counts in Gampaha (Use `mozzie` package), a10 series (`fpp2` package). 
+
+Use help() to find out about the data in each series.
+
+Modify the axis labels and title.
+
+---
+
+# Time series patterns
+
+### Trend
+
+- Long-term increase or decrease in the data.
+
+### Seasonal
+
+
+- A seasonal pattern exists when a series is influenced by seasonal factors (e.g.,
+the quarter of the year, the month, or day of the week). Seasonality is always
+of a **fixed** and **known period**. Hence, seasonal time series are sometimes called
+periodic time series.
+
+- Period is unchanging and associated with some aspect of the
+calendar.
+
+
+### Cyclic
+
+- A cyclic pattern exists when data exhibit rises and falls that are not of fixed
+period. The duration of these fluctuations is usually of at least 2 years.
+
+
+
+In general, 
+
+  - the average length of cycles is longer than the length of a seasonal pattern.
+
+  - the magnitude of cycles tends to be more variable than the magnitude of seasonal patterns.
+  
+---
+
+## Cyclic pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+  
+---
+
+## Cyclic and seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+
+
+## Multiple seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+  
+---
+
+## Seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+---
+
+## Trend
+
+
+![](timeseries1_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+
+## Trend and seasonal
+
+![](timeseries1_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+## What about this?
+
+- Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
+
+![](timeseries1_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+
+---
+
+## What about this?
+
+![](timeseries1_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+---
+
+## Autocorrelation function: ACF
+
+- **correlation** measures the strength of linear relationship between two variables.
+
+- **autocorrelation** measures the strength of linear relationship between lagged values of a time series.
+
+
+.pull-left[
+## Lagged values
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; `$$t$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_t$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-1}$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-2}$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-3}$$` &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+## Autocorrelation coefficient
+
+`$$r_k=\frac{\sum_{t=k+1}^{T}(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}$$`
+
+measures the linear relationship between `\(y_t\)` and `\(y_{t-k}\)`.
+
+]
+
+---
+## Quarterly beer production
+
+.pull-left[
+
+Time series plot
+
+![](timeseries1_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+![](timeseries1_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+]
+
+
+```
+
+Autocorrelations of series 'beer', by lag
+
+     0      1      2      3      4      5      6      7      8      9     10 
+ 1.000 -0.102 -0.657 -0.060  0.869 -0.089 -0.635 -0.054  0.832 -0.108 -0.574 
+    11     12     13     14     15     16     17     18 
+-0.055  0.774 -0.080 -0.568 -0.066  0.706 -0.065 -0.528 
+```
+
 
 ---
 class: center, middle
