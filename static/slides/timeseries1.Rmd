@@ -24,11 +24,47 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
-# Time series
+## Time series
 
 - A time series is a sequence of observations taken sequentially in time. 
 
+## Time series data vs Cross sectional data
 
+.pull-left[
+
+- Time series data
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(Year=c(2012, 2013, 2014, 2015),
+                 Values =c(120, 122, 140, 150))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- a set of observations, along with some information about what times those observations were recorded.
+
+- usually discrete and equally spaced time intervals.
+
+]
+
+.pull-right[
+
+- Cross-sectional data
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(ID=c(1, 2, 3, 4),
+                 Values =c(200, 350, 480, 250))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- observations that come from different individuals or groups at a single point in time.
+
+]
 ---
 
 ## Deterministic  vs Non-deterministic time series
@@ -93,8 +129,6 @@ kable(mathy.df, format="html", align = "l", booktabs = T, escape = FALSE) %>% ad
 
 ---
 
-- 
-
 ## Time series to be analyzed
 
 
@@ -115,7 +149,127 @@ autoplot(y)+ylab("Number of dengue cases in Colombo")
 - The observed time series or time series to be analyzed is **a particular realization of a stochastic process**.
 ---
 
+## Time series forecasting
 
+
+## Types of methods
+
+- Qualitative forecast
+
+
+- Quantitative forecast
+
+---
+
+# Basic steps in a forecasting task
+
+- Problem definition
+
+- Collect data
+
+- Data visualization
+
+- Modelling
+
+- Evaluate the fitted model
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+- Frequency: number of observation per natual time interval of measurement (usually year,  but sometimes a week, a day or an hour)
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(Data=c("Annual", "Quarterly", "Monthly", "Weekly"),
+                  Frequency =c("1", "4", "12", "52 or 52.18"))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- Multiple frequency setting
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsf <- data.frame(Data=c("Daily", "Hourly", "Half-Hourly", "Minutes", "Seconds"), Minute=c("", "", "", "", "60"),
+                 Hour=c("", "", "", "60", "3600"),
+                 Day=c("", "24", "48", "1440", "86400"),
+                 Week=c("7", "168", "336", "10080", "604800"),
+                 Year=c("365.25", "8766", "17532", "525960", "31557600")
+                 )
+kable(tsf, format="html", align = "l", booktabs = T, escape = FALSE)
+```  
+
+
+
+---
+.pull-left[
+
+## Monthly time series
+
+```{r, echo=FALSE}
+
+y <- ts(USAccDeaths, start=1949, frequency = 12)
+autoplot(y)
+```
+
+- Length of the series: 72
+
+- Monthly seasonality
+
+]
+
+
+.pull-right[
+
+## Half-hourly Time Series
+
+```{r, echo=FALSE}
+x <- msts(taylor, seasonal.periods=c(48,336), start=2000+22/52)
+autoplot(x)
+```
+
+- Length of the series: 4032
+
+- Daily seasonality and weekly seasonality
+
+]
+
+--
+Note: Monthly seasonality with high-frequency data (daily, hourly, etc.) is tricky due to variable month lengths. You can't specify that using seasonal periods. It could be possibly handled using a dummy variable. 
+
+---
+
+class: duke-orange
+
+# Your turn
+
+- What are the frequencies for a monthly time series with semi-annual and annual pattern?
+
+
+---
+
+# `ts` object in R
+
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Year=c(2012, 2013, 2014, 2015),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=2012)
+y
+```
 
 ---
 class: center, middle

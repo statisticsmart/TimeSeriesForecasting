@@ -26,11 +26,83 @@ class: center, middle, inverse, title-slide
 
 
 
-# Time series
+## Time series
 
 - A time series is a sequence of observations taken sequentially in time. 
 
+## Time series data vs Cross sectional data
 
+.pull-left[
+
+- Time series data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- a set of observations, along with some information about what times those observations were recorded.
+
+- usually discrete and equally spaced time intervals.
+
+]
+
+.pull-right[
+
+- Cross-sectional data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 350 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 480 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- observations that come from different individuals or groups at a single point in time.
+
+]
 ---
 
 ## Deterministic  vs Non-deterministic time series
@@ -40,7 +112,7 @@ class: center, middle, inverse, title-slide
 
 
 
-![](timeseries1_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 
 `$$y_t = cos(2\pi t)$$`
@@ -52,7 +124,7 @@ class: center, middle, inverse, title-slide
 
 
 
-![](timeseries1_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -110,8 +182,6 @@ A sample realization from an infinite population of time series that could have 
 
 ---
 
-- 
-
 ## Time series to be analyzed
 
 
@@ -143,13 +213,213 @@ Frequency = 52
 ]
 
 .pull-right[
-![](timeseries1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 
 - The observed time series or time series to be analyzed is **a particular realization of a stochastic process**.
 ---
 
+## Time series forecasting
 
+
+## Types of methods
+
+- Qualitative forecast
+
+
+- Quantitative forecast
+
+---
+
+# Basic steps in a forecasting task
+
+- Problem definition
+
+- Collect data
+
+- Data visualization
+
+- Modelling
+
+- Evaluate the fitted model
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+- Frequency: number of observation per natual time interval of measurement (usually year,  but sometimes a week, a day or an hour)
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Data &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Frequency &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Annual &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Quarterly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Monthly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Weekly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 52 or 52.18 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Multiple frequency setting
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Data &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Minute &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Hour &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Day &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Week &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Daily &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 365.25 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hourly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 24 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 168 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8766 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Half-Hourly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 48 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 336 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17532 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Minutes &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1440 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10080 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 525960 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Seconds &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3600 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86400 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 604800 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31557600 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+---
+.pull-left[
+
+## Monthly time series
+
+![](timeseries1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+- Length of the series: 72
+
+- Monthly seasonality
+
+]
+
+
+.pull-right[
+
+## Half-hourly Time Series
+
+![](timeseries1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+- Length of the series: 4032
+
+- Daily seasonality and weekly seasonality
+
+]
+
+--
+Note: Monthly seasonality with high-frequency data (daily, hourly, etc.) is tricky due to variable month lengths. You can't specify that using seasonal periods. It could be possibly handled using a dummy variable. 
+
+---
+
+class: duke-orange
+
+# Your turn
+
+- What are the frequencies for a monthly time series with semi-annual and annual pattern?
+
+
+---
+
+# `ts` object in R
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=2012)
+y
+```
+
+```
+Time Series:
+Start = 2012 
+End = 2015 
+Frequency = 1 
+[1] 120 122 140 150
+```
 
 ---
 class: center, middle
