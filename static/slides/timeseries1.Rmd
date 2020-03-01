@@ -151,6 +151,25 @@ autoplot(y)+ylab("Number of dengue cases in Colombo")
 
 ## Time series forecasting
 
+```{r, comment=NA, echo=FALSE, message=FALSE, fig.width=15}
+library(fpp2)
+library(forecast)
+# Set training data from 1992 to 2007
+beer2 <- window(ausbeer,start=1992,end=c(2007,4))
+# Plot some forecasts
+autoplot(beer2) +
+  autolayer(meanf(beer2, h=11),
+    series="Method 1", PI=FALSE) +
+  autolayer(naive(beer2, h=11),
+    series="Method 2", PI=FALSE) +
+  autolayer(snaive(beer2, h=11),
+    series="Method 3", PI=FALSE) +
+  ggtitle("Forecasts for sales") +
+  xlab("Year") + ylab("Sales") +
+  guides(colour=guide_legend(title="Forecast"))
+
+```
+
 
 ## Types of methods
 
@@ -688,6 +707,27 @@ ggAcf(a10, lag.max = 50)
 
 ---
 
+# Is this a white noise process?
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA}
+set.seed(132020)
+a <- cumsum(rnorm(25))
+a <- ts(a, frequency = 1, start=1990)
+autoplot(a)+ylab("Values")
+```
+
+]
+.pull-right[
+
+```{r, comment=NA, echo=F}
+ggAcf(a, lag.max = 50)
+```
+
+]
+---
+
 class: duke-orange, center, middle
 
 # Your turn
@@ -700,6 +740,169 @@ class: duke-orange, center, middle
 ![](acf.png)
 
 Reference: Forecasting: Principles and Practice, Hyndman & Athanasopoulos (3rd ed., 2020)
+
+---
+
+## Portmanteau tests for autocorrelation
+
+- Consider the first $h$ autocorrelation values together. 
+
+## Box-Pierce test
+
+The test statistics of the Box-Pierce test is
+
+$$Q = T\sum_{k=1}^hr_k^2$$
+
+where $h$ is the maximum lag being considered and $T$ is the number of observations.
+
+## Ljung-Box test
+
+The test statistics of the Ljung-Box test test is
+
+$$Q^* = T(T+2)\sum_{k=1}^{h}(T-k)^{-1}r_k^2$$
+
+- The both $Q$ and $Q^*$ follows a $\chi^2$ distribution with $(h-K)$ degrees of freedom, where $K$ is the number of parameters in the model. If $Q$ and $Q*$ are calculated from raw data (rather than the residuals from a model), then set $K=0$.
+
+---
+
+## Portmanteau tests for autocorrelation
+
+H0: Data are not serially correlated.
+
+H1: Data are serially correlated.
+
+
+
+```{r, comment=NA}
+set.seed(132020)
+a <- ts(rnorm(20), frequency = 1) #WN process
+Box.test(a, lag=10, fitdf=0, type="Lj")
+```
+
+
+```{r, comment=NA}
+x <- 1:20
+y <- 5*x+2
+b <- ts(y, frequency = 1) #trend
+Box.test(b, lag=10, fitdf=0, type="Lj")
+```
+
+
+
+---
+
+
+.pull-left[
+
+```{r, comment=NA}
+set.seed(132020)
+a <- ts(rnorm(20), frequency = 1) #WN process
+autoplot(a)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+x <- 1:20
+y <- 5*x+2
+b <- ts(y, frequency = 1) #trend
+autoplot(b)
+```
+]
+
+---
+
+# Some simple forecasting methods
+
+## Notation
+
+
+
+---
+
+## Average method
+
+- All future values are equal to the average (mean).
+
+$$\hat{y}_{T+h|T} = \bar{y}=(y_1 + y_2 + ... + y_T)/T$$
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+meanf(y, h=2)
+```
+
+
+
+---
+## Naive method/ random walk
+
+- Simply set all forecasts to be the value of the last observation.
+
+$$\hat{y}_{T+h|T} = y_T$$
+
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+naive(y, h=2) 
+rwf(y, h=2)
+```
+
+---
+## Seasonal naive method
+
+set each forecast to be equal to the last observed value from the same season of the year (e.g., this year sales forcasts for the month of December is set to what was sold in the previous year in the month of December). 
+
+$$\hat{y}_{T+h|T} = y_{T+h-m(k+1)}$$
+$m$ - the seasonal period
+
+$k$ - the integer part of  $(h-1)/m$ (i.e., the number of complete years in the forecast period prior to time  $T+h$.
+
+
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40, 60, 100), frequency = 4)
+y
+snaive(y, h=2)
+```
+
+---
+
+## Drift method
+
+$$\hat{y}_{T+h|T} = y_T + h\frac{y_T-y_1}{T-1}$$
+
+- Similar to fitting a line between the first and last observations, and extrapolating it into the future
+
+$$\frac{y-y_N}{x-x_N}=\frac{y_2-y_1}{x_2-x_1}$$
+
+```{r, comment=NA, fig.height=3}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+rwf(y, h=2, drift=TRUE)
+```
+
+---
+
+## Comparison between methods
+
+```{r, comment=NA, echo=F, fig.width=15, fig.height=10}
+# Set training data from 1992 to 2007
+moz <- ts(mozzie$Colombo, frequency = 52, start=c(2008, 51))
+# Plot some forecasts
+autoplot(moz) +
+  autolayer(meanf(moz, h=28),
+    series="Mean", PI=FALSE) +
+  autolayer(naive(moz, h=28),
+    series="Naïve", PI=FALSE) +
+  autolayer(snaive(moz, h=28),
+    series="Seasonal naïve", PI=FALSE) +
+  autolayer(rwf(moz, h=28, drift=TRUE),
+    series="Drift", PI=FALSE) +
+  ggtitle("Forecasts for dengue cases in Colombo") +
+  xlab("Year") + ylab("Number of dengue cases") +
+  guides(colour=guide_legend(title="Forecast"))
+
+```
 
 ---
 class: center, middle

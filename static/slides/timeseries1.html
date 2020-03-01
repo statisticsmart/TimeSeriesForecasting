@@ -222,6 +222,8 @@ Frequency = 52
 
 ## Time series forecasting
 
+![](timeseries1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
 
 ## Types of methods
 
@@ -341,7 +343,7 @@ Frequency = 52
 
 ## Monthly time series
 
-![](timeseries1_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 - Length of the series: 72
 
@@ -354,7 +356,7 @@ Frequency = 52
 
 ## Half-hourly Time Series
 
-![](timeseries1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 - Length of the series: 4032
 
@@ -642,7 +644,7 @@ class(y)
 autoplot(y)
 ```
 
-![](timeseries1_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -658,7 +660,7 @@ autoplot(y)
 autoplot(y)
 ```
 
-![](timeseries1_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -671,7 +673,7 @@ autoplot(y)+ylab("Number of sales")+
   ggtitle("Time series plot of sales from 2012 to 2017")
 ```
 
-![](timeseries1_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -724,38 +726,38 @@ In general,
 
 ## Cyclic pattern
 
-![](timeseries1_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
   
 ---
 
 ## Cyclic and seasonal pattern
 
-![](timeseries1_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ---
 
 
 ## Multiple seasonal pattern
 
-![](timeseries1_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
   
 ---
 
 ## Seasonal pattern
 
-![](timeseries1_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ---
 
 ## Trend
 
 
-![](timeseries1_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ---
 
 ## Trend and seasonal
 
-![](timeseries1_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -763,14 +765,14 @@ In general,
 
 - Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
 
-![](timeseries1_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
 
 ---
 
 ## What about this?
 
-![](timeseries1_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -859,7 +861,7 @@ measures the linear relationship between `\(y_t\)` and `\(y_{t-k}\)`.
 
 Time series plot
 
-![](timeseries1_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -868,7 +870,7 @@ Time series plot
 
 Correlogram
 
-![](timeseries1_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -890,7 +892,7 @@ Autocorrelations of series 'beer', by lag
 
 Time series plot
 
-![](timeseries1_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -899,7 +901,7 @@ Time series plot
 
 Correlogram
 
-![](timeseries1_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -942,13 +944,13 @@ asymptotically `\(N(0,1/T)\)`.
 
 .pull-left[
 
-![](timeseries1_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 
 ]
 
 .pull-right[
 
-![](timeseries1_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -958,16 +960,30 @@ asymptotically `\(N(0,1/T)\)`.
 
 .pull-left[
 
-![](timeseries1_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 ]
 
 .pull-right[
 
-![](timeseries1_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 
 ]
 
+---
+
+# Is this a white noise process?
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+
+]
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+
+]
 ---
 
 class: duke-orange, center, middle
@@ -982,6 +998,244 @@ class: duke-orange, center, middle
 ![](acf.png)
 
 Reference: Forecasting: Principles and Practice, Hyndman &amp; Athanasopoulos (3rd ed., 2020)
+
+---
+
+## Portmanteau tests for autocorrelation
+
+- Consider the first `\(h\)` autocorrelation values together. 
+
+## Box-Pierce test
+
+The test statistics of the Box-Pierce test is
+
+`$$Q = T\sum_{k=1}^hr_k^2$$`
+
+where `\(h\)` is the maximum lag being considered and `\(T\)` is the number of observations.
+
+## Ljung-Box test
+
+The test statistics of the Ljung-Box test test is
+
+`$$Q^* = T(T+2)\sum_{k=1}^{h}(T-k)^{-1}r_k^2$$`
+
+- The both `\(Q\)` and `\(Q^*\)` follows a `\(\chi^2\)` distribution with `\((h-K)\)` degrees of freedom, where `\(K\)` is the number of parameters in the model. If `\(Q\)` and `\(Q*\)` are calculated from raw data (rather than the residuals from a model), then set `\(K=0\)`.
+
+---
+
+## Portmanteau tests for autocorrelation
+
+H0: Data are not serially correlated.
+
+H1: Data are serially correlated.
+
+
+
+
+```r
+set.seed(132020)
+a &lt;- ts(rnorm(20), frequency = 1) #WN process
+Box.test(a, lag=10, fitdf=0, type="Lj")
+```
+
+```
+
+	Box-Ljung test
+
+data:  a
+X-squared = 4.061, df = 10, p-value = 0.9446
+```
+
+
+
+```r
+x &lt;- 1:20
+y &lt;- 5*x+2
+b &lt;- ts(y, frequency = 1) #trend
+Box.test(b, lag=10, fitdf=0, type="Lj")
+```
+
+```
+
+	Box-Ljung test
+
+data:  b
+X-squared = 48.713, df = 10, p-value = 4.598e-07
+```
+
+
+
+---
+
+
+.pull-left[
+
+
+```r
+set.seed(132020)
+a &lt;- ts(rnorm(20), frequency = 1) #WN process
+autoplot(a)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+```r
+x &lt;- 1:20
+y &lt;- 5*x+2
+b &lt;- ts(y, frequency = 1) #trend
+autoplot(b)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Some simple forecasting methods
+
+## Notation
+
+
+
+---
+
+## Average method
+
+- All future values are equal to the average (mean).
+
+`$$\hat{y}_{T+h|T} = \bar{y}=(y_1 + y_2 + ... + y_T)/T$$`
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+```
+
+```
+Time Series:
+Start = 1 
+End = 6 
+Frequency = 1 
+[1] 10 20 50 70 60 40
+```
+
+```r
+meanf(y, h=2)
+```
+
+```
+  Point Forecast    Lo 80    Hi 80     Lo 95    Hi 95
+7       41.66667 4.736783 78.59655 -22.65498 105.9883
+8       41.66667 4.736783 78.59655 -22.65498 105.9883
+```
+
+
+
+---
+## Naive method/ random walk
+
+- Simply set all forecasts to be the value of the last observation.
+
+`$$\hat{y}_{T+h|T} = y_T$$`
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+```
+
+```
+Time Series:
+Start = 1 
+End = 6 
+Frequency = 1 
+[1] 10 20 50 70 60 40
+```
+
+```r
+naive(y, h=2) 
+```
+
+```
+  Point Forecast     Lo 80    Hi 80      Lo 95    Hi 95
+7             40 15.017961 64.98204   1.793268 78.20673
+8             40  4.670061 75.32994 -14.032478 94.03248
+```
+
+```r
+rwf(y, h=2)
+```
+
+```
+  Point Forecast     Lo 80    Hi 80      Lo 95    Hi 95
+7             40 15.017961 64.98204   1.793268 78.20673
+8             40  4.670061 75.32994 -14.032478 94.03248
+```
+
+---
+## Seasonal naive method
+
+set each forecast to be equal to the last observed value from the same season of the year (e.g., this year sales forcasts for the month of December is set to what was sold in the previous year in the month of December). 
+
+`$$\hat{y}_{T+h|T} = y_{T+h-m(k+1)}$$`
+`\(m\)` - the seasonal period
+
+`\(k\)` - the integer part of  `\((h-1)/m\)` (i.e., the number of complete years in the forecast period prior to time  `\(T+h\)`.
+
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40, 60, 100), frequency = 4)
+y
+```
+
+```
+  Qtr1 Qtr2 Qtr3 Qtr4
+1   10   20   50   70
+2   60   40   60  100
+```
+
+```r
+snaive(y, h=2)
+```
+
+```
+     Point Forecast       Lo 80     Hi 80      Lo 95    Hi 95
+3 Q1             60 19.98356519 100.01643  -1.199856 121.1999
+3 Q2             40 -0.01643481  80.01643 -21.199856 101.1999
+```
+
+---
+
+## Drift method
+
+`$$\hat{y}_{T+h|T} = y_T + h\frac{y_T-y_1}{T-1}$$`
+
+- Similar to fitting a line between the first and last observations, and extrapolating it into the future
+
+`$$\frac{y-y_N}{x-x_N}=\frac{y_2-y_1}{x_2-x_1}$$`
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+rwf(y, h=2, drift=TRUE)
+```
+
+```
+  Point Forecast    Lo 80    Hi 80      Lo 95     Hi 95
+7             46 19.42518 72.57482   5.357322  86.64268
+8             52 10.83047 93.16953 -10.963366 114.96337
+```
+
+---
+
+## Comparison between methods
+
+![](timeseries1_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
 
 ---
 class: center, middle
