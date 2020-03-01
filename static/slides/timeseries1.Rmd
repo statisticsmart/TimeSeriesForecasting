@@ -149,6 +149,12 @@ autoplot(y)+ylab("Number of dengue cases in Colombo")
 - The observed time series or time series to be analyzed is **a particular realization of a stochastic process**.
 ---
 
+## Set of numbers or set of images taken sequentially in time
+
+![](figsat.png)
+
+---
+
 ## Time series forecasting
 
 ```{r, comment=NA, echo=FALSE, message=FALSE, fig.width=15}
