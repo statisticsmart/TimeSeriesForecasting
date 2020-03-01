@@ -151,11 +151,11 @@ A sample realization from an infinite population of time series that could have 
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Sequence of random Variables &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; `\(\{X_1, X_2...X_t...X_N\}\)` &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; `\(\{X_1, X_2...X_t...X_T\}\)` &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Realized values of the random Variable &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; `\(\{x_1, x_2,...x_t...x_N\}\)` &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; `\(\{x_1, x_2,...x_t...x_T\}\)` &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Examples of realizations &lt;/td&gt;
@@ -176,7 +176,7 @@ A sample realization from an infinite population of time series that could have 
 &lt;/tbody&gt;
 &lt;tfoot&gt;
 &lt;tr&gt;
-&lt;td style = 'padding: 0; border:0;' colspan='100%'&gt;&lt;sup&gt;a&lt;/sup&gt; N - length of the time series, t - time index&lt;/td&gt;
+&lt;td style = 'padding: 0; border:0;' colspan='100%'&gt;&lt;sup&gt;a&lt;/sup&gt; T - length of the time series, t - time index&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tfoot&gt;
 &lt;/table&gt;
@@ -883,6 +883,105 @@ Autocorrelations of series 'beer', by lag
 -0.055  0.774 -0.080 -0.568 -0.066  0.706 -0.065 -0.528 
 ```
 
+
+---
+
+.pull-left[
+
+Time series plot
+
+![](timeseries1_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+![](timeseries1_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+]
+
+
+```
+
+Autocorrelations of series 'a', by lag
+
+     0      1      2      3      4      5      6      7      8      9     10 
+ 1.000  0.044 -0.063 -0.184 -0.084  0.219 -0.121 -0.084 -0.165 -0.008 -0.082 
+    11     12     13     14     15     16 
+-0.094  0.155  0.096 -0.024 -0.098 -0.001 
+```
+
+** This is a white noise process. It is a time series of iid data.**
+
+---
+
+## Sampling distribution of autocorrelations
+
+- Sampling distribution of `\(r_k\)` for white noise data is
+asymptotically `\(N(0,1/T)\)`.
+
+
+- 95% confidence bands: `\(±1.96/\sqrt{T}\)`
+
+## The autocorrelation plot can provide answers to the following questions:
+
+  - Are the data random?
+    
+  - Is the observed time series white noise?
+    
+  - Does the time series contain strong seasonal patterns?
+    
+  - Does the time series contain a trend?
+
+---
+
+# Trend
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Seasonal and Trend
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+
+---
+## Which is which?
+
+![](acf.png)
+
+Reference: Forecasting: Principles and Practice, Hyndman &amp; Athanasopoulos (3rd ed., 2020)
 
 ---
 class: center, middle
