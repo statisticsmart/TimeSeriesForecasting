@@ -916,6 +916,37 @@ autoplot(moz) +
 ![](traintest.png)
 
 ---
+
+## Functions to subset a time series
+
+```{r, comment=NA}
+tsexample <- ts(c(10, 20, 50, 60, 70, 80, 90, 100, 150, 160, 180, 200), frequency = 4, start = c(2015,1))
+tsexample
+```
+
+```{r, comment=NA}
+window(tsexample, start=c(2016, 2))
+```
+
+```{r, comment=NA}
+subset(tsexample, start=length(tsexample)-2*4)
+```
+
+
+---
+
+## Functions to subset a time series (cont.)
+
+```{r, comment=NA}
+subset(tsexample, quarter =2)
+```
+
+```{r, comment=NA}
+head(tsexample, 2)
+tail(tsexample, 2)
+```
+
+---
 class: center, middle
 
 

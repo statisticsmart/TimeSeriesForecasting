@@ -1249,6 +1249,83 @@ rwf(y, h=2, drift=TRUE)
 ![](traintest.png)
 
 ---
+
+## Functions to subset a time series
+
+
+```r
+tsexample &lt;- ts(c(10, 20, 50, 60, 70, 80, 90, 100, 150, 160, 180, 200), frequency = 4, start = c(2015,1))
+tsexample
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2015   10   20   50   60
+2016   70   80   90  100
+2017  150  160  180  200
+```
+
+
+```r
+window(tsexample, start=c(2016, 2))
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2016        80   90  100
+2017  150  160  180  200
+```
+
+
+```r
+subset(tsexample, start=length(tsexample)-2*4)
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2015                  60
+2016   70   80   90  100
+2017  150  160  180  200
+```
+
+
+---
+
+## Functions to subset a time series (cont.)
+
+
+```r
+subset(tsexample, quarter =2)
+```
+
+```
+Time Series:
+Start = 2015.25 
+End = 2017.25 
+Frequency = 1 
+[1]  20  80 160
+```
+
+
+```r
+head(tsexample, 2)
+```
+
+```
+     Qtr1 Qtr2
+2015   10   20
+```
+
+```r
+tail(tsexample, 2)
+```
+
+```
+     Qtr3 Qtr4
+2017  180  200
+```
+
+---
 class: center, middle
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
