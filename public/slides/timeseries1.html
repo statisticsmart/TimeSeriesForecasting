@@ -9,6 +9,7 @@
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
     <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
     <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
     <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
   </head>
@@ -26,11 +27,83 @@ class: center, middle, inverse, title-slide
 
 
 
-# Time series
+## Time series
 
 - A time series is a sequence of observations taken sequentially in time. 
 
+## Time series data vs Cross sectional data
 
+.pull-left[
+
+- Time series data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- a set of observations, along with some information about what times those observations were recorded.
+
+- usually discrete and equally spaced time intervals.
+
+]
+
+.pull-right[
+
+- Cross-sectional data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 350 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 480 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- observations that come from different individuals or groups at a single point in time.
+
+]
 ---
 
 ## Deterministic  vs Non-deterministic time series
@@ -40,7 +113,7 @@ class: center, middle, inverse, title-slide
 
 
 
-![](timeseries1_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 
 `$$y_t = cos(2\pi t)$$`
@@ -52,7 +125,7 @@ class: center, middle, inverse, title-slide
 
 
 
-![](timeseries1_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -78,11 +151,11 @@ A sample realization from an infinite population of time series that could have 
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Sequence of random Variables &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; `\(\{X_1, X_2...X_t...X_N\}\)` &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; `\(\{X_1, X_2...X_t...X_T\}\)` &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Realized values of the random Variable &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; `\(\{x_1, x_2,...x_t...x_N\}\)` &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; `\(\{x_1, x_2,...x_t...x_T\}\)` &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Examples of realizations &lt;/td&gt;
@@ -103,14 +176,12 @@ A sample realization from an infinite population of time series that could have 
 &lt;/tbody&gt;
 &lt;tfoot&gt;
 &lt;tr&gt;
-&lt;td style = 'padding: 0; border:0;' colspan='100%'&gt;&lt;sup&gt;a&lt;/sup&gt; N - length of the time series, t - time index&lt;/td&gt;
+&lt;td style = 'padding: 0; border:0;' colspan='100%'&gt;&lt;sup&gt;a&lt;/sup&gt; T - length of the time series, t - time index&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tfoot&gt;
 &lt;/table&gt;
 
 ---
-
-- 
 
 ## Time series to be analyzed
 
@@ -143,16 +214,1216 @@ Frequency = 52
 ]
 
 .pull-right[
-![](timeseries1_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+![](timeseries1_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 
 - The observed time series or time series to be analyzed is **a particular realization of a stochastic process**.
 ---
 
+## Time series forecasting
+
+![](timeseries1_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+
+## Types of methods
+
+- Qualitative forecast
+
+
+- Quantitative forecast
+
+---
+
+# Basic steps in a forecasting task
+
+- Problem definition
+
+- Collect data
+
+- Data visualization
+
+- Modelling
+
+- Evaluate the fitted model
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+- Frequency: number of observation per natual time interval of measurement (usually year,  but sometimes a week, a day or an hour)
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Data &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Frequency &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Annual &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Quarterly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Monthly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Weekly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 52 or 52.18 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Multiple frequency setting
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Data &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Minute &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Hour &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Day &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Week &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Daily &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 365.25 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hourly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 24 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 168 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8766 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Half-Hourly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 48 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 336 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 17532 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Minutes &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1440 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10080 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 525960 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Seconds &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 60 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3600 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 86400 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 604800 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 31557600 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
 
 
 ---
+.pull-left[
+
+## Monthly time series
+
+![](timeseries1_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+- Length of the series: 72
+
+- Monthly seasonality
+
+]
+
+
+.pull-right[
+
+## Half-hourly Time Series
+
+![](timeseries1_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+- Length of the series: 4032
+
+- Daily seasonality and weekly seasonality
+
+]
+
+--
+Note: Monthly seasonality with high-frequency data (daily, hourly, etc.) is tricky due to variable month lengths. You can't specify that using seasonal periods. It could be possibly handled using a dummy variable. 
+
+---
+
+class: duke-orange
+
+# Your turn
+
+- What are the frequencies for a monthly time series with semi-annual and annual pattern?
+
+
+---
+
+# `ts` object in R
+
+- Annual time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=2012)
+y
+```
+
+```
+Time Series:
+Start = 2012 
+End = 2015 
+Frequency = 1 
+[1] 120 122 140 150
+```
+
+---
+
+# `ts` object in R
+
+- Quarterly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Quarter &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Q4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013-Q1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150, 200), start=c(2012, 1), frequency = 4)
+y
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2012  120  122  140  150
+2013  200               
+```
+
+
+
+---
+# `ts` object in R
+
+- Monthly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Month &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Jan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-Feb &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-March &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-April &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 12)
+y
+```
+
+```
+     Jan Feb Mar Apr
+2012 120 122 140 150
+```
+
+---
+# `ts` object in R
+
+- Weekly time series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Week &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W3 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012-W4 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 52)
+y
+```
+
+```
+Time Series:
+Start = c(2012, 1) 
+End = c(2012, 4) 
+Frequency = 52 
+[1] 120 122 140 150
+```
+
+---
+
+## Time series plots
+
+.pull-left[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Values &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2012 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 120 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2013 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 122 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2014 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 140 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2015 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 150 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2016 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 200 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 250 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+y &lt;- ts(c(120, 122, 140, 150, 200, 250), start=2012)
+y
+```
+
+```
+Time Series:
+Start = 2012 
+End = 2017 
+Frequency = 1 
+[1] 120 122 140 150 200 250
+```
+
+```r
+class(y)
+```
+
+```
+[1] "ts"
+```
+
+]
+
+
+.pull-right[
+
+
+```r
+autoplot(y)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+## Add title and labels 
+
+.pull-left[
+
+
+```r
+autoplot(y)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+```r
+autoplot(y)+ylab("Number of sales")+
+  xlab("Year")+
+  ggtitle("Time series plot of sales from 2012 to 2017")
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+class: duke-orange
+
+## Your turn
+
+Create plots of the following time series: dengue counts in Gampaha (Use `mozzie` package), a10 series (`fpp2` package). 
+
+Use help() to find out about the data in each series.
+
+Modify the axis labels and title.
+
+---
+
+# Time series patterns
+
+### Trend
+
+- Long-term increase or decrease in the data.
+
+### Seasonal
+
+
+- A seasonal pattern exists when a series is influenced by seasonal factors (e.g.,
+the quarter of the year, the month, or day of the week). Seasonality is always
+of a **fixed** and **known period**. Hence, seasonal time series are sometimes called
+periodic time series.
+
+- Period is unchanging and associated with some aspect of the
+calendar.
+
+
+### Cyclic
+
+- A cyclic pattern exists when data exhibit rises and falls that are not of fixed
+period. The duration of these fluctuations is usually of at least 2 years.
+
+
+
+In general, 
+
+  - the average length of cycles is longer than the length of a seasonal pattern.
+
+  - the magnitude of cycles tends to be more variable than the magnitude of seasonal patterns.
+  
+---
+
+## Cyclic pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+  
+---
+
+## Cyclic and seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+---
+
+
+## Multiple seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+  
+---
+
+## Seasonal pattern
+
+![](timeseries1_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+---
+
+## Trend
+
+
+![](timeseries1_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+
+## Trend and seasonal
+
+![](timeseries1_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+---
+
+## What about this?
+
+- Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
+
+![](timeseries1_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+
+---
+
+## What about this?
+
+![](timeseries1_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+---
+
+## Autocorrelation function: ACF
+
+- **correlation** measures the strength of linear relationship between two variables.
+
+- **autocorrelation** measures the strength of linear relationship between lagged values of a time series.
+
+
+.pull-left[
+## Lagged values
+
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; `$$t$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_t$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-1}$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-2}$$` &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; `$$Y_{t-3}$$` &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+]
+
+.pull-right[
+
+## Autocorrelation coefficient
+
+`$$r_k=\frac{\sum_{t=k+1}^{T}(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}$$`
+
+measures the linear relationship between `\(y_t\)` and `\(y_{t-k}\)`.
+
+]
+
+---
+## Quarterly beer production
+
+.pull-left[
+
+Time series plot
+
+![](timeseries1_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+![](timeseries1_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+]
+
+
+```
+
+Autocorrelations of series 'beer', by lag
+
+     0      1      2      3      4      5      6      7      8      9     10 
+ 1.000 -0.102 -0.657 -0.060  0.869 -0.089 -0.635 -0.054  0.832 -0.108 -0.574 
+    11     12     13     14     15     16     17     18 
+-0.055  0.774 -0.080 -0.568 -0.066  0.706 -0.065 -0.528 
+```
+
+
+---
+
+.pull-left[
+
+Time series plot
+
+![](timeseries1_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+![](timeseries1_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+
+]
+
+
+```
+
+Autocorrelations of series 'a', by lag
+
+     0      1      2      3      4      5      6      7      8      9     10 
+ 1.000  0.044 -0.063 -0.184 -0.084  0.219 -0.121 -0.084 -0.165 -0.008 -0.082 
+    11     12     13     14     15     16 
+-0.094  0.155  0.096 -0.024 -0.098 -0.001 
+```
+
+** This is a white noise process. It is a time series of iid data.**
+
+---
+
+## Sampling distribution of autocorrelations
+
+- Sampling distribution of `\(r_k\)` for white noise data is
+asymptotically `\(N(0,1/T)\)`.
+
+
+- 95% confidence bands: `\(±1.96/\sqrt{T}\)`
+
+## The autocorrelation plot can provide answers to the following questions:
+
+  - Are the data random?
+    
+  - Is the observed time series white noise?
+    
+  - Does the time series contain strong seasonal patterns?
+    
+  - Does the time series contain a trend?
+
+---
+
+# Trend
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Seasonal and Trend
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Is this a white noise process?
+
+.pull-left[
+
+![](timeseries1_files/figure-html/unnamed-chunk-45-1.png)&lt;!-- --&gt;
+
+]
+.pull-right[
+
+![](timeseries1_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+
+]
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+
+---
+## Which is which?
+
+![](acf.png)
+
+Reference: Forecasting: Principles and Practice, Hyndman &amp; Athanasopoulos (3rd ed., 2020)
+
+---
+
+## Portmanteau tests for autocorrelation
+
+- Consider the first `\(h\)` autocorrelation values together. 
+
+## Box-Pierce test
+
+The test statistics of the Box-Pierce test is
+
+`$$Q = T\sum_{k=1}^hr_k^2$$`
+
+where `\(h\)` is the maximum lag being considered and `\(T\)` is the number of observations.
+
+## Ljung-Box test
+
+The test statistics of the Ljung-Box test test is
+
+`$$Q^* = T(T+2)\sum_{k=1}^{h}(T-k)^{-1}r_k^2$$`
+
+- The both `\(Q\)` and `\(Q^*\)` follows a `\(\chi^2\)` distribution with `\((h-K)\)` degrees of freedom, where `\(K\)` is the number of parameters in the model. If `\(Q\)` and `\(Q*\)` are calculated from raw data (rather than the residuals from a model), then set `\(K=0\)`.
+
+---
+
+## Portmanteau tests for autocorrelation
+
+H0: Data are not serially correlated.
+
+H1: Data are serially correlated.
+
+
+
+
+```r
+set.seed(132020)
+a &lt;- ts(rnorm(20), frequency = 1) #WN process
+Box.test(a, lag=10, fitdf=0, type="Lj")
+```
+
+```
+
+	Box-Ljung test
+
+data:  a
+X-squared = 4.061, df = 10, p-value = 0.9446
+```
+
+
+
+```r
+x &lt;- 1:20
+y &lt;- 5*x+2
+b &lt;- ts(y, frequency = 1) #trend
+Box.test(b, lag=10, fitdf=0, type="Lj")
+```
+
+```
+
+	Box-Ljung test
+
+data:  b
+X-squared = 48.713, df = 10, p-value = 4.598e-07
+```
+
+
+
+---
+
+
+.pull-left[
+
+
+```r
+set.seed(132020)
+a &lt;- ts(rnorm(20), frequency = 1) #WN process
+autoplot(a)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+```r
+x &lt;- 1:20
+y &lt;- 5*x+2
+b &lt;- ts(y, frequency = 1) #trend
+autoplot(b)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Some simple forecasting methods
+
+## Notation
+
+Training set: `\(\{y_1, y_2, y_3, ..., y_T\}\)`
+
+Test set: `\(\{y_{T+1}, y_{T+2}, y_{T+3}, ..., y_{T+h}, ...\}\)`
+
+---
+
+## Average method
+
+- All future values are equal to the average (mean).
+
+`$$\hat{y}_{T+h|T} = \bar{y}=(y_1 + y_2 + ... + y_T)/T$$`
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+```
+
+```
+Time Series:
+Start = 1 
+End = 6 
+Frequency = 1 
+[1] 10 20 50 70 60 40
+```
+
+```r
+meanf(y, h=2)
+```
+
+```
+  Point Forecast    Lo 80    Hi 80     Lo 95    Hi 95
+7       41.66667 4.736783 78.59655 -22.65498 105.9883
+8       41.66667 4.736783 78.59655 -22.65498 105.9883
+```
+
+
+
+---
+## Naive method/ random walk
+
+- Simply set all forecasts to be the value of the last observation.
+
+`$$\hat{y}_{T+h|T} = y_T$$`
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+```
+
+```
+Time Series:
+Start = 1 
+End = 6 
+Frequency = 1 
+[1] 10 20 50 70 60 40
+```
+
+```r
+naive(y, h=2) 
+```
+
+```
+  Point Forecast     Lo 80    Hi 80      Lo 95    Hi 95
+7             40 15.017961 64.98204   1.793268 78.20673
+8             40  4.670061 75.32994 -14.032478 94.03248
+```
+
+```r
+rwf(y, h=2)
+```
+
+```
+  Point Forecast     Lo 80    Hi 80      Lo 95    Hi 95
+7             40 15.017961 64.98204   1.793268 78.20673
+8             40  4.670061 75.32994 -14.032478 94.03248
+```
+
+---
+## Seasonal naive method
+
+set each forecast to be equal to the last observed value from the same season of the year (e.g., this year sales forcasts for the month of December is set to what was sold in the previous year in the month of December). 
+
+`$$\hat{y}_{T+h|T} = y_{T+h-m(k+1)}$$`
+`\(m\)` - the seasonal period
+
+`\(k\)` - the integer part of  `\((h-1)/m\)` (i.e., the number of complete years in the forecast period prior to time  `\(T+h\)`.
+
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40, 60, 100), frequency = 4)
+y
+```
+
+```
+  Qtr1 Qtr2 Qtr3 Qtr4
+1   10   20   50   70
+2   60   40   60  100
+```
+
+```r
+snaive(y, h=2)
+```
+
+```
+     Point Forecast       Lo 80     Hi 80      Lo 95    Hi 95
+3 Q1             60 19.98356519 100.01643  -1.199856 121.1999
+3 Q2             40 -0.01643481  80.01643 -21.199856 101.1999
+```
+
+---
+
+## Drift method
+
+`$$\hat{y}_{T+h|T} = y_T + h\frac{y_T-y_1}{T-1}$$`
+
+- Similar to fitting a line between the first and last observations, and extrapolating it into the future
+
+`$$\frac{y-y_N}{x-x_N}=\frac{y_2-y_1}{x_2-x_1}$$`
+
+
+```r
+y &lt;- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+rwf(y, h=2, drift=TRUE)
+```
+
+```
+  Point Forecast    Lo 80    Hi 80      Lo 95     Hi 95
+7             46 19.42518 72.57482   5.357322  86.64268
+8             52 10.83047 93.16953 -10.963366 114.96337
+```
+
+---
+
+## Comparison between methods
+
+![](timeseries1_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+
+---
+
+## Training and test sets
+
+**Training set/ in-sample data:** is used to estimate any parameters of a forecasting method (80% of the total sample).
+
+
+**Test set/ out-of-sample data/ hold-out set:** evaluate the accuracy of the forecasts (20% of the total sample or at least as large as the length of the forecast horizon).
+
+![](traintest.png)
+
+---
+
+## Functions to subset a time series
+
+
+```r
+tsexample &lt;- ts(c(10, 20, 50, 60, 70, 80, 90, 100, 150, 160, 180, 200), frequency = 4, start = c(2015,1))
+tsexample
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2015   10   20   50   60
+2016   70   80   90  100
+2017  150  160  180  200
+```
+
+
+```r
+window(tsexample, start=c(2016, 2))
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2016        80   90  100
+2017  150  160  180  200
+```
+
+
+```r
+subset(tsexample, start=length(tsexample)-2*4)
+```
+
+```
+     Qtr1 Qtr2 Qtr3 Qtr4
+2015                  60
+2016   70   80   90  100
+2017  150  160  180  200
+```
+
+
+---
+
+## Functions to subset a time series (cont.)
+
+
+```r
+subset(tsexample, quarter =2)
+```
+
+```
+Time Series:
+Start = 2015.25 
+End = 2017.25 
+Frequency = 1 
+[1]  20  80 160
+```
+
+
+```r
+head(tsexample, 2)
+```
+
+```
+     Qtr1 Qtr2
+2015   10   20
+```
+
+```r
+tail(tsexample, 2)
+```
+
+```
+     Qtr3 Qtr4
+2017  180  200
+```
+
+---
+
+## Error measures
+
+error (unpredictable part of an observation): difference between an observed value and its forecast.
+
+`$$e_{T+h} = y_{T+h}-\hat{y}_{T+h|T}$$`
+
+## Mean absolute error: MAE
+
+`$$MAE = mean(|e_t|)$$`
+
+## Root mean squared error
+
+`$$RMSE = \sqrt{mean(e_t^2)}$$`
+
+## Percentage errors
+
+`$$MAPE = mean(|100e_t/y_t|)$$`
+
+## symmetric MAPE
+
+`$$sMAPE = mean(200|y_t-\hat{y}_t|/(y_t+\hat{y}_t))$$`
+
+---
+
+## Scaled errors
+
+`$$q_j = \frac{e_j}{\frac{1}{T-m}\sum_{t={m+1}}^T|y_t-y_{t-m}|}$$`
+
+`$$MASE = mean(|q_j|)$$`
+
+---
+
+## Forecast accuracy calculation
+
+
+```r
+moz &lt;- ts(mozzie$Colombo, frequency = 52, start=c(2008, 52))
+moz_training &lt;- window(moz, start=c(2008, 52), end=c(2013, 52))
+moz_test &lt;- window(moz, start=c(2014, 1))
+length(moz_test)
+```
+
+```
+[1] 18
+```
+
+```r
+fit1 &lt;- meanf(moz_training,h=18)
+fit2 &lt;- rwf(moz_training,h=18)
+fit3 &lt;- snaive(moz_training,h=18)
+```
+
+![](timeseries1_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+
+---
+
+## forecast accuracy
+
+
+```r
+accuracy(fit1, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Mean
+```
+
+```
+                 RMSE      MAE     MAPE      MASE
+Training set 80.17061 62.46083      Inf 0.8098711
+Test set     67.34743 49.25032 45.59053 0.6385828
+```
+
+```r
+accuracy(fit2, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Naive
+```
+
+```
+                  RMSE       MAE     MAPE      MASE
+Training set  62.14487  42.98462      Inf 0.5573413
+Test set     178.40715 169.55556 191.3185 2.1984683
+```
+
+```r
+accuracy(fit3, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Seasonal naive
+```
+
+```
+                  RMSE      MAE     MAPE      MASE
+Training set 103.27783 77.12440      Inf 1.0000000
+Test set      72.34639 55.22222 44.38492 0.7160149
+```
+
+---
 class: center, middle
+
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

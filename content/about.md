@@ -7,7 +7,6 @@ title: Applied Time Series Forecasting
 
 ### Course Information
 
-Course outline: here
 
 Lecturer-in-charge: [Dr Thiyanga Talagala](https://thiyanga.netlify.com/)
 
@@ -22,7 +21,7 @@ Here's your roadmap for the semester!
 
 **Week 1: Exploring and visualizing time series  using R and Beginning to model time series**
 
-📈 [Slides](/slides/timeseries1.html) 📚 [Reading: Ch. 1 and Ch. 2](https://otexts.com/fpp2/intro.html) 📋 Exercises
+📈 [Slides](/slides/timeseries1.html) 📚 [Reading: Ch. 1 and Ch. 3](https://otexts.com/fpp2/intro.html) 📋 Exercises
 
 **Week 2: Forecasting with (S)ARIMA models**
 

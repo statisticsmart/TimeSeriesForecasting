@@ -24,11 +24,47 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
-# Time series
+## Time series
 
 - A time series is a sequence of observations taken sequentially in time. 
 
+## Time series data vs Cross sectional data
 
+.pull-left[
+
+- Time series data
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(Year=c(2012, 2013, 2014, 2015),
+                 Values =c(120, 122, 140, 150))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- a set of observations, along with some information about what times those observations were recorded.
+
+- usually discrete and equally spaced time intervals.
+
+]
+
+.pull-right[
+
+- Cross-sectional data
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(ID=c(1, 2, 3, 4),
+                 Values =c(200, 350, 480, 250))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- observations that come from different individuals or groups at a single point in time.
+
+]
 ---
 
 ## Deterministic  vs Non-deterministic time series
@@ -85,15 +121,13 @@ library(knitr)
 library(magrittr)
 library(kableExtra)
 mathy.df <- data.frame(a = c("Sequence of random Variables", "Realized values of the random Variable", "Examples of realizations", "", "", ""), 
-b = c('$\\{X_1, X_2...X_t...X_N\\}$', "$\\{x_1, x_2,...x_t...x_N\\}$", "{20, 40, 20..., 190}", "{15, 20, 100..., 490}", "{15, 44, 39, ..., 329}", "...")
+b = c('$\\{X_1, X_2...X_t...X_T\\}$', "$\\{x_1, x_2,...x_t...x_T\\}$", "{20, 40, 20..., 190}", "{15, 20, 100..., 490}", "{15, 44, 39, ..., 329}", "...")
 )
 colnames(mathy.df) <- c("Description", "Notation")
-kable(mathy.df, format="html", align = "l", booktabs = T, escape = FALSE) %>% add_footnote("N - length of the time series, t - time index")
+kable(mathy.df, format="html", align = "l", booktabs = T, escape = FALSE) %>% add_footnote("T - length of the time series, t - time index")
 ```
 
 ---
-
-- 
 
 ## Time series to be analyzed
 
@@ -115,9 +149,875 @@ autoplot(y)+ylab("Number of dengue cases in Colombo")
 - The observed time series or time series to be analyzed is **a particular realization of a stochastic process**.
 ---
 
+## Time series forecasting
 
+```{r, comment=NA, echo=FALSE, message=FALSE, fig.width=15}
+library(fpp2)
+library(forecast)
+# Set training data from 1992 to 2007
+beer2 <- window(ausbeer,start=1992,end=c(2007,4))
+# Plot some forecasts
+autoplot(beer2) +
+  autolayer(meanf(beer2, h=11),
+    series="Method 1", PI=FALSE) +
+  autolayer(naive(beer2, h=11),
+    series="Method 2", PI=FALSE) +
+  autolayer(snaive(beer2, h=11),
+    series="Method 3", PI=FALSE) +
+  ggtitle("Forecasts for sales") +
+  xlab("Year") + ylab("Sales") +
+  guides(colour=guide_legend(title="Forecast"))
+
+```
+
+
+## Types of methods
+
+- Qualitative forecast
+
+
+- Quantitative forecast
+
+---
+
+# Basic steps in a forecasting task
+
+- Problem definition
+
+- Collect data
+
+- Data visualization
+
+- Modelling
+
+- Evaluate the fitted model
+
+---
+
+## Frequency of a time series: Seasonal periods
+
+- Frequency: number of observation per natual time interval of measurement (usually year,  but sometimes a week, a day or an hour)
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+ts <- data.frame(Data=c("Annual", "Quarterly", "Monthly", "Weekly"),
+                  Frequency =c("1", "4", "12", "52 or 52.18"))
+kable(ts, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+- Multiple frequency setting
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsf <- data.frame(Data=c("Daily", "Hourly", "Half-Hourly", "Minutes", "Seconds"), Minute=c("", "", "", "", "60"),
+                 Hour=c("", "", "", "60", "3600"),
+                 Day=c("", "24", "48", "1440", "86400"),
+                 Week=c("7", "168", "336", "10080", "604800"),
+                 Year=c("365.25", "8766", "17532", "525960", "31557600")
+                 )
+kable(tsf, format="html", align = "l", booktabs = T, escape = FALSE)
+```  
+
+
+
+---
+.pull-left[
+
+## Monthly time series
+
+```{r, echo=FALSE}
+
+y <- ts(USAccDeaths, start=1949, frequency = 12)
+autoplot(y)
+```
+
+- Length of the series: 72
+
+- Monthly seasonality
+
+]
+
+
+.pull-right[
+
+## Half-hourly Time Series
+
+```{r, echo=FALSE}
+x <- msts(taylor, seasonal.periods=c(48,336), start=2000+22/52)
+autoplot(x)
+```
+
+- Length of the series: 4032
+
+- Daily seasonality and weekly seasonality
+
+]
+
+--
+Note: Monthly seasonality with high-frequency data (daily, hourly, etc.) is tricky due to variable month lengths. You can't specify that using seasonal periods. It could be possibly handled using a dummy variable. 
+
+---
+
+class: duke-orange
+
+# Your turn
+
+- What are the frequencies for a monthly time series with semi-annual and annual pattern?
+
+
+---
+
+# `ts` object in R
+
+- Annual time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Year=c(2012, 2013, 2014, 2015),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=2012)
+y
+```
+
+---
+
+# `ts` object in R
+
+- Quarterly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Quarter=c("2012-Q1", "2012-Q2", "2012-Q3", "2012-Q4", "2013-Q1"),
+                 Values =c(120, 122, 140, 150, 200))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150, 200), start=c(2012, 1), frequency = 4)
+y
+```
+
+
+
+---
+# `ts` object in R
+
+- Monthly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Month=c("2012-Jan", "2012-Feb", "2012-March", "2012-April"),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 12)
+y
+```
+
+---
+# `ts` object in R
+
+- Weekly time series
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Week=c("2012-W1", "2012-W2", "2012-W3", "2012-W4"),
+                 Values =c(120, 122, 140, 150))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150), start=c(2012, 1), frequency = 52)
+y
+```
+
+---
+
+## Time series plots
+
+.pull-left[
+
+```{r, comment=NA, echo=FALSE}
+library(knitr)
+library(magrittr)
+library(kableExtra)
+tsdataset <- data.frame(Year=c(2012, 2013, 2014, 2015, 2016, 2017),
+                 Values =c(120, 122, 140, 150, 200, 250))
+kable(tsdataset, format="html", align = "l", booktabs = T, escape = FALSE)
+```
+
+```{r, comment=NA}
+y <- ts(c(120, 122, 140, 150, 200, 250), start=2012)
+y
+class(y)
+```
+
+]
+
+
+.pull-right[
+
+```{r, comment=NA}
+autoplot(y)
+```
+
+
+]
+
+---
+
+## Add title and labels 
+
+.pull-left[
+
+```{r, comment=NA}
+autoplot(y)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+autoplot(y)+ylab("Number of sales")+
+  xlab("Year")+
+  ggtitle("Time series plot of sales from 2012 to 2017")
+```
+
+]
+
+---
+
+class: duke-orange
+
+## Your turn
+
+Create plots of the following time series: dengue counts in Gampaha (Use `mozzie` package), a10 series (`fpp2` package). 
+
+Use help() to find out about the data in each series.
+
+Modify the axis labels and title.
+
+---
+
+# Time series patterns
+
+### Trend
+
+- Long-term increase or decrease in the data.
+
+### Seasonal
+
+
+- A seasonal pattern exists when a series is influenced by seasonal factors (e.g.,
+the quarter of the year, the month, or day of the week). Seasonality is always
+of a **fixed** and **known period**. Hence, seasonal time series are sometimes called
+periodic time series.
+
+- Period is unchanging and associated with some aspect of the
+calendar.
+
+
+### Cyclic
+
+- A cyclic pattern exists when data exhibit rises and falls that are not of fixed
+period. The duration of these fluctuations is usually of at least 2 years.
+
+
+
+In general, 
+
+  - the average length of cycles is longer than the length of a seasonal pattern.
+
+  - the magnitude of cycles tends to be more variable than the magnitude of seasonal patterns.
+  
+---
+
+## Cyclic pattern
+
+```{r, echo=FALSE, comment=NA, message=F}
+library(fpp2)
+autoplot(lynx) + xlab("Year") + ylab("Number of lynx trapped")
+
+```
+  
+---
+
+## Cyclic and seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+autoplot(hsales) + xlab("Year") + ylab("Monthly housing sales
+(millions)")
+
+```
+
+---
+
+
+## Multiple seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+autoplot(taylor) + xlab("Week") + ylab("Electricity demand (GW)")
+
+```
+  
+---
+
+## Seasonal pattern
+
+```{r, echo=FALSE, comment=NA}
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+```  
+---
+
+## Trend
+
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+x <- 1:20
+y <- 5*x+rnorm(20)
+y <- ts(y, frequency = 1, start=1980)
+autoplot(y)
+
+```
+
+---
+
+## Trend and seasonal
+
+```{r, comment=NA, echo=FALSE}
+autoplot(a10) + ylab("$ million") + xlab("Year") +
+ggtitle("Antidiabetic drug sales")
+```
+
+---
+
+## What about this?
+
+- Daily morning gold prices in US dollars. 1 January 1985 – 31 March 1989.
+
+```{r, comment=F, echo=F}
+gold <- msts(gold, seasonal.periods = c(7, 365.25), start=c(1985, 1))
+autoplot(gold)
+```
+
+
+---
+
+## What about this?
+
+```{r, comment=NA, echo=F}
+set.seed(132020)
+a <-  rnorm(50)
+a <- ts(a, frequency = 1, start=1940)
+autoplot(a)+ylab("Values")+ggtitle("Series A")
+```
+
+---
+
+## Autocorrelation function: ACF
+
+- **correlation** measures the strength of linear relationship between two variables.
+
+- **autocorrelation** measures the strength of linear relationship between lagged values of a time series.
+
+
+.pull-left[
+## Lagged values
+
+```{r, comment=NA, echo=F}
+df <- data.frame(t=1:6,
+                 yt=c(3, 9, 8, 4, 2, 7),
+                 yt1=c(NA, 3, 9, 8, 4, 2),
+                 yt2=c(NA, NA, 3, 9, 8, 4),
+                 yt3=c(NA, NA, NA, 3, 9, 8))
+colnames(df) <- c("$$t$$", "$$Y_t$$", "$$Y_{t-1}$$", "$$Y_{t-2}$$", "$$Y_{t-3}$$")
+kable(df, format="html", align = "c", escape = T)%>%
+  kable_styling(full_width = T)
+
+```
+
+]
+
+.pull-right[
+
+## Autocorrelation coefficient
+
+$$r_k=\frac{\sum_{t=k+1}^{T}(y_t-\bar{y})(y_{t-k}-\bar{y})}{\sum_{t=1}^T(y_t-\bar{y})^2}$$
+
+measures the linear relationship between $y_t$ and $y_{t-k}$.
+
+]
+
+---
+## Quarterly beer production
+
+.pull-left[
+
+Time series plot
+
+```{r, echo=FALSE, comment=NA}
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+```  
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(beer)
+```  
+
+]
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(beer, plot=FALSE)
+```  
+
+
+---
+
+.pull-left[
+
+Time series plot
+
+```{r, echo=FALSE, comment=NA}
+autoplot(a)+ylab("Values")+ggtitle("Series A")
+```  
+
+
+]
+
+.pull-right[
+
+Correlogram
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(a)
+```  
+
+]
+
+```{r, echo=FALSE, comment=NA}
+ggAcf(a, plot=FALSE)
+```  
+
+** This is a white noise process. It is a time series of iid data.**
+
+---
+
+## Sampling distribution of autocorrelations
+
+- Sampling distribution of $r_k$ for white noise data is
+asymptotically $N(0,1/T)$.
+
+
+- 95% confidence bands: $±1.96/\sqrt{T}$
+
+## The autocorrelation plot can provide answers to the following questions:
+
+  - Are the data random?
+    
+  - Is the observed time series white noise?
+    
+  - Does the time series contain strong seasonal patterns?
+    
+  - Does the time series contain a trend?
+
+---
+
+# Trend
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA}
+library(fpp2)
+x <- 1:200
+y <- 5*x+rnorm(200)
+y <- ts(y, frequency = 1, start=1900)
+autoplot(y)
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, echo=F}
+ggAcf(y)
+```
+
+]
+
+---
+
+# Seasonal and Trend
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA}
+autoplot(a10) + ylab("$ million") + xlab("Year") +
+ggtitle("Antidiabetic drug sales")
+
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA, echo=F}
+ggAcf(a10, lag.max = 50)
+```
+
+]
+
+---
+
+# Is this a white noise process?
+
+.pull-left[
+
+```{r, echo=FALSE, comment=NA}
+set.seed(132020)
+a <- cumsum(rnorm(25))
+a <- ts(a, frequency = 1, start=1990)
+autoplot(a)+ylab("Values")
+```
+
+]
+.pull-right[
+
+```{r, comment=NA, echo=F}
+ggAcf(a, lag.max = 50)
+```
+
+]
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+
+
+---
+## Which is which?
+
+![](acf.png)
+
+Reference: Forecasting: Principles and Practice, Hyndman & Athanasopoulos (3rd ed., 2020)
+
+---
+
+## Portmanteau tests for autocorrelation
+
+- Consider the first $h$ autocorrelation values together. 
+
+## Box-Pierce test
+
+The test statistics of the Box-Pierce test is
+
+$$Q = T\sum_{k=1}^hr_k^2$$
+
+where $h$ is the maximum lag being considered and $T$ is the number of observations.
+
+## Ljung-Box test
+
+The test statistics of the Ljung-Box test test is
+
+$$Q^* = T(T+2)\sum_{k=1}^{h}(T-k)^{-1}r_k^2$$
+
+- The both $Q$ and $Q^*$ follows a $\chi^2$ distribution with $(h-K)$ degrees of freedom, where $K$ is the number of parameters in the model. If $Q$ and $Q*$ are calculated from raw data (rather than the residuals from a model), then set $K=0$.
+
+---
+
+## Portmanteau tests for autocorrelation
+
+H0: Data are not serially correlated.
+
+H1: Data are serially correlated.
+
+
+
+```{r, comment=NA}
+set.seed(132020)
+a <- ts(rnorm(20), frequency = 1) #WN process
+Box.test(a, lag=10, fitdf=0, type="Lj")
+```
+
+
+```{r, comment=NA}
+x <- 1:20
+y <- 5*x+2
+b <- ts(y, frequency = 1) #trend
+Box.test(b, lag=10, fitdf=0, type="Lj")
+```
+
+
+
+---
+
+
+.pull-left[
+
+```{r, comment=NA}
+set.seed(132020)
+a <- ts(rnorm(20), frequency = 1) #WN process
+autoplot(a)
+```
+
+]
+
+.pull-right[
+
+```{r, comment=NA}
+x <- 1:20
+y <- 5*x+2
+b <- ts(y, frequency = 1) #trend
+autoplot(b)
+```
+]
+
+---
+
+# Some simple forecasting methods
+
+## Notation
+
+Training set: $\{y_1, y_2, y_3, ..., y_T\}$
+
+Test set: $\{y_{T+1}, y_{T+2}, y_{T+3}, ..., y_{T+h}, ...\}$
+
+---
+
+## Average method
+
+- All future values are equal to the average (mean).
+
+$$\hat{y}_{T+h|T} = \bar{y}=(y_1 + y_2 + ... + y_T)/T$$
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+meanf(y, h=2)
+```
+
+
+
+---
+## Naive method/ random walk
+
+- Simply set all forecasts to be the value of the last observation.
+
+$$\hat{y}_{T+h|T} = y_T$$
+
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+y
+naive(y, h=2) 
+rwf(y, h=2)
+```
+
+---
+## Seasonal naive method
+
+set each forecast to be equal to the last observed value from the same season of the year (e.g., this year sales forcasts for the month of December is set to what was sold in the previous year in the month of December). 
+
+$$\hat{y}_{T+h|T} = y_{T+h-m(k+1)}$$
+$m$ - the seasonal period
+
+$k$ - the integer part of  $(h-1)/m$ (i.e., the number of complete years in the forecast period prior to time  $T+h$.
+
+
+```{r, comment=NA}
+y <- ts(c(10, 20, 50, 70, 60, 40, 60, 100), frequency = 4)
+y
+snaive(y, h=2)
+```
+
+---
+
+## Drift method
+
+$$\hat{y}_{T+h|T} = y_T + h\frac{y_T-y_1}{T-1}$$
+
+- Similar to fitting a line between the first and last observations, and extrapolating it into the future
+
+$$\frac{y-y_N}{x-x_N}=\frac{y_2-y_1}{x_2-x_1}$$
+
+```{r, comment=NA, fig.height=3}
+y <- ts(c(10, 20, 50, 70, 60, 40), frequency = 1)
+rwf(y, h=2, drift=TRUE)
+```
+
+---
+
+## Comparison between methods
+
+```{r, comment=NA, echo=F, fig.width=15, fig.height=10}
+# Set training data from 1992 to 2007
+moz <- ts(mozzie$Colombo, frequency = 52, start=c(2008, 51))
+# Plot some forecasts
+autoplot(moz) +
+  autolayer(meanf(moz, h=28),
+    series="Mean", PI=FALSE) +
+  autolayer(naive(moz, h=28),
+    series="Naïve", PI=FALSE) +
+  autolayer(snaive(moz, h=28),
+    series="Seasonal naïve", PI=FALSE) +
+  autolayer(rwf(moz, h=28, drift=TRUE),
+    series="Drift", PI=FALSE) +
+  ggtitle("Forecasts for dengue cases in Colombo") +
+  xlab("Year") + ylab("Number of dengue cases") +
+  guides(colour=guide_legend(title="Forecast"))
+
+```
+
+---
+
+## Training and test sets
+
+**Training set/ in-sample data:** is used to estimate any parameters of a forecasting method (80% of the total sample).
+
+
+**Test set/ out-of-sample data/ hold-out set:** evaluate the accuracy of the forecasts (20% of the total sample or at least as large as the length of the forecast horizon).
+
+![](traintest.png)
+
+---
+
+## Functions to subset a time series
+
+```{r, comment=NA}
+tsexample <- ts(c(10, 20, 50, 60, 70, 80, 90, 100, 150, 160, 180, 200), frequency = 4, start = c(2015,1))
+tsexample
+```
+
+```{r, comment=NA}
+window(tsexample, start=c(2016, 2))
+```
+
+```{r, comment=NA}
+subset(tsexample, start=length(tsexample)-2*4)
+```
+
+
+---
+
+## Functions to subset a time series (cont.)
+
+```{r, comment=NA}
+subset(tsexample, quarter =2)
+```
+
+```{r, comment=NA}
+head(tsexample, 2)
+tail(tsexample, 2)
+```
+
+---
+
+## Error measures
+
+error (unpredictable part of an observation): difference between an observed value and its forecast.
+
+$$e_{T+h} = y_{T+h}-\hat{y}_{T+h|T}$$
+
+## Mean absolute error: MAE
+
+$$MAE = mean(|e_t|)$$
+
+## Root mean squared error
+
+$$RMSE = \sqrt{mean(e_t^2)}$$
+
+## Percentage errors
+
+$$MAPE = mean(|100e_t/y_t|)$$
+
+## symmetric MAPE
+
+$$sMAPE = mean(200|y_t-\hat{y}_t|/(y_t+\hat{y}_t))$$
+
+---
+
+## Scaled errors
+
+$$q_j = \frac{e_j}{\frac{1}{T-m}\sum_{t={m+1}}^T|y_t-y_{t-m}|}$$
+
+$$MASE = mean(|q_j|)$$
+
+---
+
+## Forecast accuracy calculation
+
+```{r, comment=NA}
+moz <- ts(mozzie$Colombo, frequency = 52, start=c(2008, 52))
+moz_training <- window(moz, start=c(2008, 52), end=c(2013, 52))
+moz_test <- window(moz, start=c(2014, 1))
+length(moz_test)
+fit1 <- meanf(moz_training,h=18)
+fit2 <- rwf(moz_training,h=18)
+fit3 <- snaive(moz_training,h=18)
+```
+
+```{r, comment=NA, echo=FALSE, fig.width=15, fig.height=6}
+autoplot(moz) +
+  autolayer(fit1, series="Mean", PI=FALSE) +
+  autolayer(fit2, series="Naïve", PI=FALSE) +
+  autolayer(fit3, series="Seasonal naïve", PI=FALSE) +
+  xlab("Year") + ylab("Number of dengue cases") +
+  ggtitle("Forecasts for Dengue cases in Colombo") +
+  guides(colour=guide_legend(title="Forecast"))
+```
+
+---
+
+## forecast accuracy
+
+```{r, comment=NA}
+accuracy(fit1, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Mean
+accuracy(fit2, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Naive
+accuracy(fit3, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Seasonal naive
+
+```
 
 ---
 class: center, middle
 
 
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)

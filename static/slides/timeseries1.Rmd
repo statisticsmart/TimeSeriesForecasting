@@ -818,7 +818,9 @@ autoplot(b)
 
 ## Notation
 
+Training set: $\{y_1, y_2, y_3, ..., y_T\}$
 
+Test set: $\{y_{T+1}, y_{T+2}, y_{T+3}, ..., y_{T+h}, ...\}$
 
 ---
 
@@ -947,6 +949,75 @@ tail(tsexample, 2)
 ```
 
 ---
+
+## Error measures
+
+error (unpredictable part of an observation): difference between an observed value and its forecast.
+
+$$e_{T+h} = y_{T+h}-\hat{y}_{T+h|T}$$
+
+## Mean absolute error: MAE
+
+$$MAE = mean(|e_t|)$$
+
+## Root mean squared error
+
+$$RMSE = \sqrt{mean(e_t^2)}$$
+
+## Percentage errors
+
+$$MAPE = mean(|100e_t/y_t|)$$
+
+## symmetric MAPE
+
+$$sMAPE = mean(200|y_t-\hat{y}_t|/(y_t+\hat{y}_t))$$
+
+---
+
+## Scaled errors
+
+$$q_j = \frac{e_j}{\frac{1}{T-m}\sum_{t={m+1}}^T|y_t-y_{t-m}|}$$
+
+$$MASE = mean(|q_j|)$$
+
+---
+
+## Forecast accuracy calculation
+
+```{r, comment=NA}
+moz <- ts(mozzie$Colombo, frequency = 52, start=c(2008, 52))
+moz_training <- window(moz, start=c(2008, 52), end=c(2013, 52))
+moz_test <- window(moz, start=c(2014, 1))
+length(moz_test)
+fit1 <- meanf(moz_training,h=18)
+fit2 <- rwf(moz_training,h=18)
+fit3 <- snaive(moz_training,h=18)
+```
+
+```{r, comment=NA, echo=FALSE, fig.width=15, fig.height=6}
+autoplot(moz) +
+  autolayer(fit1, series="Mean", PI=FALSE) +
+  autolayer(fit2, series="Naïve", PI=FALSE) +
+  autolayer(fit3, series="Seasonal naïve", PI=FALSE) +
+  xlab("Year") + ylab("Number of dengue cases") +
+  ggtitle("Forecasts for Dengue cases in Colombo") +
+  guides(colour=guide_legend(title="Forecast"))
+```
+
+---
+
+## forecast accuracy
+
+```{r, comment=NA}
+accuracy(fit1, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Mean
+accuracy(fit2, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Naive
+accuracy(fit3, moz_test)[,c("RMSE", "MAE", "MAPE", "MASE")] # Seasonal naive
+
+```
+
+---
 class: center, middle
 
 
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
