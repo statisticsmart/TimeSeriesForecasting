@@ -152,7 +152,6 @@ autoplot(y)+ylab("Number of dengue cases in Colombo")
 ## Set of numbers or set of images taken sequentially in time
 
 ![](figsat.png)
-
 ---
 
 ## Time series forecasting
