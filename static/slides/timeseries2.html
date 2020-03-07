@@ -50,10 +50,58 @@ where `\(-\infty &lt; x_1, ..., x_n &lt; \infty\)` and `\(n = 1, 2, ...\)`
 
 ---
 
-# Mean, Variance, Covariance
 
+## Mean function
 
+--
+The **mean function** of `\(\{X_t\}\)` is
 
+`$$\mu_X(t)=E(X_t).$$`
+--
+## Covariance function
+
+The **covariance function** of `\(\{X_t\}\)` is
+
+`$$\gamma_X(r, s)=Cov(X_r, X_s)=E[(X_r-\mu_X(r))(X_s-\mu_X(s))]$$`
+
+for all integers `\(r\)` and `\(s\)`.
+
+--
+
+The covariance function of `\(\{X_t\}\)` at lag `\(h\)` is defined by
+`$$\gamma_X(h):=\gamma_X(h, 0)=\gamma(t+h, t)=Cov(X_{t+h}, X_t).$$`
+
+--
+
+## Autocovariance function
+
+The autocovariance function of `\({X_t}\)` at lag `\(h\)` is
+
+`$$\gamma_X(h)=Cov(X_{t+h}, X_t).$$`
+
+---
+
+## Autocorrelation function
+
+The autocorrelation function of `\({X_t}\)` at lag `\(h\)` is
+
+`$$\rho_X(h)=\frac{\gamma_X(h)}{\gamma_X(0)}=Cor(X_{t+h}, X_t).$$`
+
+---
+
+## Weekly stationary
+
+A time series `\(\{X_t\}\)` is called weekly stationary if 
+
+- `\(\mu_X(t)\)` is independent of `\(t\)`.
+
+- `\(\gamma_X(t+h, t)\)` is independent of `\(t\)` for each `\(h\)`.
+
+--
+
+## Strict stationarity of a time series
+
+A time series `\(\{X_t\}\)` is called weekly stationary if the random vector `\([X_1, X_2..., X_n]'\)` and `\([X_{1+h}, X_{2+h}..., X_{n+h}]'\)` have the same joint distribution for all integers `\(h\)` and `\(n&gt;0\)`.
 
 ---
 
