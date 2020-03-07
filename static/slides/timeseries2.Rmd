@@ -95,6 +95,8 @@ A time series $\{X_t\}$ is called weekly stationary if
 
 - $\gamma_X(t+h, t)$ is independent of $t$ for each $h$.
 
+In otherwords the statistical properties of the time series (mean, variance, autocorrelation, etc.) do not depend on the time at which the series is observed, that is no trend or seasonality. However,  a time series with cyclic behaviour (but with no trend or seasonality) is stationary.
+
 --
 
 ## Strict stationarity of a time series
@@ -180,12 +182,55 @@ Is $\{S_t, t=0, 1, 2, ...\}$ a weak stationary process?
 
 ---
 
-## Trend Estimation
+## Identifying non-stationarity in the mean
+
+- Using time series plot
+
+- ACF plot
+
+   - ACF of stationary time series will drop to relatively quickly.
+   
+   - The ACF of non-stationary series decreases slowly.
+   
+   - For non-stationary series, the ACF at lag 1 is often large and positive.
+
 
 ---
 
-## Trend Elimination
+# Elimination of Trend and Seasonality by Differencing
 
+- Differencing helps to stabilize the mean.
+
+## Backshift notation: 
+
+$$BX_t=X_{t-1}$$
+
+## Ordinary differencing
+
+The first-order differencing can be defined as
+
+$$\nabla X_t = X_t-X_{t-1}=X_t-BX_t=(1-B)X_t$$
+The second-order differencing
+
+$$\nabla^2X_t=\nabla(\nabla X_t)=\nabla(X_t-X_{t-1})=\nabla X_t - \nabla X_{t-1}=X_t-2X_{t-1}+X_{t-2}$$
+- In practice, we seldom need to go beyond second order differencing. 
+
+
+---
+## Seasonal differencing
+
+- differencing between an observation and the corresponding observation from the previous year.
+
+$$\nabla_mX_t=X_t-X_{t-m}=(1-B^m)X_t$$
+where $m$ is the number of seasons. For monthly, $m=12$, for quarterly $m=4$.
+
+For monthly series
+
+$$\nabla_{12}X_t=X_t-X_{t-12}$$
+
+Twice-differenced series
+
+$$\nabla^2_{12}X_t=\nabla_{12}X_t-\nabla_{12}X_{t-1}=(X_t-X_{t-12})-(X_{t-1}-X_{t-13})$$
 
 ---
 
