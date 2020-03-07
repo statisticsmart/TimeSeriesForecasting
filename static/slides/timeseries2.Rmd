@@ -2,7 +2,7 @@
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
 author: "Dr. Thiyanga Talagala"
-date: "1 March 2020"
+date: "8 March 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -45,6 +45,13 @@ $$P[X_1 \le x_1, X_2 \le x_2, ..., X_n \le x_n]$$
  
 
 where $-\infty < x_1, ..., x_n < \infty$ and $n = 1, 2, ...$
+
+---
+
+# Mean, Variance, Covariance
+
+
+
 
 ---
 
