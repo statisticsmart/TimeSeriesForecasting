@@ -236,9 +236,102 @@ $$\nabla^2_{12}X_t=\nabla_{12}X_t-\nabla_{12}X_{t-1}=(X_t-X_{t-12})-(X_{t-1}-X_{
 
 If seasonality is strong, the seasonal differencing should be done first.
 
-
 ---
 
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+autoplot(goog200)
+ggAcf(goog200)
+```
+
+]
+
+.pull-right[
+
+Differenced series
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+a <- ts(cumsum(rnorm(20)))
+autoplot(diff(goog200))
+ggAcf(diff(goog200))
+```
+
+]
+
+- For a stationary time series, the ACF will drop to zero relatively quickly, while the ACF of non-stationary data decreases slowly.
+---
+
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+set.seed(1)
+a <- ts(cumsum(rnorm(20)))
+autoplot(a)
+ggAcf(a)
+```
+
+]
+
+.pull-right[
+
+Differenced series
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+a <- ts(cumsum(rnorm(20)))
+autoplot(diff(a))
+ggAcf(diff(a))
+```
+
+]
+---
+
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+ggAcf(beer)
+```
+
+]
+
+.pull-right[
+
+Seasonal Differencing
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+autoplot(diff(beer, lag=4))
+ggAcf(diff(beer, lag=4))
+```
+]
+
+
+---
 # Linear filter model
 
 A linear filter is an operation $L$ which transform the white noise process into another time series $\{X_t\}$.
@@ -318,7 +411,7 @@ Find the mean, variance and the autocorrelation function of a AR(1) process.
 
 Help:
 
-$$Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y$$
+$$Cov(X+Y, X+Y)=Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y)$$
 $$Cov(X, Y)=E[(X-\mu_X)(Y-\mu_Y)]$$
 ---
 
@@ -376,13 +469,15 @@ where $\epsilon_t$ is white noise.
 
 - The current value $x_t$ can be thought of as a weighted moving average of the past few forecast errors.
 
+- $MA(q)$ is always stationary.
+
 --
 
 - Any $AR(p)$ model can be written as an $MA(\infty)$ model using repeated substitution.
 
 ---
 
-## Inconvertibility condition of an MA model
+## Invertibility condition of an MA model
 
 $$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$
 Using back shift operator,
@@ -394,13 +489,16 @@ $$x_t=\theta_q(B)\epsilon_t+c.$$
 
 The $\theta_q$ is defined as an MA operator.
 
+Any $MA(q)$ process can be written as an $AR(\infty)$ process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+
+
 MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the unit circle, $|\theta| \geq 1$.
 
 ---
 
 ## MA(1) process
 
-1. Obtain the inconvertibility condition of $MA(1)$ process.
+1. Obtain the invertibility condition of $MA(1)$ process.
 
 1. Calculate mean, variance, ACF and PACF of $MA(1)$ process.
 
@@ -544,3 +642,25 @@ $$ARMA(p, d, q)(P, D, Q)_m$$
 $$ARIMA(1,1,1)(1,1,1)_4$$
 
 $$(1-\phi_1B)(1-\Phi_1B^4)(1-B)(1-B^4)x_t=(1+\theta_1B)(1+\Theta_1B^4)\epsilon_t$$
+
+   $(1-\phi_1B)$ - Non-seasonal $AR(1)$
+
+   $(1-\Phi_1B^4)$ - Seasonal $AR(1)$
+
+   $(1-B)$ - Non-seasonal difference
+
+   $(1-B^4)$ - Deasonal difference
+
+   $(1+\theta_1B)$ - Non-seasonal $MA(1)$
+
+   $(1+\Theta B^4)$ - Seasonal $MA(1)$
+
+---
+
+## Question
+
+1. Write down the model for 
+
+$$ARIMA(0, 0, 1)(0, 0, 1)_{12}$$
+$$ARIMA(1,0,0)(1,0,0)_{12}$$
+

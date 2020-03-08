@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1]  0.42602839  1.20426059  0.02187974 -0.16652850 -1.03471925 -0.76278279
- [7] -0.02764741 -0.14207016 -0.43830015 -0.11893336  0.27902607  0.12292448
-[13] -0.81252529  0.55662909 -0.77007385
+ [1] -1.45366349  0.84481516  1.31497823  0.46568047  0.89579045  1.92714431
+ [7] -0.46813954  1.97348107 -0.82278497 -1.71239858  0.02815214 -0.33510602
+[13]  0.78471691 -0.06400969  0.91872131
 ```
 
 --
@@ -245,9 +245,64 @@ Twice-differenced series
 
 If seasonality is strong, the seasonal differencing should be done first.
 
-
 ---
 
+
+.pull-left[
+
+Original series
+
+![](timeseries2_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-2-2.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+Differenced series
+
+![](timeseries2_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-3-2.png)&lt;!-- --&gt;
+
+]
+
+- For a stationary time series, the ACF will drop to zero relatively quickly, while the ACF of non-stationary data decreases slowly.
+---
+
+
+.pull-left[
+
+Original series
+
+![](timeseries2_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-4-2.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+Differenced series
+
+![](timeseries2_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-5-2.png)&lt;!-- --&gt;
+
+]
+---
+
+
+.pull-left[
+
+Original series
+
+![](timeseries2_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-6-2.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+Seasonal Differencing
+
+![](timeseries2_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;![](timeseries2_files/figure-html/unnamed-chunk-7-2.png)&lt;!-- --&gt;
+]
+
+
+---
 # Linear filter model
 
 A linear filter is an operation `\(L\)` which transform the white noise process into another time series `\(\{X_t\}\)`.
@@ -327,7 +382,7 @@ Find the mean, variance and the autocorrelation function of a AR(1) process.
 
 Help:
 
-`$$Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y$$`
+`$$Cov(X+Y, X+Y)=Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y)$$`
 `$$Cov(X, Y)=E[(X-\mu_X)(Y-\mu_Y)]$$`
 ---
 
@@ -385,13 +440,15 @@ where `\(\epsilon_t\)` is white noise.
 
 - The current value `\(x_t\)` can be thought of as a weighted moving average of the past few forecast errors.
 
+- `\(MA(q)\)` is always stationary.
+
 --
 
 - Any `\(AR(p)\)` model can be written as an `\(MA(\infty)\)` model using repeated substitution.
 
 ---
 
-## Inconvertibility condition of an MA model
+## Invertibility condition of an MA model
 
 `$$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$`
 Using back shift operator,
@@ -403,13 +460,16 @@ Hence,
 
 The `\(\theta_q\)` is defined as an MA operator.
 
+Any `\(MA(q)\)` process can be written as an `\(AR(\infty)\)` process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+
+
 MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle, `\(|\theta| \geq 1\)`.
 
 ---
 
 ## MA(1) process
 
-1. Obtain the inconvertibility condition of `\(MA(1)\)` process.
+1. Obtain the invertibility condition of `\(MA(1)\)` process.
 
 1. Calculate mean, variance, ACF and PACF of `\(MA(1)\)` process.
 
@@ -553,6 +613,27 @@ For quarterly series
 `$$ARIMA(1,1,1)(1,1,1)_4$$`
 
 `$$(1-\phi_1B)(1-\Phi_1B^4)(1-B)(1-B^4)x_t=(1+\theta_1B)(1+\Theta_1B^4)\epsilon_t$$`
+
+   `\((1-\phi_1B)\)` - Non-seasonal `\(AR(1)\)`
+
+   `\((1-\Phi_1B^4)\)` - Seasonal `\(AR(1)\)`
+
+   `\((1-B)\)` - Non-seasonal difference
+
+   `\((1-B^4)\)` - Deasonal difference
+
+   `\((1+\theta_1B)\)` - Non-seasonal `\(MA(1)\)`
+
+   `\((1+\Theta B^4)\)` - Seasonal `\(MA(1)\)`
+
+---
+
+## Question
+
+1. Write down the model for 
+
+`$$ARIMA(0, 0, 1)(0, 0, 1)_{12}$$`
+`$$ARIMA(1,0,0)(1,0,0)_{12}$$`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

@@ -236,9 +236,102 @@ $$\nabla^2_{12}X_t=\nabla_{12}X_t-\nabla_{12}X_{t-1}=(X_t-X_{t-12})-(X_{t-1}-X_{
 
 If seasonality is strong, the seasonal differencing should be done first.
 
-
 ---
 
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+autoplot(goog200)
+ggAcf(goog200)
+```
+
+]
+
+.pull-right[
+
+Differenced series
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+a <- ts(cumsum(rnorm(20)))
+autoplot(diff(goog200))
+ggAcf(diff(goog200))
+```
+
+]
+
+- For a stationary time series, the ACF will drop to zero relatively quickly, while the ACF of non-stationary data decreases slowly.
+---
+
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+set.seed(1)
+a <- ts(cumsum(rnorm(20)))
+autoplot(a)
+ggAcf(a)
+```
+
+]
+
+.pull-right[
+
+Differenced series
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+a <- ts(cumsum(rnorm(20)))
+autoplot(diff(a))
+ggAcf(diff(a))
+```
+
+]
+---
+
+
+.pull-left[
+
+Original series
+
+```{r echo=FALSE, message=FALSE, comment=NA, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+beer <- window(ausbeer,start=1992)
+autoplot(beer)
+ggAcf(beer)
+```
+
+]
+
+.pull-right[
+
+Seasonal Differencing
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=5}
+library(forecast)
+library(ggplot2)
+library(fpp2)
+autoplot(diff(beer, lag=4))
+ggAcf(diff(beer, lag=4))
+```
+]
+
+
+---
 # Linear filter model
 
 A linear filter is an operation $L$ which transform the white noise process into another time series $\{X_t\}$.
@@ -318,7 +411,7 @@ Find the mean, variance and the autocorrelation function of a AR(1) process.
 
 Help:
 
-$$Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y$$
+$$Cov(X+Y, X+Y)=Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y)$$
 $$Cov(X, Y)=E[(X-\mu_X)(Y-\mu_Y)]$$
 ---
 
