@@ -26,7 +26,7 @@ Here's your roadmap for the semester!
 **Week 2: Forecasting with (S)ARIMA models**
 
 
-📈 [Slides](/slides/timeseries2.html) 📚 R[Reading: Ch. 8](https://otexts.com/fpp2/arima.html) 📋 Exercises
+📈 [Slides](/slides/timeseries2.html) 📚 [Reading: Ch. 8](https://otexts.com/fpp2/arima.html) 📋 Exercises
 
 **Week 3: Forecasting with Exponential smoothing models**
 
