@@ -3,7 +3,7 @@
   <head>
     <title>IM532 3.0 Applied Time Series Forecasting</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Dr. Thiyanga Talagala" />
+    <meta name="author" content="Dr. Anything Talladega" />
     <meta name="date" content="2020-03-08" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # IM532 3.0 Applied Time Series Forecasting
 ## MSc in Industrial Mathematics
-### Dr. Thiyanga Talagala
+### Dr. Anything Talladega
 ### 8 March 2020
 
 ---
@@ -73,9 +73,9 @@ The covariance function of `\(\{X_t\}\)` at lag `\(h\)` is defined by
 
 ---
 
-## Autocovariance function
+## Auto covariance function
 
-The autocovariance function of `\({X_t}\)` at lag `\(h\)` is
+The auto covariance function of `\({X_t}\)` at lag `\(h\)` is
 
 `$$\gamma_X(h)=Cov(X_{t+h}, X_t).$$`
 
@@ -97,7 +97,7 @@ A time series `\(\{X_t\}\)` is called weekly stationary if
 
 - `\(\gamma_X(t+h, t)\)` is independent of `\(t\)` for each `\(h\)`.
 
-In otherwords the statistical properties of the time series (mean, variance, autocorrelation, etc.) do not depend on the time at which the series is observed, that is no trend or seasonality. However,  a time series with cyclic behaviour (but with no trend or seasonality) is stationary.
+In other words the statistical properties of the time series (mean, variance, autocorrelation, etc.) do not depend on the time at which the series is observed, that is no trend or seasonality. However,  a time series with cyclic behaviour (but with no trend or seasonality) is stationary.
 
 --
 
@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1]  1.9558412243 -0.0459677288 -0.0003297169  2.0568307515  0.2142585968
- [6]  1.6599478863 -0.5202285163 -1.6943792205  0.6154986902 -1.3646823497
-[11] -0.1552456284  1.1571832487 -0.1294822963 -0.2496870896  0.9231121906
+ [1]  0.42602839  1.20426059  0.02187974 -0.16652850 -1.03471925 -0.76278279
+ [7] -0.02764741 -0.14207016 -0.43830015 -0.11893336  0.27902607  0.12292448
+[13] -0.81252529  0.55662909 -0.77007385
 ```
 
 --
@@ -219,9 +219,11 @@ Is `\(\{S_t, t=0, 1, 2, ...\}\)` a weak stationary process?
 The first-order differencing can be defined as
 
 `$$\nabla X_t = X_t-X_{t-1}=X_t-BX_t=(1-B)X_t$$`
+where `\(\nabla=1-B\)`.
+
 The second-order differencing
 
-`$$\nabla^2X_t=\nabla(\nabla X_t)=\nabla(X_t-X_{t-1})=\nabla X_t - \nabla X_{t-1}=X_t-2X_{t-1}+X_{t-2}$$`
+`$$\nabla^2X_t=\nabla(\nabla X_t)=\nabla(X_t-X_{t-1})=\nabla X_t - \nabla X_{t-1}=(X_t-X_{t-1})-(X_{t-1}-X_{t-2})$$`
 - In practice, we seldom need to go beyond second order differencing. 
 
 
@@ -241,9 +243,316 @@ Twice-differenced series
 
 `$$\nabla^2_{12}X_t=\nabla_{12}X_t-\nabla_{12}X_{t-1}=(X_t-X_{t-12})-(X_{t-1}-X_{t-13})$$`
 
+If seasonality is strong, the seasonal differencing should be done first.
+
+
 ---
 
-All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.com/)
+# Linear filter model
+
+A linear filter is an operation `\(L\)` which transform the white noise process into another time series `\(\{X_t\}\)`.
+
+White noise `\(\epsilon_t\)` `\(\to\)` Linear Filter `\(\psi(B)\)` `\(\to\)` Output `\(X_t\)`
+
+
+
+---
+
+# Autoregressive models
+
+current value  = linear combination of past values + current error 
+
+An autoregressive model of order `\(p\)`, `\(AR(P)\)` model can be written as
+
+`$$x_t= c+ \phi_1x_{t-1}+\phi_2x_{t-2}+...+\phi_px_{t-p}+\epsilon_t,$$`
+where `\(\epsilon_t\)` is white noise.  
+
+- Similar to multiple linear regression model but with lagged values of `\(x_t\)` as predictors.
+
+--
+
+## Question 
+
+Show that `\(AR(P)\)` is a linear filter with transfer function `\(\phi^{-1}(B)\)`, where `\(\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p\)`.
+
+--
+## Stationary condition for AR(P)
+
+The roots of `\(\phi(B)=0\)` (characteristic equation) must lie outside the unit circle.
+---
+
+# Stationarity Conditions for AR(1)
+
+Let's consider `\(AR(1)\)` process,
+
+`$$x_t=c+\phi_1x_{t-1}+\epsilon_t.$$`
+
+Then, 
+
+`$$(1-\phi B)x_t=\epsilon_t.$$`
+
+This may be written as,
+`$$x_t=(1-\phi B)^{-1}\epsilon_t=\sum_{j=0}^{\infty}\phi_1^j\epsilon_t-j.$$`
+Hence,
+
+`$$\psi(B)=(1-\phi B)^{-1}=\sum_{j=0}^{\infty}\phi_1^jB^j$$`
+
+If `\(|\phi_1| &lt; 1,\)` the `\(AR(1)\)` process is stationary.
+
+This is equivalent to saying the roots of `\(1-\phi_1B=0\)` must lie outside the unit circle.
+
+---
+Geometric series
+
+`$$a+ar+ar^2+ar^3+...=\frac{a}{1-r}$$`
+
+for `\(|r|&lt;1.\)`
+
+---
+## AR(1) process
+
+`$$x_t=c+\phi_1x_{t-1}+\epsilon_t,$$`
+
+- when `\(\phi_1=0\)` - equivalent to white noise process
+
+- when `\(\phi_1=0\)` and `\(c=0\)` - random walk
+
+- when `\(\phi_1=1\)` and `\(c \neq = 0\)` - random walk with drift
+
+- when `\(\phi_1 &lt; 0\)` - oscillates around the mean
+
+---
+
+Find the mean, variance and the autocorrelation function of a AR(1) process.
+
+Help:
+
+`$$Var(X+Y)=Var(X)+Var(Y)+2Cov(X, Y$$`
+`$$Cov(X, Y)=E[(X-\mu_X)(Y-\mu_Y)]$$`
+---
+
+## Question: Properties of AR(2) process
+
+Find the Mean, Variance and Autocorrelation function.
+
+
+---
+
+## Yule-Walker Equations
+
+Autoregressive parameters in terms of the autocorrelations.
+
+
+---
+
+## Autocorrelation function of a AR(P) process
+
+The autocorrelation function of AR(P) process
+
+`$$\rho_k=\phi_1\rho_{k-1}+\phi_2\rho_{k-2}+...+\phi_p\rho_{k-p}$$`
+for `\(k&gt;0\)`.
+
+This can be written as 
+
+`$$\phi(B)\rho_k=0,$$`
+where `\(\phi(B)=1-\phi B-...-\phi_p B^p.\)`
+
+1. When `\(\phi_1&gt;0\)`, autocorrelation function decays exponentially to zero.
+
+1. When `\(\phi_1&lt;0\)`, autocorrelation function decays exponentially to zero and oscillates in sign.
+
+---
+## Partial Autocorrelation Function
+
+Conditional autocorrelation between `\(X_t\)` and `\(X_{t-k}\)` given that `\(X_{t+1}, X_{t+2}, ..., X_{t+k-1}\)`.
+
+`$$Cor(X_t, X_{t+k}|X_{t+1}, X_{t+2}, ..., X_{t+k-1})$$`
+
+The partial autocorrelation function `\(\phi_{kk}\)` of `\(AR(P)\)`  will be non-zero for `\(k\)` less than or equal to `\(p\)` and zero for `\(k\)` greater than `\(p\)`.
+
+Calculations: in-class
+
+---
+
+## Moving average models
+
+Current value = linear combination of past forecast errors + current error
+
+An `\(MA(q)\)` process can be written as
+
+`$$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$`
+where `\(\epsilon_t\)` is white noise.
+
+- The current value `\(x_t\)` can be thought of as a weighted moving average of the past few forecast errors.
+
+--
+
+- Any `\(AR(p)\)` model can be written as an `\(MA(\infty)\)` model using repeated substitution.
+
+---
+
+## Inconvertibility condition of an MA model
+
+`$$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$`
+Using back shift operator,
+`$$x_t=c+\epsilon_t+\theta_1 B \epsilon_{t}+\theta_2 B^2 \epsilon_{t}+...+\theta_p B^q \epsilon_{t}$$`
+
+Hence, 
+
+`$$x_t=\theta_q(B)\epsilon_t+c.$$`
+
+The `\(\theta_q\)` is defined as an MA operator.
+
+MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle, `\(|\theta| \geq 1\)`.
+
+---
+
+## MA(1) process
+
+1. Obtain the inconvertibility condition of `\(MA(1)\)` process.
+
+1. Calculate mean, variance, ACF and PACF of `\(MA(1)\)` process.
+
+---
+
+## MA(2) process
+
+Calculate mean, variance, ACF and PACF of `\(MA(2)\)` process.
+
+---
+
+# ACF and PACF of AR(p) v MA(q) process
+
+.pull-left[
+
+# AR(p)
+
+**ACF:** decays exponentially to zero.
+
+**PACF:** PACF of `\(AR(p)\)` process is zero, beyond the order `\(p\)` of the process/ cut-off after lag `\(p\)`.
+
+]
+
+.pull-right[
+
+# MA(q)
+
+
+**ACF:** ACF of `\(MA(q)\)` process is zero, beyond the order `\(q\)` of the process/ cut-off after lag `\(q\)`.
+
+**PACF:** decays exponentially to zero.
+
+]
+
+---
+
+## ARMA process
+
+
+current value = linear combination of past values + linear combination of past error + current error
+
+The `\(ARMA(p, q)\)` can be written as
+
+`$$X_t=c+\phi_1 x_{t-1}+\phi_2 x_{t-2}+...+\phi_px_{t-p}+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_q\epsilon_{t-q}+\epsilon_t,$$`
+where `\(\{\epsilon_t\}\)` is a white noise process.
+
+Using the back shift operator
+
+`$$\phi(B)x_t=\theta(B)\epsilon_t,$$`
+where `\(\phi(.)\)` and `\(\theta(.)\)` are the `\(p\)`Th and `\(q\)`Th degree polynomials,
+
+`$$\phi(B)=1-\phi_1\epsilon-...-\phi_p\epsilon^p,$$`
+and
+`$$\theta(B)=1+\theta_1\epsilon+...+\theta_q\epsilon^q.$$`
+
+---
+
+## ARMA(p, q) process
+
+**Stationary condition**
+Roots of `$$\phi(B)=0$$` lie outside the unit circle.
+
+**Invertible condition**
+Roots of `$$\theta(B)=0$$` lie outside the unit circle.
+
+---
+
+## Question:
+
+Determine which of the following processes are invertible and stationary.
+
+1. `\(x_t=0.6x_{t-1}+\epsilon_t\)`
+
+1. `\(x_t=\epsilon_t-1.3\epsilon_{t-1}+0.4\epsilon_{t-2}\)`
+
+1. `\(x_t=0.6x_{t-1}-1.3\epsilon_{t-1}+0.4\epsilon_{t-2}+\epsilon_t\)`
+
+1. `\(x_t=x_{t-1}-1.3\epsilon_{t-1}+0.3\epsilon_{t-2}+x_t\)`
+
+---
+
+## ARMA(1, 1) model
+
+Calculate the mean,variance and ACF of ARMA(1, 1) process.
+
+
+---
+
+## Non-seasonal ARIMA models
+
+- Autoregressive Integrated Moving Average Model
+
+`\(x'_t=c+\phi_1x'_{t-1}+...+\phi_px'_{t-p}+\theta_1\epsilon_{t-1}+...+\theta_q\epsilon_{t-q}+\epsilon_t,\)`
+where `\(x'_t\)` is the difference series.
+
+Using the back shift notation
+
+`$$(1-\phi_1B-...-\phi_pB^p)(1-B)^dx_t=c+(1+\theta_1B+...+\theta_qB^q)\epsilon_t$$`
+
+- We call this an `\(ARIMA(p, d, q)\)` model.
+
+      - p - order of the autoregressive part
+      
+      - d - degree of first differencing involved
+      
+      - q - order of the moving average part
+---
+
+# Seasonal ARIMA model
+
+## Seasonal differencing
+
+For monthly series
+
+`$$(1-B^{12})x_t=x_t-x_{t-12}$$`
+
+For quarterly series
+
+`$$(1-B^{4})x_t=x_t-x_{t-4}$$`
+
+## Non-seasonal differencing
+
+`$$(1-B)x_t=x_t-x_{t-1}$$`
+
+## Multiply terms together
+
+`$$(1-B)(1-B^m)x_t=(1-B-B^m+B^{m+1})x_t=x_t-x_{t-1}-x_{t-m}+x_{t-m-1}.$$`
+
+---
+
+## Seasonal ARIMA models
+
+`$$ARMA(p, d, q)(P, D, Q)_m$$`
+
+- `\((p, d, q)\)` - non-seasonal part of the model
+
+- `\((P, D, Q)\)` - seasonal part of the model
+
+- `\(m\)` - number of observations per year
+
+`$$ARIMA(1,1,1)(1,1,1)_4$$`
+
+`$$(1-\phi_1B)(1-\Phi_1B^4)(1-B)(1-B^4)x_t=(1+\theta_1B)(1+\Theta_1B^4)\epsilon_t$$`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
