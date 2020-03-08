@@ -376,6 +376,8 @@ where $\epsilon_t$ is white noise.
 
 - The current value $x_t$ can be thought of as a weighted moving average of the past few forecast errors.
 
+- $MA(q)$ is always stationary.
+
 --
 
 - Any $AR(p)$ model can be written as an $MA(\infty)$ model using repeated substitution.
@@ -393,6 +395,9 @@ Hence,
 $$x_t=\theta_q(B)\epsilon_t+c.$$
 
 The $\theta_q$ is defined as an MA operator.
+
+Any $MA(q)$ process can be written as an $AR(\infty)$ process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+
 
 MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the unit circle, $|\theta| \geq 1$.
 

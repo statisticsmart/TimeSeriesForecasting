@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1]  1.9856891  0.5764815 -0.2368939  0.5096988  1.1012680 -0.3516610
- [7] -2.3791267  0.8370960 -0.8523571 -2.1040285  0.6556062 -1.7646958
-[13] -1.4353789 -0.8034875  0.6357211
+ [1] -1.6782155 -0.0224838  0.3897774 -0.2790654 -0.2789255 -0.2168453
+ [7]  2.0229455 -1.4491833  0.9461867 -0.5814335  1.1373526  0.1211311
+[13]  0.5459778 -0.2354432  0.4570698
 ```
 
 --
@@ -385,6 +385,8 @@ where `\(\epsilon_t\)` is white noise.
 
 - The current value `\(x_t\)` can be thought of as a weighted moving average of the past few forecast errors.
 
+- `\(MA(q)\)` is always stationary.
+
 --
 
 - Any `\(AR(p)\)` model can be written as an `\(MA(\infty)\)` model using repeated substitution.
@@ -402,6 +404,9 @@ Hence,
 `$$x_t=\theta_q(B)\epsilon_t+c.$$`
 
 The `\(\theta_q\)` is defined as an MA operator.
+
+Any `\(MA(q)\)` process can be written as an `\(AR(\infty)\)` process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+
 
 MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle, `\(|\theta| \geq 1\)`.
 
