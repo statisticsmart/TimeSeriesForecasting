@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1]  0.628259386  0.283201844 -1.270011963  1.293302788 -0.810613422
- [6] -1.003029187 -0.008923118 -0.546876449  1.598979323 -1.014409948
-[11]  0.500124111 -0.304643692  0.288148743 -0.518507485 -0.814386016
+ [1]  1.9856891  0.5764815 -0.2368939  0.5096988  1.1012680 -0.3516610
+ [7] -2.3791267  0.8370960 -0.8523571 -2.1040285  0.6556062 -1.7646958
+[13] -1.4353789 -0.8034875  0.6357211
 ```
 
 --
@@ -391,7 +391,7 @@ where `\(\epsilon_t\)` is white noise.
 
 ---
 
-## Inconvertibility condition of an MA model
+## Invertibility condition of an MA model
 
 `$$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$`
 Using back shift operator,
@@ -409,7 +409,7 @@ MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside th
 
 ## MA(1) process
 
-1. Obtain the inconvertibility condition of `\(MA(1)\)` process.
+1. Obtain the invertibility condition of `\(MA(1)\)` process.
 
 1. Calculate mean, variance, ACF and PACF of `\(MA(1)\)` process.
 

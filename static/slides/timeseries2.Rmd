@@ -382,7 +382,7 @@ where $\epsilon_t$ is white noise.
 
 ---
 
-## Inconvertibility condition of an MA model
+## Invertibility condition of an MA model
 
 $$x_t=c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+...+\theta_p\epsilon_{t-q}$$
 Using back shift operator,
@@ -400,7 +400,7 @@ MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the un
 
 ## MA(1) process
 
-1. Obtain the inconvertibility condition of $MA(1)$ process.
+1. Obtain the invertibility condition of $MA(1)$ process.
 
 1. Calculate mean, variance, ACF and PACF of $MA(1)$ process.
 
