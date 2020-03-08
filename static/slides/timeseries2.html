@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1]  0.42602839  1.20426059  0.02187974 -0.16652850 -1.03471925 -0.76278279
- [7] -0.02764741 -0.14207016 -0.43830015 -0.11893336  0.27902607  0.12292448
-[13] -0.81252529  0.55662909 -0.77007385
+ [1]  0.628259386  0.283201844 -1.270011963  1.293302788 -0.810613422
+ [6] -1.003029187 -0.008923118 -0.546876449  1.598979323 -1.014409948
+[11]  0.500124111 -0.304643692  0.288148743 -0.518507485 -0.814386016
 ```
 
 --
@@ -553,6 +553,27 @@ For quarterly series
 `$$ARIMA(1,1,1)(1,1,1)_4$$`
 
 `$$(1-\phi_1B)(1-\Phi_1B^4)(1-B)(1-B^4)x_t=(1+\theta_1B)(1+\Theta_1B^4)\epsilon_t$$`
+
+   `\((1-\phi_1B)\)` - Non-seasonal `\(AR(1)\)`
+
+   `\((1-\Phi_1B^4)\)` - Seasonal `\(AR(1)\)`
+
+   `\((1-B)\)` - Non-seasonal difference
+
+   `\((1-B^4)\)` - Deasonal difference
+
+   `\((1+\theta_1B)\)` - Non-seasonal `\(MA(1)\)`
+
+   `\((1+\Theta B^4)\)` - Seasonal `\(MA(1)\)`
+
+---
+
+## Question
+
+1. Write down the model for 
+
+`$$ARIMA(0, 0, 1)(0, 0, 1)_{12}$$`
+`$$ARIMA(1,0,0)(1,0,0)_{12}$$`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
