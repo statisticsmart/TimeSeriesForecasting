@@ -1,11 +1,10 @@
 ---
-title: "Introduction to linear time series models"
+title: "Linear Time Series Analysis and Its Applications" 
 author:
 - familyname: Thiyanga
   othernames: Talagala
   address: University of Sri Jayewardenepura
   email: ttalagala@sjp.ac.lk
-  correspondingauthor: true
 abstract: ""
 keywords: ""
 blind: false
@@ -34,22 +33,381 @@ library(ggplot2)
 ```
 
 
+\newpage
+
 # Introduction
 
-In a famous paper, @BC64 introduced a family of transformations \dots
+## Models for stationary time series
 
-```{r histogram, fig.cap="Nice histogram", message=FALSE, warning=FALSE}
-qplot(exp(rnorm(200)))
-```
+## Models for nonstationary time series
 
-Consider the logNormal data plotted in Figure \ref{fig:histogram}.
+First, we will look at the theoretical properties of these models.
 
-$$s^2 = \sum_{i=1}^n (x_i-\bar{x})^2$$
+# Autoregressive process
+
+## Properties of AR(1) model
+
+Consider the following $AR(1)$ model. 
+
+\begin{equation}
+  \label{eq:1}
+Y_t=\phi_0+\phi_1Y_{t-1}+\epsilon_{t}
+\end{equation}
+
+where ${\epsilon_t}$ is assumed to be a white noise process with mean zero and variance $\sigma^2$. 
+
+
+### Mean
+
+Assuming that the series is weak stationary, we have $E(Y_t)=\mu$, $Var(Y_t)=\gamma_0$, and $Cov(Y_t, Y_{t-k})=\gamma_k$, where $\mu$ and $\gamma_0$ are constants. Given that ${\epsilon_t}$ is a white noise, we have $E(\epsilon_t)=0$. The mean of $AR(1)$ process can be computed as follows:
 
 $$
 \begin{aligned}
-  \dot{x} & = \sigma(y-x) \\
-  \dot{y} & = \rho x- y - xz 
+  E(Y_t) &= E(\phi_0+\phi_1 Y_{t-1}) \\
+         &= E(\phi_0) +E(\phi_1 Y_{t-1}) \\
+         &= \phi_0 +\phi_1 E(Y_{t-1}). \\
 \end{aligned}
 $$
+
+
+
+Under the stationarity condition, $E(Y_t)=E(Y_{t-1})=\mu$. Thus we get
+
+$$\mu = \phi_0+\phi_1\mu.$$
+
+Solving for $\mu$  yields
+
+\begin{equation}
+  \label{eq:2}
+E(Y_t)=\mu=\frac{\phi_0}{1-\phi_1}.
+\end{equation}
+
+
+The results has two constraints for $Y_t$. First, the mean of $Y_t$ exists if $\phi \neq 1 .$ The mean of $Y_t$ is zero if and only if $\phi_0=0$.  
+
+### Variance and stationary condition of AR (1) process
+
+First take variance of both sides of Eq. (1)
+
+$$Var(Y_t)=Var(\phi_0+\phi_1 Y_{t-1}+\epsilon_t)$$
+
+The $Y_{t-1}$ occurred before time $t$. The $\epsilon_t$ does not depend on any past observation. Hence, $cov(Y_{t-1}, \epsilon_t)= 0$. Furthermore, ${\epsilon_t}$ is a white noise and hence
+
+$$Var(Y_t)=\phi_1^2 Var(Y_{t-1})+\sigma^2.$$
+
+Under the stationarity condition, $Var(Y_t)=Var(Y_{t-1})$, so that,
+
+$$Var(Y_t)=\frac{\sigma^2}{1-\phi_1^2}.$$
+
+provided that $\phi_1^2 < 1$ or $|\phi| < 1$ (The variance of a random variable is bounded and non-negative). The necessary and sufficient condition for the $AR(1)$ model in Eq. (1) to be weakly stationary is $|\phi| < 1$. This condition is equivalent to saying that the root of $1-\phi_1B = 0$ must lie outside the unit circle. This can be explained as below
+
+Using the backshift notation we can write $AR(1)$ process as 
+
+$$Y_t = \phi_0 + \phi_1BY_{t} + \epsilon_t.$$
+
+Then we get
+
+$$(1-\phi_1B)Y_t=\phi_0 + \epsilon_t.$$ The $AR(1)$ process is said to be stationary if the roots of $(1-\phi_1B)=0$ lie outside the unit circle. 
+
+## Covariance 
+
+The covariance $\gamma_k=Cov(Y_t, Y_{t-k})$ is called the lag-$k$ autocovariance of $Y_t$. The two main properties of $\gamma_k$: (a) $\gamma_0=Var(Y_t)$ and (b) $\gamma_{-k}=\gamma_{k}$. 
+
+The lag-$k$ autocovariance of $Y_t$ is
+
+\begin{equation}
+  \label{eq:3}
+\begin{aligned}
+  \gamma_k &= Cov(Y_t, Y_{t-k}) \\
+         &= E[(Y_t-\mu)(Y_{t-k}-\mu)] \\
+         &= E[Y_tY_{t-k}-Y_t\mu-\mu Y_{t-k} +\mu^2] \\
+         &= E(Y_t Y_{t-k}) - \mu^2. \\
+\end{aligned}
+\end{equation}
+
+Now we have 
+
+\begin{equation}
+  \label{eq:3}
+  E(Y_t Y_{t-k}) = \gamma_k + \mu^2
+\end{equation}
+
+### Autocorrelation function of an AR(1) process
+
+To derive autocorrelation function of an AR(1) process we first multiply both sides of Eq. (1) by $Y_{t-k}$ and take expected values:
+
+$$E(Y_tY_{t-k})=\phi_0E(Y_{t-k})+\phi_1 E(Y_{t-1}Y_{t-k})+E(\epsilon_tY_{t-k})$$
+Since $\epsilon_t$ and $Y_{t-k}$ are independent and using the results in Eq. (4)
+
+$$\gamma_k + \mu^2 = \phi_0 \mu+\phi_1(\gamma_{k-1}+\mu^2)$$
+
+Substituting the results in Eq. (2) to Eq. (4) we get
+
+\begin{equation}
+\label{eq:5}
+\gamma_k = \phi_1 \gamma_{k-1}.
+\end{equation}
+
+
+The autocorrelation function is defined as 
+
+$$\rho_k = \frac{\gamma_k}{\gamma_0}$$.
+
+Setting $k=1$, we get $\gamma_1 = \phi_1\gamma_0.$ Hence,
+
+$$\rho_1=\phi_1.$$
+
+Similarly with $k=2$, $\gamma_2 = \phi_1 \gamma_1$. Dividing both sides by $\gamma_0$ and substituting with $\rho_1=\phi_1$ we get 
+
+$$\rho_2=\phi_1^2.$$
+
+Now it is easy to see that in general 
+
+$$\rho_k = \frac{\gamma_k}{\gamma_0}=\phi_1^k $$
+
+for $k=0, 1, 2, 3, ...$.
+
+Since $|\phi_1| < 1,$ the autocorrelation function is an exponentially decreasing as the number of lags $k$ increases. There are two features in the ACF of AR(1) process depending on the sign of $\phi_1$. They are,
+
+1. If $0 < \phi_1 < 1,$ all correlations are positive.
+
+1. if $-1 < \phi_1 < 0,$ the lag 1 autocorrelation is negative ($\phi_1=\phi_1$) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially. 
+
+```{r comment=NA, echo=FALSE, message=FALSE, echo=FALSE, eval=FALSE}
+library(forecast)
+library(patchwork)
+set.seed(456)
+## list description for AR(1) model with small coef
+AR.sm <- list(order = c(1, 0, 0), ar = 0.9, sd = 0)
+## list description for AR(1) model with large coef
+AR.lg <- list(order = c(1, 0, 0), ar = -0.9, sd = 0)
+##
+ar1 <- list(order = c(1, 0, 0), ar = 0.4, sd = 0)
+ar2 <- list(list(order = c(1, 0, 0), ar = -0.4, sd = 0))
+## simulate AR(1)
+AR1.sm1 <- arima.sim(n = 50, model = AR.sm)
+AR1.sm2 <- arima.sim(n = 50, model = AR.lg)
+AR1.sm11 <- arima.sim(n = 50, model = ar1)
+AR1.sm21 <- arima.sim(n = 50, model = ar2)
+p1 <- ggAcf(AR1.sm1)
+p2 <- ggAcf(AR1.sm2)
+p3 <- ggAcf(AR1.sm11)
+p4 <- ggAcf(AR1.sm21)
+(p1|p2)/(p3|p4)
+
+```
+
+## Properties of AR(2) model
+
+Now consider an second-order autoregressive process (AR(2)) 
+
+\begin{equation}
+  \label{eq:1}
+Y_t=\phi_0+\phi_1Y_{t-1}+\phi_2Y_{t-2}+\epsilon_t.
+\end{equation}
+
+### Mean
+
+
+**Question 1:** Using the same technique as that of the AR(1), show that 
+
+$$E(Y_t) = \mu = \frac{\phi_0}{1-\phi_1 - \phi_2}$$ and the mean of $Y_t$ exists if $\phi_1 + \phi_2 \neq 1$.
+
+### Variance
+
+**Question 2:** Show that $$Var(Y_t) = \frac{(1-\phi_2)\sigma^2}{(1+\phi_2)((1+\phi_2)^2-\phi_1^2)}.$$
+
+Here is a guide to the solution
+
+Start with
+
+$$Var(Y_t)=Var(\phi_0+\phi_1Y_{t-1}+\phi_2Y_{t-2}+\epsilon_t)$$
+
+Solve it until you obtain the Eq. (a) as shown below.
+
+\begin{equation}
+\tag{a}
+\gamma_0 (1-\alpha_1^2 - \alpha_1^2) = 2\alpha_1\alpha_2\gamma_1+\sigma^2.
+\end{equation}
+
+Next multiply both sides of Eq. (6) by $Y_{t-1}$ and obtain a expression for $\gamma_1$. Let's call this Eq. (b).
+
+Solve Eq. (a) and (b) for $\gamma_0.$
+
+### Stationarity of AR(2) process
+
+To discuss the stationarity condition of the $AR(2)$ process we use the roots of the characteristic polynomial. Here is the illustration. 
+
+Using the backshift notation we can write $AR(2)$ process as 
+
+$$Y_t = \phi_0 + \phi_1 BY_{t} + \phi_2 B^2 Y_{t} + \epsilon_t.$$
+
+Furthermore, we get
+
+$$(1-\phi_1 B - \phi_2 B^2) Y_t = \phi_0 + \epsilon_t.$$
+
+The **characteristic polynomial** of $AR(2)$ process is 
+
+$$\Phi(B)=1-\phi_1 B - \phi_2 B^2.$$
+
+and the corresponding **AR characteristic equation**
+
+$$1-\phi_1 B - \phi_2 B^2=0.$$
+
+
+For stationarity, the roots of AR characteristic equation must lie outside the unit circle. The two roots of the AR characteristic equation are 
+
+$$\frac{\phi_1 }{-2\phi_2}$$
+
+Using algebraic manipulation, we can show that these roots will exceed 1 in modulus if and only if simultaneously $\phi_1 + \phi_2 < 1,$ $\phi_2-\phi_1 < 1,$ and $|\phi_2| < 1.$ This is called the stationarity condition of $AR(2)$ process.
+
+
+### Autocorrelation function of an AR(2) process
+
+To derive autocorrelation function of an AR(2) process we first multiply both sides of Eq. (6) by $Y_{t-k}$ and take expected values:
+
+
+\begin{align}
+E(Y_tY_{t-k}) &= E(\phi_0Y_{t-k}+\alpha_1Y_{t-1}Y_{t-k}+\alpha_2Y_{t-2}Y_{t-k})+\epsilon_tY_{t-k} \\
+&= \phi_0 E(Y_{t-k})+\phi_{1}E(Y_{t-1}Y_{t-k}) + \phi_2 E(X_{t-2} X_{t-k}) + E(\epsilon_tX_{t-k}).
+\end{align}
+
+
+Using the independence between $\epsilon_t$ and $Y_{t-1}$, $E(\epsilon_t X_{t-k})=0$ and the results in Eq. 3 (This valid for AR(2)) we have
+
+$$\gamma_k + \mu^2 = \gamma_0 \mu + \alpha_1 (\gamma_{k-1}+\mu^2)+\phi_2 (\gamma_{k-2}+\mu^2).$$
+
+(Note that $E(X_{t-1}X_{t-k})=E(X_{t-1}X_{(t-1)-(k-1)}=\gamma_{k-1})$)
+
+Solving for $\gamma_k$ we get
+
+\begin{align}
+ \gamma_k=\phi_1\gamma_{k-1}+\phi_2\gamma_{k-2}.
+\end{align}
+
+By dividing the both sides of Eq. (9) by $\gamma_0$, we have
+
+\begin{align}
+ \rho_k=\phi_1\rho_{k-1}+\phi_2\rho_{k-2}.
+\end{align}
+
+for $k>0$. 
+
+Setting $k=1$ and using $\rho_0=1$ and $\rho_{-1}=\rho_1$, we get **the Yule-Walker equation for $AR(2)$ process.**
+
+$$\rho_1=\phi_1+\phi_2 \rho_1$$ or
+
+$$\rho_1 = \frac{\phi_1}{1-\phi_2}$$.
+
+Similarly, we can show that 
+
+$$\rho_2 = \frac{\phi_2(1-\phi_2)+\phi_1^2}{(1-\phi_2)}.$$
+
+
+
+## Properties of AR(p) model
+
+The $p$th order autoregressive model can be written as
+
+\begin{align}
+Y_t = \phi_0 + \phi_1Y_{t-1}+\phi_2 Y_{t-2}+ ... + \epsilon_t.
+\end{align}
+
+The AR characteristic equation is 
+
+$$1-\phi_1B-\phi_2B^2-...-\phi_pB^p=0.$$
+
+For stationarity of $AR(p)$ process, the $p$ roots of the AR characteristic must lie outside the unit circle. 
+
+### Mean
+
+**Question: ** Find $E(Y_t)$ of $AR(p)$ process.
+ 
+### Variance
+
+**Question: ** Find $Var(Y_t)$ of $AR(p)$ process.
+
+### Autocorrelation function of an AR(p) process
+
+**Question: ** Assuming stationarity and multiplying both sides of Eq. (11) obtain the following recursive relationship. 
+
+\begin{align}
+\rho_k = \phi_1\rho_{k-1}+\phi_2 \rho_{k-2} + ... + \phi_p \rho_{k-p}.
+\end{align}
+
+
+Setting $k=1, 2, ..., p$ into Eq. (11) and using $\rho_0=1$ and $\rho_{-k}=\rho_k$, we get the Yule-Walker equations for $AR(p)$ process
+
+
+\begin{equation}
+  \label{eq:13}
+\begin{aligned}
+  \rho_1 &= \phi_1+\phi_2 \rho_{1} + ... + \phi_p \rho_{p-1}\\
+  \rho_2 &= \phi_1 \rho_1+\phi_2  + ... + \phi_p \rho_{p-2}\\
+  ... \\
+  \rho_p &= \phi_1 \rho_{p-1} +\phi_2 \rho_{p-2}  + ... + \phi_p \\
+\end{aligned}
+\end{equation}
+
+
+
+
+
+# Moving average (MA) models
+
+
+We first derive the properties of $MA(1)$ and $MA(2)$ models and then give the results for the general $MA(q)$ model.
+
+## Properties of MA(1) model
+
+### Mean
+
+### Variance
+
+### Autocorrelation function of an MA(1) process
+
+### Partial autocorrelation function of an MA(1) process
+
+## Properties of MA(2) model
+
+### Mean
+
+### Variance
+
+### Autocorrelation function of an MA(2) process
+
+### Partial autocorrelation function of an MA(2) process
+
+## Properties of MA(p) model
+
+### Mean
+
+### Variance
+
+### Autocorrelation function of an MA(q) process
+
+### Partial autocorrelation function of an MA(q) process
+
+# Autoregressive and Moving-average (ARMA) models
+
+
+# Unit root nonstationarity
+
+
+# ARIMA models
+
+# SARIMA models
+
+
+
+
+
+# Forecasting model building process using R
+
+
+# Appendix
+
+Some important rules in statistics
+
+$$Var(X+Y) = Var(X) + Var(Y) + 2Cov(X+Y)$$
 
