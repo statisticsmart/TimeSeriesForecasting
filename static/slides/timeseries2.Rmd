@@ -489,7 +489,7 @@ $$x_t=\theta_q(B)\epsilon_t+c.$$
 
 The $\theta_q$ is defined as an MA operator.
 
-Any $MA(q)$ process can be written as an $AR(\infty)$ process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+Any $MA(q)$ process can be written as an $AR(\infty)$ process if we impose some constraints on the MA parameters. Then it is called **invertible**.
 
 
 MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the unit circle, $|\theta| \geq 1$.
@@ -548,7 +548,7 @@ where $\{\epsilon_t\}$ is a white noise process.
 Using the back shift operator
 
 $$\phi(B)x_t=\theta(B)\epsilon_t,$$
-where $\phi(.)$ and $\theta(.)$ are the $p$Th and $q$Th degree polynomials,
+where $\phi(.)$ and $\theta(.)$ are the $p$th and $q$th degree polynomials,
 
 $$\phi(B)=1-\phi_1\epsilon-...-\phi_p\epsilon^p,$$
 and
