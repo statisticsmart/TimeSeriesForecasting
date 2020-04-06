@@ -864,3 +864,40 @@ Theoretical autocorrelation coefficients for some of the more common AR, MA and 
 ![ACF and PACF of ARMA(1, 1) model](arma.PNG)
 
 \newpage
+
+## ACF and PACF calculated from data
+
+```{r, comment=NA, echo=FALSE, fig.cap="ACF and PACF of AR(1), MA(1) and ARMA(1, 1) models calculated from the data", fig.height=9}
+set.seed(542020)
+## list description for AR(1) model with small coef
+AR1 <- list(order = c(1, 0, 0), ar = -0.9, sd = 0.1)
+## list description for AR(1) model with large coef
+AR2 <- list(order = c(1, 0, 0), ar = 0.9, sd = 0.1)
+## simulate AR(1)
+AR1acf <- arima.sim(n = 50, model = AR1)
+AR2acf <- arima.sim(n = 50, model = AR2)
+library(forecast)
+t1 <- autoplot(AR1acf) + ggtitle("AR(1)")
+p1 <- ggAcf(AR1acf) + ggtitle("ACF of AR(1),\n phi1=-0.9")
+p3 <- ggAcf(AR1acf, type = "partial") + ggtitle("PACF of AR(1), \n phi1=-0.9")
+library(patchwork)
+
+set.seed(542020)
+## list description for AR(1) model with small coef
+MA1 <- list(order = c(0, 0, 1), ma = -0.9, sd = 0.1)
+## simulate AR(1)
+
+MA1acf <- arima.sim(n = 50, model = MA1)
+t2 <- autoplot(MA1acf) + ggtitle("MA(1)")
+p5 <- ggAcf(MA1acf) + ggtitle("ACF of MA(1), \n theta1=-0.9")
+p7 <- ggAcf(MA1acf, type = "partial") + ggtitle("PACF of MA(1), \n theta1=-0.9")
+
+## ARMA process
+ARMA1 <- list(order = c(1, 0, 1), ma = 0.5, ar=0.9, sd = 1)
+## simulate AR(1)
+ARMA1acf <- arima.sim(n = 50, model = ARMA1)
+t3 <- autoplot(ARMA1acf) + ggtitle("ARMA(1,1)")
+p8 <- ggAcf(ARMA1acf) + ggtitle("ACF: ARMA(1,1), \n theta1 = 0.5, phi1 = 0.9")
+p9 <- ggAcf(ARMA1acf, type = "partial") + ggtitle("PACF: ARMA(1,1), \n theta1 = 0.5, phi1 = 0.9")
+(t1|p1|p3)/(t2|p5|p7)/(t3|p8|p9)
+```

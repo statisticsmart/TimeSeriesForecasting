@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.5)  6 APR 2020 09:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.5)  6 APR 2020 10:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1206,56 +1206,63 @@ LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
 l.540 \end{align}
                   [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20
 ]
-<ar.PNG, id=344, 1541.76pt x 1690.315pt>
+<ar.PNG, id=349, 1541.76pt x 1690.315pt>
 File: ar.PNG Graphic file (type png)
 <use ar.PNG>
 Package pdftex.def Info: ar.PNG  used on input line 1140.
 (pdftex.def)             Requested size: 455.23872pt x 499.10286pt.
 [21 <./ar.PNG>]
-<ma.PNG, id=353, 1626.075pt x 1851.91875pt>
+<ma.PNG, id=358, 1626.075pt x 1851.91875pt>
 File: ma.PNG Graphic file (type png)
 <use ma.PNG>
 Package pdftex.def Info: ma.PNG  used on input line 1151.
 (pdftex.def)             Requested size: 455.22346pt x 518.44894pt.
 [22 <./ma.PNG>]
-<arma.PNG, id=361, 1626.075pt x 1875.005pt>
+<arma.PNG, id=366, 1626.075pt x 1875.005pt>
 File: arma.PNG Graphic file (type png)
 <use arma.PNG>
 Package pdftex.def Info: arma.PNG  used on input line 1162.
 (pdftex.def)             Requested size: 455.22346pt x 524.912pt.
 [23 <./arma.PNG>]
+<TS1_files/figure-latex/unnamed-chunk-1-1.pdf, id=374, 578.16pt x 650.43pt>
+File: TS1_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
+<use TS1_files/figure-latex/unnamed-chunk-1-1.pdf>
+Package pdftex.def Info: TS1_files/figure-latex/unnamed-chunk-1-1.pdf  used on 
+input line 1173.
+(pdftex.def)             Requested size: 455.24165pt x 512.14687pt.
 
-LaTeX Warning: Empty bibliography on input line 1168.
+LaTeX Warning: Empty bibliography on input line 1177.
 
 
 Package caption Warning: Unused \captionsetup[table] on input line 70.
 See the caption package documentation for explanation.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1170.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1170.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1179.
+[24 <./TS1_files/figure-latex/unnamed-chunk-1-1.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1179.
 (./TS1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1170.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1170.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1179.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1179.
 
 Package rerunfilecheck Info: File `TS1.out' has not changed.
-(rerunfilecheck)             Checksum: 4999E3668E8A52BA5FC9D03295E6727B;5079.
+(rerunfilecheck)             Checksum: 89CA9C2B0B30A10E3A1EA845B9A4491F;5339.
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package logreq Info: Writing requests to 'TS1.run.xml'.
 \openout1 = `TS1.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1170.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1179.
  )
 (\end occurred inside a group at level 1)
 
 ### semi simple group (level 1) entered at line 186 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 22450 strings out of 482938
- 379295 string characters out of 5958192
- 1071124 words of memory out of 5000000
- 37065 multiletter control sequences out of 15000+600000
+ 22464 strings out of 482938
+ 379744 string characters out of 5958192
+ 1071295 words of memory out of 5000000
+ 37073 multiletter control sequences out of 15000+600000
  620796 words of font info for 215 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  41i,12n,45p,1192b,3960s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1278,10 +1285,10 @@ haminitalagala/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><
 ino/uplbi8a.pfb></Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/font
 s/type1/urw/palatino/uplr8a.pfb></Users/thiyangashaminitalagala/Library/TinyTeX
 /texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on TS1.pdf (23 pages, 1171931 bytes).
+Output written on TS1.pdf (24 pages, 1182882 bytes).
 PDF statistics:
- 451 PDF objects out of 1000 (max. 8388607)
- 401 compressed objects within 5 object streams
- 156 named destinations out of 1000 (max. 500000)
- 22720 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 469 PDF objects out of 1000 (max. 8388607)
+ 416 compressed objects within 5 object streams
+ 160 named destinations out of 1000 (max. 500000)
+ 22733 words of extra memory for PDF output out of 24883 (max. 10000000)
 

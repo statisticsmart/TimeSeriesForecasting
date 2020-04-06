@@ -93,3 +93,5 @@
 \contentsline {subsection}{\numberline {6.2}MA models}{22}{subsection.6.2}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {6.3}ARMA models}{23}{subsection.6.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4}ACF and PACF calculated from data}{24}{subsection.6.4}%
