@@ -55,7 +55,7 @@ library(ggplot2)
 
 First, we will look at the theoretical properties of these models. 
 
-# Autoregressive process
+# Autoregressive (AR) models
 
 ## Properties of AR(1) model
 
@@ -104,11 +104,11 @@ First take variance of both sides of Equation \@ref(eq:ar)
 
 $$Var(Y_t)=Var(\phi_0+\phi_1 Y_{t-1}+\epsilon_t)$$
 
-The $Y_{t-1}$ occurred before time $t$. The $\epsilon_t$ does not depend on any past observation. Hence, $cov(Y_{t-1}, \epsilon_t)= 0$. Furthermore, ${\epsilon_t}$ is a white noise and hence
+The $Y_{t-1}$ occurred before time $t$. The $\epsilon_t$ does not depend on any past observation. Hence, $cov(Y_{t-1}, \epsilon_t)= 0$. Furthermore, ${\epsilon_t}$ is a white noise. This gives
 
 $$Var(Y_t)=\phi_1^2 Var(Y_{t-1})+\sigma^2.$$
 
-Under the stationarity condition, $Var(Y_t)=Var(Y_{t-1})$, so that,
+Under the stationarity condition, $Var(Y_t)=Var(Y_{t-1})$. Hence,
 
 $$Var(Y_t)=\frac{\sigma^2}{1-\phi_1^2}.$$
 
@@ -187,12 +187,12 @@ Since $|\phi_1| < 1,$ the autocorrelation function is an exponentially decreasin
 
 1. If $0 < \phi_1 < 1,$ all correlations are positive.
 
-1. if $-1 < \phi_1 < 0,$ the lag 1 autocorrelation is negative ($\phi_1=\phi_1$) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially. 
+1. if $-1 < \phi_1 < 0,$ the lag 1 autocorrelation is negative ($\rho_1=\phi_1$) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially. 
 
 
 ## Properties of AR(2) model
 
-Now consider an second-order autoregressive process (AR(2)) 
+Now consider a second-order autoregressive process (AR(2)) 
 
 \begin{equation}
   \label{eq:ar2}
@@ -223,7 +223,7 @@ Solve it until you obtain the Eq. (a) as shown below.
 \gamma_0 (1-\theta_1^2 - \theta_1^2) = 2\theta_1\theta_2\gamma_1+\sigma^2.
 \end{equation}
 
-Next multiply both sides of Equation \@ref(eq:ar2) by $Y_{t-1}$ and obtain a expression for $\gamma_1$. Let's call this Eq. (b).
+Next multiply both sides of Equation \@ref(eq:ar2) by $Y_{t-1}$ and obtain an expression for $\gamma_1$. Let's call this Eq. (b).
 
 Solve Eq. (a) and (b) for $\gamma_0.$
 
@@ -414,6 +414,7 @@ $$\bm{\phi}=\bm{P_p^{-1}\rho_p}.$$
 **Question 6:** Obtain the parameters of an $AR(3)$ process whose first autocorrelations are $\rho_1=0.9$; $\rho_2=0.9$; $\rho_3=0.5$. Is the process stationary?
 
 ## The partial autocorrelation function (PACF)
+
 
 Let $\phi_{ki}$, the $j$th coefficient in an $AR(k)$ model. Then, $\phi_{kk}$ is the last coefficient. From Equation \@ref(eq:yulep), the $\phi_{kj}$ satisfy the set of equations
 
@@ -624,14 +625,14 @@ Now we have
 
 \begin{equation}
   \label{eq:covma1}
-  E(Y_t Y_{t-k}) = \gamma_k + \theta_0^2
+  E(Y_t Y_{t-k}) = \gamma_k + \theta_0^2.
 \end{equation}
 
 Using the Equations \@ref(eq:ma1acfs2) and \@ref(eq:covma1) we have
 
 \begin{equation}
   \label{eq:covma2}
-  \gamma_k = \theta_0^2 - \theta_0^2 + \theta_1E(\epsilon_{t-1}Y_{t-k})
+  \gamma_k = \theta_0^2 - \theta_0^2 + \theta_1E(\epsilon_{t-1}Y_{t-k}).
 \end{equation}
 
 Now let's consider the case $k=1$.
@@ -777,7 +778,8 @@ $$\phi(B)Y_t=\epsilon_t,$$
 where $\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p.$ Furthermore, $Y_t$ can be written as infinite sum of previous $\epsilon$'s as below
 
 $$Y_t = \phi^{-1}(B)\epsilon_t,$$
-where $\psi(B)=1+\Psi_1B+\psi_2B^2+...,$ such that $\phi(B)\psi(B)=1.$ Then $Y_t=\psi(B)\epsilon_t$ is a $MA(\infty)$ process.
+where $\phi(B)\psi(B)=1$ and $\psi(B)=1+\Psi_1B+\psi_2B^2+...$ Then $$Y_t=\psi(B)\epsilon_t.$$ 
+This is a representation of $MA(\infty)$ process.
 
 **Next, we consider the relation MA(q) <--> AR(**$\infty$**)**
 
@@ -901,3 +903,7 @@ p8 <- ggAcf(ARMA1acf) + ggtitle("ACF: ARMA(1,1), \n theta1 = 0.5, phi1 = 0.9")
 p9 <- ggAcf(ARMA1acf, type = "partial") + ggtitle("PACF: ARMA(1,1), \n theta1 = 0.5, phi1 = 0.9")
 (t1|p1|p3)/(t2|p5|p7)/(t3|p8|p9)
 ```
+
+# References
+
+Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). Time series analysis: forecasting and control.

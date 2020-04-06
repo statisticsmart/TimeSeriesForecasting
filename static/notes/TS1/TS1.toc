@@ -6,7 +6,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.2}Models for nonstationary time series}{3}{subsection.1.2}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Autoregressive process}{3}{section.2}%
+\contentsline {section}{\numberline {2}Autoregressive (AR) models}{3}{section.2}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1}Properties of AR(1) model}{3}{subsection.2.1}%
 \defcounter {refsection}{0}\relax 
@@ -95,3 +95,5 @@
 \contentsline {subsection}{\numberline {6.3}ARMA models}{23}{subsection.6.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {6.4}ACF and PACF calculated from data}{24}{subsection.6.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7}References}{24}{section.7}%

@@ -325,8 +325,8 @@ IM 532 3.0 Applied Time Series Forecasting, online teaching material - 1 during 
 
 First, we will look at the theoretical properties of these models.
 
-\hypertarget{autoregressive-process}{%
-\section{Autoregressive process}\label{autoregressive-process}}
+\hypertarget{autoregressive-ar-models}{%
+\section{Autoregressive (AR) models}\label{autoregressive-ar-models}}
 
 \hypertarget{properties-of-ar1-model}{%
 \subsection{Properties of AR(1) model}\label{properties-of-ar1-model}}
@@ -373,11 +373,11 @@ First take variance of both sides of Equation \eqref{eq:ar}
 
 \[Var(Y_t)=Var(\phi_0+\phi_1 Y_{t-1}+\epsilon_t)\]
 
-The \(Y_{t-1}\) occurred before time \(t\). The \(\epsilon_t\) does not depend on any past observation. Hence, \(cov(Y_{t-1}, \epsilon_t)= 0\). Furthermore, \({\epsilon_t}\) is a white noise and hence
+The \(Y_{t-1}\) occurred before time \(t\). The \(\epsilon_t\) does not depend on any past observation. Hence, \(cov(Y_{t-1}, \epsilon_t)= 0\). Furthermore, \({\epsilon_t}\) is a white noise. This gives
 
 \[Var(Y_t)=\phi_1^2 Var(Y_{t-1})+\sigma^2.\]
 
-Under the stationarity condition, \(Var(Y_t)=Var(Y_{t-1})\), so that,
+Under the stationarity condition, \(Var(Y_t)=Var(Y_{t-1})\). Hence,
 
 \[Var(Y_t)=\frac{\sigma^2}{1-\phi_1^2}.\]
 
@@ -460,13 +460,13 @@ Since \(|\phi_1| < 1,\) the autocorrelation function is an exponentially decreas
 \item
   If \(0 < \phi_1 < 1,\) all correlations are positive.
 \item
-  if \(-1 < \phi_1 < 0,\) the lag 1 autocorrelation is negative (\(\phi_1=\phi_1\)) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially.
+  if \(-1 < \phi_1 < 0,\) the lag 1 autocorrelation is negative (\(\rho_1=\phi_1\)) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially.
 \end{enumerate}
 
 \hypertarget{properties-of-ar2-model}{%
 \subsection{Properties of AR(2) model}\label{properties-of-ar2-model}}
 
-Now consider an second-order autoregressive process (AR(2))
+Now consider a second-order autoregressive process (AR(2))
 
 \begin{equation}
   \label{eq:ar2}
@@ -498,7 +498,7 @@ Solve it until you obtain the Eq. (a) as shown below.
 \gamma_0 (1-\theta_1^2 - \theta_1^2) = 2\theta_1\theta_2\gamma_1+\sigma^2.
 \end{equation}
 
-Next multiply both sides of Equation \eqref{eq:ar2} by \(Y_{t-1}\) and obtain a expression for \(\gamma_1\). Let's call this Eq. (b).
+Next multiply both sides of Equation \eqref{eq:ar2} by \(Y_{t-1}\) and obtain an expression for \(\gamma_1\). Let's call this Eq. (b).
 
 Solve Eq. (a) and (b) for \(\gamma_0.\)
 
@@ -899,14 +899,14 @@ Now we have
 
 \begin{equation}
   \label{eq:covma1}
-  E(Y_t Y_{t-k}) = \gamma_k + \theta_0^2
+  E(Y_t Y_{t-k}) = \gamma_k + \theta_0^2.
 \end{equation}
 
 Using the Equations \eqref{eq:ma1acfs2} and \eqref{eq:covma1} we have
 
 \begin{equation}
   \label{eq:covma2}
-  \gamma_k = \theta_0^2 - \theta_0^2 + \theta_1E(\epsilon_{t-1}Y_{t-k})
+  \gamma_k = \theta_0^2 - \theta_0^2 + \theta_1E(\epsilon_{t-1}Y_{t-k}).
 \end{equation}
 
 Now let's consider the case \(k=1\).
@@ -1060,7 +1060,8 @@ Then
 where \(\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p.\) Furthermore, \(Y_t\) can be written as infinite sum of previous \(\epsilon\)'s as below
 
 \[Y_t = \phi^{-1}(B)\epsilon_t,\]
-where \(\psi(B)=1+\Psi_1B+\psi_2B^2+...,\) such that \(\phi(B)\psi(B)=1.\) Then \(Y_t=\psi(B)\epsilon_t\) is a \(MA(\infty)\) process.
+where \(\phi(B)\psi(B)=1\) and \(\psi(B)=1+\Psi_1B+\psi_2B^2+...\) Then \[Y_t=\psi(B)\epsilon_t.\]
+This is a representation of \(MA(\infty)\) process.
 
 \textbf{Next, we consider the relation MA(q) \textless{}--\textgreater{} AR(}\(\infty\)\textbf{)}
 
@@ -1173,6 +1174,11 @@ Theoretical autocorrelation coefficients for some of the more common AR, MA and 
 \includegraphics{TS1_files/figure-latex/unnamed-chunk-1-1.pdf}
 \caption{\label{fig:unnamed-chunk-1}ACF and PACF of AR(1), MA(1) and ARMA(1, 1) models calculated from the data}
 \end{figure}
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+Box, G. E., Jenkins, G. M., Reinsel, G. C., \& Ljung, G. M. (2015). Time series analysis: forecasting and control.
 
 \printbibliography
 
