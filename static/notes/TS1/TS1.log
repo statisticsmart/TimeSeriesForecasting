@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.5)  5 APR 2020 19:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.3.5)  6 APR 2020 09:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -675,6 +675,38 @@ Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
 \@lastruleclass=\count402
 \@thisrulewidth=\dimen170
 )
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/g
+raphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/g
+raphics.sty
+Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
+
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/t
+rig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics-c
+fg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 105.
+
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics-d
+ef/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen171
+\Gin@req@width=\dimen172
+)
+(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/grffile/gr
+ffile.sty
+Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legac
+y)
+Package grffile Info: This package is an empty stub for compatibility on input 
+line 40.
+)
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/parskip/pa
 rskip.sty
 Package: parskip 2020-01-22 v2.0d non-zero parskip adjustments
@@ -687,13 +719,13 @@ Package: caption 2020/01/03 v3.4h Customizing captions (AR)
 ption3.sty
 Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 61.
-\captionmargin=\dimen171
-\captionmargin@=\dimen172
-\captionwidth=\dimen173
-\caption@tempdima=\dimen174
-\caption@indent=\dimen175
-\caption@parindent=\dimen176
-\caption@hangindent=\dimen177
+\captionmargin=\dimen173
+\captionmargin@=\dimen174
+\captionwidth=\dimen175
+\caption@tempdima=\dimen176
+\caption@indent=\dimen177
+\caption@parindent=\dimen178
+\caption@hangindent=\dimen179
 Package caption Info: Standard document class detected.
 )
 \c@caption@flags=\count403
@@ -763,31 +795,6 @@ Package: bm 2019/07/24 v1.2d Bold Symbol Support (DPC/FMi)
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 141.
 LaTeX Info: Redefining \bm on input line 209.
 )
-(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/g
-raphicx.sty
-Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
-
-(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/g
-raphics.sty
-Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
-
-(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics/t
-rig.sty
-Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-)
-(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics-c
-fg/graphics.cfg
-File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
-)
-Package graphics Info: Driver file: pdftex.def on input line 105.
-
-(/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/graphics-d
-ef/pdftex.def
-File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
-))
-\Gin@req@height=\dimen178
-\Gin@req@width=\dimen179
-)
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/titlesec/t
 itlesec.sty
 Package: titlesec 2019/10/16 v2.13 Sectioning titles
@@ -824,11 +831,11 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-Package hyperref Info: Option `breaklinks' set `true' on input line 206.
-Package hyperref Info: Option `bookmarksopen' set `true' on input line 206.
-Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 206.
+Package hyperref Info: Option `breaklinks' set `true' on input line 215.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 215.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 215.
 
-Package hyperref Info: Option `colorlinks' set `true' on input line 206.
+Package hyperref Info: Option `colorlinks' set `true' on input line 215.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/base/fonte
 nc.sty
@@ -947,38 +954,35 @@ LaTeX Warning: Label `eq:mtd21' multiply defined.
 
 LaTeX Warning: Label `eq:ma2' multiply defined.
 
-
-LaTeX Warning: Label `eq:ma2' multiply defined.
-
 )
 \openout1 = `TS1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 280.
-LaTeX Font Info:    ... okay on input line 280.
-LaTeX Info: Redefining \microtypecontext on input line 280.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 292.
+LaTeX Font Info:    ... okay on input line 292.
+LaTeX Info: Redefining \microtypecontext on input line 292.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 280.
+LaTeX Info: Redefining \showhyphens on input line 292.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -988,7 +992,7 @@ mt-ppl.cfg
 File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 )
 \AtBeginShipoutBox=\box55
-Package hyperref Info: Link coloring ON on input line 280.
+Package hyperref Info: Link coloring ON on input line 292.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/hyperref/n
 ameref.sty
@@ -1004,9 +1008,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count420
 )
-LaTeX Info: Redefining \ref on input line 280.
-LaTeX Info: Redefining \pageref on input line 280.
-LaTeX Info: Redefining \nameref on input line 280.
+LaTeX Info: Redefining \ref on input line 292.
+LaTeX Info: Redefining \pageref on input line 292.
+LaTeX Info: Redefining \nameref on input line 292.
 (./TS1.out) (./TS1.out)
 \@outlinefile=\write4
 \openout4 = `TS1.out'.
@@ -1060,10 +1064,8 @@ Package biblatex Info: Data encoding 'utf8' specified.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'TS1.bbl' found.
 (./TS1.bbl)
-Package biblatex Info: Reference section=0 on input line 280.
-Package biblatex Info: Reference segment=0 on input line 280.
-Package caption Info: Begin \AtBeginDocument code.
-Package caption Info: End \AtBeginDocument code.
+Package biblatex Info: Reference section=0 on input line 292.
+Package biblatex Info: Reference segment=0 on input line 292.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-p
 kg/epstopdf-base.sty
@@ -1075,171 +1077,188 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 g/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
-)) ABD: EveryShipout initializing macros
-LaTeX Font Info:    Trying to load font information for T1+fvs on input line 28
-1.
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+ABD: EveryShipout initializing macros
+LaTeX Font Info:    Trying to load font information for T1+fvs on input line 29
+3.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/bera/t1fvs
 .fd
 File: t1fvs.fd 2004/09/07 scalable font definitions for T1/fvs.
 )
 LaTeX Font Info:    Font shape `T1/fvs/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 281.
+(Font)              scaled to size 9.85492pt on input line 293.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `fvs' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `T1/fvs/m/n' will be
-(Font)              scaled to size 22.39185pt on input line 281.
+(Font)              scaled to size 22.39185pt on input line 293.
 LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 281.
+(Font)              scaled to size 22.39185pt on input line 293.
 LaTeX Font Info:    Font shape `T1/fvs/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 281.
+(Font)              scaled to size 10.79993pt on input line 293.
 LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 281.
+(Font)              scaled to size 10.79993pt on input line 293.
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 2
-81.
+93.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1
 ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-281.
+293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/oml
 zplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-281.
+293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/oms
 zplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-281.
+293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omx
 zplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 281.
+(Font)              scaled to size 12.50409pt on input line 293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/microtype/
 mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 281.
+(Font)              scaled to size 9.37807pt on input line 293.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 281.
+(Font)              scaled to size 7.29405pt on input line 293.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 281.
+(Font)              scaled to size 12.50409pt on input line 293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/microtype/
 mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 281.
+(Font)              scaled to size 9.37807pt on input line 293.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 281.
+(Font)              scaled to size 7.29405pt on input line 293.
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-281.
+293.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1
 zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 281--281
+Underfull \hbox (badness 10000) in paragraph at lines 293--293
 
  []
 
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 281.
+(Font)              scaled to size 11.40997pt on input line 293.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 281.
+(Font)              scaled to size 8.33606pt on input line 293.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 281.
+(Font)              scaled to size 6.25204pt on input line 293.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 281.
+(Font)              scaled to size 11.40997pt on input line 293.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 281.
+(Font)              scaled to size 8.33606pt on input line 293.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 281.
+(Font)              scaled to size 6.25204pt on input line 293.
 [1
 
 {/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-var/fonts/map/pdftex/updm
 ap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
-(Font)              scaled to size 13.49991pt on input line 285.
+(Font)              scaled to size 13.49991pt on input line 297.
 (./TS1.toc)
 \tf@toc=\write5
 \openout5 = `TS1.toc'.
 
 [2]
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 2
-99.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 3
+09.
 
 (/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1
 ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
 LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
-(Font)              scaled to size 9.85492pt on input line 334.
+(Font)              scaled to size 9.85492pt on input line 344.
 LaTeX Font Info:    Font shape `T1/fvs/m/n' will be
-(Font)              scaled to size 12.9599pt on input line 348.
+(Font)              scaled to size 12.9599pt on input line 362.
 LaTeX Font Info:    Font shape `T1/fvs/b/n' will be
-(Font)              scaled to size 12.9599pt on input line 348.
+(Font)              scaled to size 12.9599pt on input line 362.
 [3] [4] [5] [6] [7]pdfTeX warning (ext4): destination with the same identifier 
 (name{equation.2.8}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.530 \end{align}
-                  [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19]
+l.540 \end{align}
+                  [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20
+]
+<ar.PNG, id=344, 1541.76pt x 1690.315pt>
+File: ar.PNG Graphic file (type png)
+<use ar.PNG>
+Package pdftex.def Info: ar.PNG  used on input line 1140.
+(pdftex.def)             Requested size: 455.23872pt x 499.10286pt.
+[21 <./ar.PNG>]
+<ma.PNG, id=353, 1626.075pt x 1851.91875pt>
+File: ma.PNG Graphic file (type png)
+<use ma.PNG>
+Package pdftex.def Info: ma.PNG  used on input line 1151.
+(pdftex.def)             Requested size: 455.22346pt x 518.44894pt.
+[22 <./ma.PNG>]
+<arma.PNG, id=361, 1626.075pt x 1875.005pt>
+File: arma.PNG Graphic file (type png)
+<use arma.PNG>
+Package pdftex.def Info: arma.PNG  used on input line 1162.
+(pdftex.def)             Requested size: 455.22346pt x 524.912pt.
+[23 <./arma.PNG>]
 
-LaTeX Warning: Empty bibliography on input line 1118.
+LaTeX Warning: Empty bibliography on input line 1168.
 
 
-Package caption Warning: Unused \captionsetup[figure] on input line 60.
+Package caption Warning: Unused \captionsetup[table] on input line 70.
 See the caption package documentation for explanation.
 
-
-Package caption Warning: Unused \captionsetup[table] on input line 61.
-See the caption package documentation for explanation.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1120.
-[20]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1120.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1170.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1170.
 (./TS1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1120.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1120.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1170.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1170.
 
 Package rerunfilecheck Info: File `TS1.out' has not changed.
-(rerunfilecheck)             Checksum: 04DD98C96DBEF64C8D07A2630ACDBB0C;4360.
+(rerunfilecheck)             Checksum: 4999E3668E8A52BA5FC9D03295E6727B;5079.
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package logreq Info: Writing requests to 'TS1.run.xml'.
 \openout1 = `TS1.run.xml'.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1120.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1170.
  )
 (\end occurred inside a group at level 1)
 
-### semi simple group (level 1) entered at line 177 (\begingroup)
+### semi simple group (level 1) entered at line 186 (\begingroup)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 22394 strings out of 482938
- 378259 string characters out of 5958192
- 1066378 words of memory out of 5000000
- 37030 multiletter control sequences out of 15000+600000
- 619917 words of font info for 215 fonts, out of 8000000 for 9000
+ 22450 strings out of 482938
+ 379295 string characters out of 5958192
+ 1071124 words of memory out of 5000000
+ 37065 multiletter control sequences out of 15000+600000
+ 620796 words of font info for 215 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 41i,12n,45p,1192b,3884s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,12n,45p,1192b,3960s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/font
 s/enc/dvips/base/8r.enc}</Users/thiyangashaminitalagala/Library/TinyTeX/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></Users/thiyangashaminitalagala/
@@ -1259,10 +1278,10 @@ haminitalagala/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><
 ino/uplbi8a.pfb></Users/thiyangashaminitalagala/Library/TinyTeX/texmf-dist/font
 s/type1/urw/palatino/uplr8a.pfb></Users/thiyangashaminitalagala/Library/TinyTeX
 /texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on TS1.pdf (20 pages, 172550 bytes).
+Output written on TS1.pdf (23 pages, 1171931 bytes).
 PDF statistics:
- 402 PDF objects out of 1000 (max. 8388607)
- 362 compressed objects within 4 object streams
- 144 named destinations out of 1000 (max. 500000)
- 18593 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 451 PDF objects out of 1000 (max. 8388607)
+ 401 compressed objects within 5 object streams
+ 156 named destinations out of 1000 (max. 500000)
+ 22720 words of extra memory for PDF output out of 24883 (max. 10000000)
 

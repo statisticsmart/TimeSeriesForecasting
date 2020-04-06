@@ -1,12 +1,14 @@
 ---
-title: "Linear Time Series Analysis and Its Applications" 
+title: "Linear Time Series Analysis and Its Applications - Part 1" 
 author:
-- familyname: Thiyanga
-  othernames: Talagala
+- familyname: Talagala
+  othernames: Dr Thiyanga
   address: University of Sri Jayewardenepura
   email: ttalagala@sjp.ac.lk
+- familyname: 
+  othernames: Note
+  address: IM 532 3.0 Applied Time Series Forecasting, online teaching material - 1 during the COVID-19 outbreak. This is designed for self-study to support your learning.
 abstract: ""
-keywords: ""
 blind: false
 cover: false
 toc: true
@@ -39,8 +41,6 @@ library(ggplot2)
 
 ## Models for stationary time series
 
-There are different ways to model stationary time series. Here, we will explore the properties of th following three models.
-
 - $AR$ models
 
 - $MA$ models
@@ -67,6 +67,7 @@ Y_t=\phi_0+\phi_1Y_{t-1}+\epsilon_{t}
 \end{equation}
 
 where ${\epsilon_t}$ is assumed to be a white noise process with mean zero and variance $\sigma^2$. 
+
 
 
 ### Mean
@@ -111,7 +112,7 @@ Under the stationarity condition, $Var(Y_t)=Var(Y_{t-1})$, so that,
 
 $$Var(Y_t)=\frac{\sigma^2}{1-\phi_1^2}.$$
 
-provided that $\phi_1^2 < 1$ or $|\phi| < 1$ (The variance of a random variable is bounded and non-negative). The necessary and sufficient condition for the $AR(1)$ model in Eq. (1) to be weakly stationary is $|\phi| < 1$. This condition is equivalent to saying that the root of $1-\phi_1B = 0$ must lie outside the unit circle. This can be explained as below
+provided that $\phi_1^2 < 1$ or $|\phi| < 1$ (The variance of a random variable is bounded and non-negative). The necessary and sufficient condition for the $AR(1)$ model in Equation \@ref(eq:ar) to be weakly stationary is $|\phi| < 1$. This condition is equivalent to saying that the root of $1-\phi_1B = 0$ must lie outside the unit circle. This can be explained as below
 
 Using the backshift notation we can write $AR(1)$ process as 
 
@@ -121,7 +122,7 @@ Then we get
 
 $$(1-\phi_1B)Y_t=\phi_0 + \epsilon_t.$$ The $AR(1)$ process is said to be stationary if the roots of $(1-\phi_1B)=0$ lie outside the unit circle. 
 
-## Covariance 
+### Covariance 
 
 The covariance $\gamma_k=Cov(Y_t, Y_{t-k})$ is called the lag-$k$ autocovariance of $Y_t$. The two main properties of $\gamma_k$: (a) $\gamma_0=Var(Y_t)$ and (b) $\gamma_{-k}=\gamma_{k}$. 
 
@@ -146,14 +147,14 @@ Now we have
 
 ### Autocorrelation function of an AR(1) process
 
-To derive autocorrelation function of an AR(1) process we first multiply both sides of Eq. (1) by $Y_{t-k}$ and take expected values:
+To derive autocorrelation function of an AR(1) process we first multiply both sides of Equation \@ref(eq:ar) by $Y_{t-k}$ and take expected values:
 
 $$E(Y_tY_{t-k})=\phi_0E(Y_{t-k})+\phi_1 E(Y_{t-1}Y_{t-k})+E(\epsilon_tY_{t-k})$$
-Since $\epsilon_t$ and $Y_{t-k}$ are independent and using the results in Eq. (4)
+Since $\epsilon_t$ and $Y_{t-k}$ are independent and using the results in Equation \@ref(eq:3)
 
 $$\gamma_k + \mu^2 = \phi_0 \mu+\phi_1(\gamma_{k-1}+\mu^2)$$
 
-Substituting the results in Eq. (2) to Eq. (4) we get
+Substituting the results in Equation \@ref(eq:2) to Equation \@ref(eq:3) we get
 
 \begin{equation}
 \label{eq:5}
@@ -188,36 +189,13 @@ Since $|\phi_1| < 1,$ the autocorrelation function is an exponentially decreasin
 
 1. if $-1 < \phi_1 < 0,$ the lag 1 autocorrelation is negative ($\phi_1=\phi_1$) and the signs of successive autocorrelations alternate from positive to negative with their magnitudes decreasing exponentially. 
 
-```{r comment=NA, echo=FALSE, message=FALSE, echo=FALSE, eval=FALSE}
-library(forecast)
-library(patchwork)
-set.seed(456)
-## list description for AR(1) model with small coef
-AR.sm <- list(order = c(1, 0, 0), ar = 0.9, sd = 0)
-## list description for AR(1) model with large coef
-AR.lg <- list(order = c(1, 0, 0), ar = -0.9, sd = 0)
-##
-ar1 <- list(order = c(1, 0, 0), ar = 0.4, sd = 0)
-ar2 <- list(list(order = c(1, 0, 0), ar = -0.4, sd = 0))
-## simulate AR(1)
-AR1.sm1 <- arima.sim(n = 50, model = AR.sm)
-AR1.sm2 <- arima.sim(n = 50, model = AR.lg)
-AR1.sm11 <- arima.sim(n = 50, model = ar1)
-AR1.sm21 <- arima.sim(n = 50, model = ar2)
-p1 <- ggAcf(AR1.sm1)
-p2 <- ggAcf(AR1.sm2)
-p3 <- ggAcf(AR1.sm11)
-p4 <- ggAcf(AR1.sm21)
-(p1|p2)/(p3|p4)
-
-```
 
 ## Properties of AR(2) model
 
 Now consider an second-order autoregressive process (AR(2)) 
 
 \begin{equation}
-  \label{eq:1}
+  \label{eq:ar2}
 Y_t=\phi_0+\phi_1Y_{t-1}+\phi_2Y_{t-2}+\epsilon_t.
 \end{equation}
 
@@ -242,10 +220,10 @@ Solve it until you obtain the Eq. (a) as shown below.
 
 \begin{equation}
 \tag{a}
-\gamma_0 (1-\alpha_1^2 - \alpha_1^2) = 2\alpha_1\alpha_2\gamma_1+\sigma^2.
+\gamma_0 (1-\theta_1^2 - \theta_1^2) = 2\theta_1\theta_2\gamma_1+\sigma^2.
 \end{equation}
 
-Next multiply both sides of Eq. (6) by $Y_{t-1}$ and obtain a expression for $\gamma_1$. Let's call this Eq. (b).
+Next multiply both sides of Equation \@ref(eq:ar2) by $Y_{t-1}$ and obtain a expression for $\gamma_1$. Let's call this Eq. (b).
 
 Solve Eq. (a) and (b) for $\gamma_0.$
 
@@ -279,28 +257,29 @@ Using algebraic manipulation, we can show that these roots will exceed 1 in modu
 
 ### Autocorrelation function of an AR(2) process
 
-To derive autocorrelation function of an AR(2) process we first multiply both sides of Eq. (6) by $Y_{t-k}$ and take expected values:
+To derive autocorrelation function of an AR(2) process we first multiply both sides of  Equation \@ref(eq:ar2) by $Y_{t-k}$ and take expected values:
 
 
 \begin{align}
-E(Y_tY_{t-k}) &= E(\phi_0Y_{t-k}+\alpha_1Y_{t-1}Y_{t-k}+\alpha_2Y_{t-2}Y_{t-k})+\epsilon_tY_{t-k} \\
+E(Y_tY_{t-k}) &= E(\phi_0Y_{t-k}+\theta_1Y_{t-1}Y_{t-k}+\theta_2Y_{t-2}Y_{t-k})+\epsilon_tY_{t-k} \\
 &= \phi_0 E(Y_{t-k})+\phi_{1}E(Y_{t-1}Y_{t-k}) + \phi_2 E(Y_{t-2} Y_{t-k}) + E(\epsilon_tY_{t-k}).
 \end{align}
 
 
-Using the independence between $\epsilon_t$ and $Y_{t-1}$, $E(\epsilon_t Y_{t-k})=0$ and the results in Eq. 3 (This valid for AR(2)) we have
+Using the independence between $\epsilon_t$ and $Y_{t-1}$, $E(\epsilon_t Y_{t-k})=0$ and the results in Equation \@ref(eq:3) (This is valid for AR(2)) we have
 
-$$\gamma_k + \mu^2 = \gamma_0 \mu + \alpha_1 (\gamma_{k-1}+\mu^2)+\phi_2 (\gamma_{k-2}+\mu^2).$$
+$$\gamma_k + \mu^2 = \gamma_0 \mu + \theta_1 (\gamma_{k-1}+\mu^2)+\phi_2 (\gamma_{k-2}+\mu^2).$$
 
 (Note that $E(X_{t-1}X_{t-k})=E(X_{t-1}X_{(t-1)-(k-1)}=\gamma_{k-1})$)
 
 Solving for $\gamma_k$ we get
 
 \begin{align}
+\label{eq:eq9}
  \gamma_k=\phi_1\gamma_{k-1}+\phi_2\gamma_{k-2}.
 \end{align}
 
-By dividing the both sides of Eq. (9) by $\gamma_0$, we have
+By dividing the both sides of Equation \@ref(eq:eq9) by $\gamma_0$, we have
 
 \begin{align}
 \label{eq:yule2}
@@ -337,16 +316,16 @@ For stationarity of $AR(p)$ process, the $p$ roots of the AR characteristic must
 
 ### Mean
 
-**Question: ** Find $E(Y_t)$ of $AR(p)$ process.
+**Question 3: ** Find $E(Y_t)$ of $AR(p)$ process.
  
 ### Variance
 
-**Question: ** Find $Var(Y_t)$ of $AR(p)$ process.
+**Question 4: ** Find $Var(Y_t)$ of $AR(p)$ process.
 
 
 ### Autocorrelation function (ACF) of an AR(p) process
 
-**Question: ** Similar to the results in Equation \@ref(eq:yule2) for $AR(2)$ process, obtain the following recursive relationship for $AR(p)$. 
+**Question 5: ** Similar to the results in Equation \@ref(eq:yule2) for $AR(2)$ process, obtain the following recursive relationship for $AR(p)$. 
 
 \begin{align}
 \label{eq:yulep}
@@ -428,11 +407,11 @@ $$\bm{\rho_p} = \left[\begin{array}
 \phi_p
 \end{array}\right]$$
 
-The parameters can be extimated using 
+The parameters can be estimated using 
 
 $$\bm{\phi}=\bm{P_p^{-1}\rho_p}.$$
 
-**Question:** Obtain the parameters of an $AR(3)$ process whose first autocorrelations are $\rho_1=0.9$; $\rho_2=0.9$; $\rho_3=0.5$. Is the process stationary?
+**Question 6:** Obtain the parameters of an $AR(3)$ process whose first autocorrelations are $\rho_1=0.9$; $\rho_2=0.9$; $\rho_3=0.5$. Is the process stationary?
 
 ## The partial autocorrelation function (PACF)
 
@@ -573,11 +552,11 @@ Similarly, for $AR(1)$ we can show that $\phi_{kk}=0$ for all $k > 0$. Hence, fo
 
 ### PACF for AR(2) model
 
-**Question:** For $AR(2)$ process show that $\phi_{kk}=0$ for all $k>2$. Sketch the PACF of $AR(2)$ process.
+**Question 7:** For $AR(2)$ process show that $\phi_{kk}=0$ for all $k>2$. Sketch the PACF of $AR(2)$ process.
 
 ### PACF for AR(P) model
 
-In general for $AR(p)$ precess, the partial autocorrelation function $\phi_{kk}$ is non-zero for $k$ less than or equal to $p$ (the order of the process) and zero for all $k$ greater than $p$. In other words, the partial autocorrelation function of a $AR(p)$ process has a cutoff after lag $p$. 
+In general for $AR(p)$ precess, the partial autocorrelation function $\phi_{kk}$ is non-zero for $k$ less than or equal to $p$ (the order of the process) and zero for all $k$ greater than $p$. In other words, the partial autocorrelation function of a $AR(p)$ process has a cut-off after lag $p$. 
 
 
 
@@ -591,27 +570,27 @@ We first derive the properties of $MA(1)$ and $MA(2)$ models and then give the r
 The general form for $MA(1)$ model is
 
 \begin{equation}
-  \label{eq:ma2}
+  \label{eq:ma1}
 Y_t = \theta_0 + \theta_1 \epsilon_{t-1} + \epsilon_t
 \end{equation}
 
-whre $\theta_0$ is a constant and ${\epsilon_t}$ is a white noise series.
+where $\theta_0$ is a constant and ${\epsilon_t}$ is a white noise series.
 
 ### Mean
 
-**Question:** Show that $E(Y_t) = \theta_0$. 
+**Question 8:** Show that $E(Y_t) = \theta_0$. 
 
 ### Variance
 
-**Question:** Show that $Var(Y_t) = (1+\theta_1^2)\sigma^2$.
+**Question 9:** Show that $Var(Y_t) = (1+\theta_1^2)\sigma^2$.
 
-We can see both mean and variance are time-invarient.  $MA$ models are finite linear combinations of a white noise sequence. Hence, $MA$ processes are always weakly stationary. 
+We can see both mean and variance are time-invariant.  $MA$ models are finite linear combinations of a white noise sequence. Hence, $MA$ processes are always weakly stationary. 
 
 ### Autocorrelation function of an MA(1) process
 
 #### Method 1
 
-To obtain the autocorrelation function of $MA(1)$, we first multiply bothsides of Equation \@ref(eq:ma2) by $Y_{t-k}$ and take the expectation. 
+To obtain the autocorrelation function of $MA(1)$, we first multiply both sides of Equation \@ref(eq:ma1) by $Y_{t-k}$ and take the expectation. 
 
 \begin{equation}
 \label{eq: ma1acfs1}
@@ -716,7 +695,7 @@ We can see that the ACF of $MA(1)$ process is zero, beyond the order of 1 of the
 \end{aligned}
 \end{equation}
 
-We have $\gamma_0=\sigma^2(1+\theta_1^2)$.
+We have $\gamma_0=\sigma^2(1+\theta_1^2)$, (Using the variance).
 
 Hence
 
@@ -737,15 +716,15 @@ where $\theta_0$ is a constant and ${\epsilon_t}$ is a white noise series.
 
 ### Mean
 
-**Question: ** Show that $E(Y_t) = \theta_0.$
+**Question 10: ** Show that $E(Y_t) = \theta_0.$
 
 ### Variance
 
-**Question: ** Show that $Var(Y_t) = \sigma^2 (1+\theta_1^2 + \theta_2^2).$
+**Question 11: ** Show that $Var(Y_t) = \sigma^2 (1+\theta_1^2 + \theta_2^2).$
 
 ### Autocorrelation function of an MA(2) process
 
-For $MA(2)$ process show that,
+**Question 12: **For $MA(2)$ process show that,
 
 $$\rho_1=\frac{\theta_1(1+\theta_2)}{1+\theta_1^2+\theta_2^2},$$
 $$\rho_2 = \frac{\theta_2}{1+\theta_1^2 + \theta_2^2},$$
@@ -759,20 +738,20 @@ and $\rho_k=0$ for all $k \geq 3.$
 Y_t = \theta_0 + \theta_1 \epsilon_{t-1} + \theta_2 \epsilon_{t-2} +...+ \theta_q \epsilon_{t-q} +\epsilon_t
 \end{equation}
 
-whre $\theta_0$ is a constant and ${\epsilon_t}$ is a white noise series.
+where $\theta_0$ is a constant and ${\epsilon_t}$ is a white noise series.
 
 ### Mean
 
-**Question:** Show that the constant term of an $MA$ model is the mean of the series (i.e. $E(Y_t)=\theta_0$).
+**Question 13:** Show that the constant term of an $MA$ model is the mean of the series (i.e. $E(Y_t)=\theta_0$).
 
 ### Variance
 
-**Question:** Show that the varianceof an $MA$ model is 
+**Question 14:** Show that the variance of an $MA$ model is 
 $$Var(Y_t)=(1+\theta_1^2+\theta_2^2+...+\theta_q^2)\sigma^2.$$
 
 ### Autocorrelation function of an MA(q) process
 
-**Question:** Show that the autocorrelation function of a $MA(q)$ process is zero, beyond the order of $q$ of the process. In other words, the autocorrelation function of a moving average process has a cutoff after lag $q$.
+**Question 15:** Show that the autocorrelation function of a $MA(q)$ process is zero, beyond the order of $q$ of the process. In other words, the autocorrelation function of a moving average process has a cutoff after lag $q$.
 
 ## Partial autocorrelation function of an MA(q) process
 
@@ -800,7 +779,7 @@ where $\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p.$ Furthermore, $Y_t$ can be wri
 $$Y_t = \phi^{-1}(B)\epsilon_t,$$
 where $\psi(B)=1+\Psi_1B+\psi_2B^2+...,$ such that $\phi(B)\psi(B)=1.$ Then $Y_t=\psi(B)\epsilon_t$ is a $MA(\infty)$ process.
 
-**Next, we conside the realation MA(q) <--> AR(**$\infty$**)**
+**Next, we consider the relation MA(q) <--> AR(**$\infty$**)**
 
 Let $MA(q)$ be **invertible** moving average process 
 
@@ -821,7 +800,7 @@ where $\pi(B)\theta(B)=1$, and $\pi(B) = 1+\pi_1B+\pi B^2+...$. Hence,
 
 $$\epsilon_t = \pi(B)Y_t.$$ This is an representation of a $AR(\infty)$ process.
 
-**Dual realation 2**
+**Dual relation 2**
 
 An $MA(q)$ process has an ACF function that is zero beyond lag $q$ and its PACF is decays exponentially to 0. Consequently, an $AR(p)$ process has an PACF that is zero beyond lag-$p$, but its ACF decays exponentially to 0.
 
@@ -858,7 +837,30 @@ Roots of $$\phi(B)=0$$ lie outside the unit circle.
 Roots of $$\theta(B)=0$$ lie outside the unit circle.
 
 
-## Autocorrelation function 
+## Autocorrelation function and  Partial autocorrelation function
 
+The ACF of an ARMA model exhibits a pattern similar to that of an AR model. The PACF of ARMA process behaves like the PACF of a MA process. Hence, the ACF and PACF are not informative in determining the order of an ARMA model.
 
-## 
+# Theoretical ACF and PACF for AR, MA and ARMA models
+
+Theoretical autocorrelation coefficients for some of the more common AR, MA and ARMA models are shown here. However, the ACF and PACF calculated from the data will not exactly match any set of theoretical ACF and PACF because the ACF and PACF calculated from the data are subject to sampling variation.
+
+\newpage
+
+## AR models
+
+![ACF and PACF of AR(1) and AR(2) models](ar.PNG)
+
+\newpage
+
+## MA models
+
+![ACF and PACF of MA(1) and MA(2) models](ma.PNG)
+
+\newpage
+
+## ARMA models
+
+![ACF and PACF of ARMA(1, 1) model](arma.PNG)
+
+\newpage
