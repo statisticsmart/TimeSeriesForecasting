@@ -146,9 +146,9 @@ rnorm(15)
 ```
 
 ```
- [1] -1.7046107  0.7709364 -0.6274863 -0.8331814  1.1384931  1.9786094
- [7]  0.5548567  0.7297540  1.0108304 -1.6153411 -0.3837559  0.1983547
-[13]  0.4591542 -1.0493560  0.1105358
+ [1] -1.10074959 -0.08761539 -0.27929065 -0.62399042 -0.22818002 -0.59440435
+ [7]  1.31177754 -0.65794150 -0.91564131  0.04654866 -0.31067592 -1.78004044
+[13] -0.98496718 -0.20097704  0.58606531
 ```
 
 --
@@ -460,7 +460,7 @@ Hence,
 
 The `\(\theta_q\)` is defined as an MA operator.
 
-Any `\(MA(q)\)` process can be written as an `\(AR(\infty)\)` process if we impose some constraints on the MA parameters. Then it is call **invertible**.
+Any `\(MA(q)\)` process can be written as an `\(AR(\infty)\)` process if we impose some constraints on the MA parameters. Then it is called **invertible**.
 
 
 MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle, `\(|\theta| \geq 1\)`.
@@ -519,7 +519,7 @@ where `\(\{\epsilon_t\}\)` is a white noise process.
 Using the back shift operator
 
 `$$\phi(B)x_t=\theta(B)\epsilon_t,$$`
-where `\(\phi(.)\)` and `\(\theta(.)\)` are the `\(p\)`Th and `\(q\)`Th degree polynomials,
+where `\(\phi(.)\)` and `\(\theta(.)\)` are the `\(p\)`th and `\(q\)`th degree polynomials,
 
 `$$\phi(B)=1-\phi_1\epsilon-...-\phi_p\epsilon^p,$$`
 and

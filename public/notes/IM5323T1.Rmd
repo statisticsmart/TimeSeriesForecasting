@@ -1,0 +1,13 @@
+---
+title: "Tutorial 1"
+author: "IM 532 3.0 Applied Time Series Forecasting"
+date: "05/04/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Sketch the autocorrelation functions for each of the following ARMA models.
+

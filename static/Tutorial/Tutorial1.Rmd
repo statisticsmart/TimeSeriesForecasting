@@ -1,0 +1,89 @@
+---
+title: "Tutorial 1"
+author: "IM532 3.0 Applied Time Series Forecasting"
+date: "07/04/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = NA, message = FALSE, warning = FALSE)
+```
+
+
+## Data
+
+Use data in `colmozzie` package in R. 
+
+## Package installation
+
+```{r, eval=FALSE}
+install.packages("colmozzie")
+```
+
+```{r}
+library(colmozzie)
+head(colmozzie)
+```
+
+To view the description of variables type,
+
+```{r, eval=FALSE}
+?colmozzie
+```
+
+## Other packages
+
+```{r, comment=NA, eval=FALSE}
+install.packages("forecast")
+library(forecast)
+```
+
+
+
+1. Use TEM: average temperature of the week (Celcius) in `colmozzie` data set. Split the data into two parts: i) training set (2009 to 2013 data) and ii) test set (2014 data).
+
+```{r, comment=NA}
+tem <- ts(colmozzie$TEM, start=c(2009, 1), frequency = 52)
+tem.train <- window(tem, end=c(2013, 52))
+tem.test <- window(tem, start=c(2014, 1))
+```
+
+2. The following code can be used to check whether time series has been split correctly.
+
+```{r, comment=NA}
+library(forecast)
+autoplot(tem) +
+autolayer(tem.train, series="Training") +
+autolayer(tem.test, series="Test")
+```
+
+4. Calculate forecasts using `naive` method applied to `tem.train` .
+
+```{r, comment=NA}
+forecast.naive <- naive(tem.train, h=length(tem.test))
+forecast.naive
+```
+
+5. Compare the accuracy on the results using the test set.
+
+```{r, comment=NA}
+accuracy(forecast.naive, tem.test)
+```
+
+6. Check the residuals. Do they resemble white noise?
+
+```{r, comment=NA}
+checkresiduals(forecast.naive)
+```
+
+
+7. Use other benchmark methods such as snaive, average method and random walk with drift methods to forecast the training set and compare the results on the test set. 
+
+8. Which do you think is best to forecast average temperature in Colombo district? Give reasons for your answer.
+
+9. Repeat the exercise for the other climate variable (TMAX, Tm, SLP, H, PP, VV, V, VM) in `colmozzie` dataset.
+
+**Note:**
+
+**The above exercise is prepared based on Hyndman, R. J., & Athanasopoulos, G. (2018). Forecasting: principles and practice. OTexts. adapting to colmozzie data set avilable on colmozzie package in R written by Thiyanga S. Talagala.**
+

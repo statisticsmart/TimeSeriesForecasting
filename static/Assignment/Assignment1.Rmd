@@ -1,0 +1,29 @@
+---
+title: "Assignment 1"
+author: "IM 532 3.0 Applied Time Series Forecasting"
+date: "07/04/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Use the dengue counts data in Gampaha, Kalutara, Ratnapura in `mozzie` package in R to do the following:
+
+    a) Produce suitable time series graphics and interpret the outputs.
+
+    b) Split the data into a training set (from 2008 to 2013) and a test set (2014 data).
+
+    c)  Try using various benchmark methods (average method, naive method, drift method, snaive method) to forecast the training set and compare the results on the test set. 
+    
+    d) Check the residuals of each method. Do they resemble white noise?
+    
+    d) Which method did best for each district? Give reasons for your answer.
+
+    
+Please send me your R codes, outputs and answers to the above questions.
+
+**Due date: ** Due to COVID-19 outbreak I am NOT strict about the deadlines. However, please try your best to complete it by 25 April 2020.
+
+
