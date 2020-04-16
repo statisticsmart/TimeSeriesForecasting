@@ -26,7 +26,20 @@ Here's your roadmap for the semester!
 **Week 2: Forecasting with (S)ARIMA models**
 
 
-📈 [Slides](/slides/timeseries2.html) 📚 [Reading: Ch. 8](https://otexts.com/fpp2/arima.html) 📋 Exercises
+📈 [Slides](/slides/timeseries2.html) 📚 [Reading: Ch. 8](https://otexts.com/fpp2/arima.html) 📋 [Exercises](/slides/video.pdf)
+
+_________________________________________________________
+
+## COVID-19 outbreak: distance learning teaching/learning study materials.
+
+```diff
+! Please go to Google Classroom for up-to-date information and announcements.
+```
+
+📓[Linear Time Series Analysis and Its Applications - Part 1: theoretical properties of AR, MA and ARMA](/slides/video.pdf)
+
+
+_________________________________________________________
 
 **Week 3: Forecasting with Exponential smoothing models**
 

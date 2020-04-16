@@ -39,7 +39,7 @@ library(ggplot2)
 
 # Introduction
 
-Linear models attempt to explain a time series as a linear ombination of external variables  and/or internal variables (laged values of error terms or observed values). These lead to the several possible models, such as AR, MA, ARMA, ARMA, SARIMA, ARFIMA and so on. The most representative of these are listed below. 
+Linear models attempt to explain a time series as a linear combination of external variables  and/or internal variables (lagged values of error terms or observed values). These lead to the several possible models, such as AR, MA, ARMA, ARMA, SARIMA, ARFIMA and so on. The most representative of these are listed below. 
 
 
 ## Models for stationary time series
@@ -99,7 +99,7 @@ E(Y_t)=\mu=\frac{\phi_0}{1-\phi_1}.
 \end{equation}
 
 
-The results has two constraints for $Y_t$. First, the mean of $Y_t$ exists if $\phi \neq 1 .$ The mean of $Y_t$ is zero if and only if $\phi_0=0$.  
+The results has two constraints for $Y_t$. First, the mean of $Y_t$ exists if $\phi_1 \neq 1 .$ The mean of $Y_t$ is zero if and only if $\phi_0=0$.  
 
 ### Variance and the stationary condition of AR (1) process
 
@@ -115,7 +115,7 @@ Under the stationarity condition, $Var(Y_t)=Var(Y_{t-1})$. Hence,
 
 $$Var(Y_t)=\frac{\sigma^2}{1-\phi_1^2}.$$
 
-provided that $\phi_1^2 < 1$ or $|\phi| < 1$ (The variance of a random variable is bounded and non-negative). The necessary and sufficient condition for the $AR(1)$ model in Equation \@ref(eq:ar) to be weakly stationary is $|\phi| < 1$. This condition is equivalent to saying that the root of $1-\phi_1B = 0$ must lie outside the unit circle. This can be explained as below
+provided that $\phi_1^2 < 1$ or $|\phi_1| < 1$ (The variance of a random variable is bounded and non-negative). The necessary and sufficient condition for the $AR(1)$ model in Equation \@ref(eq:ar) to be weakly stationary is $|\phi_1| < 1$. This condition is equivalent to saying that the root of $1-\phi_1B = 0$ must lie outside the unit circle. This can be explained as below
 
 Using the backshift notation we can write $AR(1)$ process as 
 
@@ -223,7 +223,7 @@ Solve it until you obtain the Eq. (a) as shown below.
 
 \begin{equation}
 \tag{a}
-\gamma_0 (1-\theta_1^2 - \theta_1^2) = 2\theta_1\theta_2\gamma_1+\sigma^2.
+\gamma_0 (1-\phi_1^2 - \phi_2^2) = 2\phi_1\phi_2\gamma_1+\sigma^2.
 \end{equation}
 
 Next multiply both sides of Equation \@ref(eq:ar2) by $Y_{t-1}$ and obtain an expression for $\gamma_1$. Let's call this Eq. (b).
@@ -295,7 +295,7 @@ Setting $k=1$ and using $\rho_0=1$ and $\rho_{-1}=\rho_1$, we get **the Yule-Wal
 
 $$\rho_1=\phi_1+\phi_2 \rho_1$$ or
 
-$$\rho_1 = \frac{\phi_1}{1-\phi_2}$$.
+$$\rho_1 = \frac{\phi_1}{1-\phi_2}.$$
 
 Similarly, we can show that 
 

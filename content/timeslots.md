@@ -12,8 +12,15 @@ Week 1: `1 March 2020, 1pm - 4pm`
 
 Week 2: `8 March 2020, 1pm - 4pm`
 
-Week 3: `15 March 2020, 2pm - 5pm`
+Week 3: `15 March 2020, 2pm - 5pm`*
 
-Week 4: `22 March 2020, 2pm - 5pm`
+Week 4: `22 March 2020, 2pm - 5pm`*
 
-Week 5:  `29 March 2020, 2pm - 5pm`
+Week 5:  `29 March 2020, 2pm - 5pm`*
+
+*University closed amid COVID-19 outbreak
+
+
+### Zoom lectures due to COVID19 - Outbreak
+
+`11 April 2020: 2pm - 4pm`
