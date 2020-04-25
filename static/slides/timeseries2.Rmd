@@ -1,7 +1,7 @@
 ---
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
-author: ""
+author: "Introduction to ARIMA models"
 date: "8 March 2020"
 output:
   xaringan::moon_reader:
