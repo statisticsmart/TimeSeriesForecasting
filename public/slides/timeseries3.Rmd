@@ -1,0 +1,115 @@
+---
+title: "IM532 3.0 Applied Time Series Forecasting"
+subtitle: "MSc in Industrial Mathematics"
+author: "Thiyanga Talagala"
+date: "25 April 2020"
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+# Non-Stationary Time Series
+
+**1. Deterministic trend**
+
+$$Y_t  = f(t) + \epsilon_t$$
+
+
+where $\epsilon_t \sim iid(0, \sigma^2)$, $t = 1, 2, ...T$
+
+Mean of the process is time dependent, but the variance of the process is constant.
+
+**2. Random walk**
+
+$$Y_t = Y_{t-1} + \epsilon_t$$
+
+**3. Random walk with drift**
+
+$$Y_t = \alpha+  Y_{t-1} + \epsilon_t$$
+
+**4. Random walk with drift and deterministic trend**
+
+---
+# Common trend removal (de-trending) procedures
+
+1. Deterministic trend: Time-trend regression
+
+      The trend can be removed by fitting a deterministic polynomial time trend. The residual series after removing the trend will give us the de-trended series.
+
+1. Stochastic trend: Differencing
+ 
+      The process is also known as a **Difference-stationary process**.
+
+--
+      
+# Notation: I(d)
+
+Integrated to order $d$, $I(d)$:
+
+series can be made stationary by differencing $d$ times.
+
+**Question: ** Show that random walk process is an $I(1)$ process.
+
+---
+
+# Trend stationary time series
+
+---
+
+# Difference stationary process: Random walk model (RW)
+
+---
+
+# Deterministic trend + Stochastic trend: Random walk with drift (RWD)
+
+
+---
+
+# Summary: RW vs RWD
+
+---
+
+# Detecting non stationarity by visual inspections of plots and ACF
+
+.pull-left[
+
+
+]
+
+.pull-right[
+
+
+]
+---
+
+# Testing for nonstationarity for the presence of unit roots
+
+---
+
+# Dickey and Fuller (DF) tests
+
+
+---
+
+# Augmented DF tests
+
+
+---
+
+# Phillips and Perron (PP) nonparametric tests
+
