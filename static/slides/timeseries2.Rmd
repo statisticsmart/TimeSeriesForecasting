@@ -1,7 +1,7 @@
 ---
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
-author: "Dr. Thiyanga Talagala"
+author: ""
 date: "8 March 2020"
 output:
   xaringan::moon_reader:
@@ -71,7 +71,7 @@ $$\gamma_X(h):=\gamma_X(h, 0)=\gamma(t+h, t)=Cov(X_{t+h}, X_t).$$
 
 ---
 
-## Auto covariance function
+## Autocovariance function
 
 The auto covariance function of ${X_t}$ at lag $h$ is
 
@@ -357,7 +357,7 @@ where $\epsilon_t$ is white noise.
 
 ## Question 
 
-Show that $AR(P)$ is a linear filter with transfer function $\phi^{-1}(B)$, where $\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p$.
+Show that $AR(P)$ is a linear filter with transfer function $\phi^{-1}(B)$, where $\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p.$
 
 --
 ## Stationary condition for AR(P)
@@ -369,17 +369,17 @@ The roots of $\phi(B)=0$ (characteristic equation) must lie outside the unit cir
 
 Let's consider $AR(1)$ process,
 
-$$x_t=c+\phi_1x_{t-1}+\epsilon_t.$$
+$$x_t=\phi_1x_{t-1}+\epsilon_t.$$
 
 Then, 
 
-$$(1-\phi B)x_t=\epsilon_t.$$
+$$(1-\phi_1 B)x_t=\epsilon_t.$$
 
 This may be written as,
-$$x_t=(1-\phi B)^{-1}\epsilon_t=\sum_{j=0}^{\infty}\phi_1^j\epsilon_t-j.$$
+$$x_t=(1-\phi_1 B)^{-1}\epsilon_t=\sum_{j=0}^{\infty}\phi_1^j\epsilon_{t-j}.$$
 Hence,
 
-$$\psi(B)=(1-\phi B)^{-1}=\sum_{j=0}^{\infty}\phi_1^jB^j$$
+$$\psi(B)=(1-\phi_1 B)^{-1}=\sum_{j=0}^{\infty}\phi_1^jB^j$$
 
 If $|\phi_1| < 1,$ the $AR(1)$ process is stationary.
 
@@ -401,7 +401,7 @@ $$x_t=c+\phi_1x_{t-1}+\epsilon_t,$$
 
 - when $\phi_1=0$ and $c=0$ - random walk
 
-- when $\phi_1=1$ and $c \neq = 0$ - random walk with drift
+- when $\phi_1=1$ and $c \neq 0$ - random walk with drift
 
 - when $\phi_1 < 0$ - oscillates around the mean
 
@@ -439,7 +439,13 @@ for $k>0$.
 This can be written as 
 
 $$\phi(B)\rho_k=0,$$
-where $\phi(B)=1-\phi B-...-\phi_p B^p.$
+where $\phi(B)=1-\phi_1 B-...-\phi_p B^p.$ 
+
+For $AR(1)$ process
+
+$$\rho_k=\phi_1\rho_{k-1},$$ for $k>0$. Since $\rho_0=1,$ for $k \geq 1$, we get
+
+$$\rho_k=\phi_1^k$$
 
 1. When $\phi_1>0$, autocorrelation function decays exponentially to zero.
 
@@ -492,8 +498,7 @@ The $\theta_q$ is defined as an MA operator.
 Any $MA(q)$ process can be written as an $AR(\infty)$ process if we impose some constraints on the MA parameters. Then it is called **invertible**.
 
 
-MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the unit circle, $|\theta| \geq 1$.
-
+MA model is called invertible if the roots of $\theta_q(B)=0$ lie outside the unit circle.
 ---
 
 ## MA(1) process
@@ -559,10 +564,12 @@ $$\theta(B)=1+\theta_1\epsilon+...+\theta_q\epsilon^q.$$
 ## ARMA(p, q) process
 
 **Stationary condition**
-Roots of $$\phi(B)=0$$ lie outside the unit circle.
+
+Roots of $\phi(B)=0$ lie outside the unit circle.
 
 **Invertible condition**
-Roots of $$\theta(B)=0$$ lie outside the unit circle.
+
+Roots of $\theta(B)=0$ lie outside the unit circle.
 
 ---
 

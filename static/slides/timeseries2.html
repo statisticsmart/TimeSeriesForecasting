@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>IM532 3.0 Applied Time Series Forecasting</title>
     <meta charset="utf-8" />
-    <meta name="author" content="Dr. Thiyanga Talagala" />
+    <meta name="author" content="" />
     <meta name="date" content="2020-03-08" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -18,7 +18,6 @@ class: center, middle, inverse, title-slide
 
 # IM532 3.0 Applied Time Series Forecasting
 ## MSc in Industrial Mathematics
-### Dr. Thiyanga Talagala
 ### 8 March 2020
 
 ---
@@ -73,7 +72,7 @@ The covariance function of `\(\{X_t\}\)` at lag `\(h\)` is defined by
 
 ---
 
-## Auto covariance function
+## Autocovariance function
 
 The auto covariance function of `\({X_t}\)` at lag `\(h\)` is
 
@@ -146,9 +145,9 @@ rnorm(15)
 ```
 
 ```
- [1] -1.10074959 -0.08761539 -0.27929065 -0.62399042 -0.22818002 -0.59440435
- [7]  1.31177754 -0.65794150 -0.91564131  0.04654866 -0.31067592 -1.78004044
-[13] -0.98496718 -0.20097704  0.58606531
+ [1]  1.37415560  0.77352476 -0.45948665  2.47777434  2.01027749 -0.62785895
+ [7]  1.04854861 -0.36518179  0.16242926 -2.09779031 -0.28800836  1.66000173
+[13]  1.00796171 -0.02401685 -0.13028116
 ```
 
 --
@@ -328,7 +327,7 @@ where `\(\epsilon_t\)` is white noise.
 
 ## Question 
 
-Show that `\(AR(P)\)` is a linear filter with transfer function `\(\phi^{-1}(B)\)`, where `\(\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p\)`.
+Show that `\(AR(P)\)` is a linear filter with transfer function `\(\phi^{-1}(B)\)`, where `\(\phi(B)=1-\phi_1B-\phi_2B^2-...-\phi_pB^p.\)`
 
 --
 ## Stationary condition for AR(P)
@@ -340,17 +339,17 @@ The roots of `\(\phi(B)=0\)` (characteristic equation) must lie outside the unit
 
 Let's consider `\(AR(1)\)` process,
 
-`$$x_t=c+\phi_1x_{t-1}+\epsilon_t.$$`
+`$$x_t=\phi_1x_{t-1}+\epsilon_t.$$`
 
 Then, 
 
-`$$(1-\phi B)x_t=\epsilon_t.$$`
+`$$(1-\phi_1 B)x_t=\epsilon_t.$$`
 
 This may be written as,
-`$$x_t=(1-\phi B)^{-1}\epsilon_t=\sum_{j=0}^{\infty}\phi_1^j\epsilon_t-j.$$`
+`$$x_t=(1-\phi_1 B)^{-1}\epsilon_t=\sum_{j=0}^{\infty}\phi_1^j\epsilon_{t-j}.$$`
 Hence,
 
-`$$\psi(B)=(1-\phi B)^{-1}=\sum_{j=0}^{\infty}\phi_1^jB^j$$`
+`$$\psi(B)=(1-\phi_1 B)^{-1}=\sum_{j=0}^{\infty}\phi_1^jB^j$$`
 
 If `\(|\phi_1| &lt; 1,\)` the `\(AR(1)\)` process is stationary.
 
@@ -372,7 +371,7 @@ for `\(|r|&lt;1.\)`
 
 - when `\(\phi_1=0\)` and `\(c=0\)` - random walk
 
-- when `\(\phi_1=1\)` and `\(c \neq = 0\)` - random walk with drift
+- when `\(\phi_1=1\)` and `\(c \neq 0\)` - random walk with drift
 
 - when `\(\phi_1 &lt; 0\)` - oscillates around the mean
 
@@ -410,7 +409,13 @@ for `\(k&gt;0\)`.
 This can be written as 
 
 `$$\phi(B)\rho_k=0,$$`
-where `\(\phi(B)=1-\phi B-...-\phi_p B^p.\)`
+where `\(\phi(B)=1-\phi_1 B-...-\phi_p B^p.\)` 
+
+For `\(AR(1)\)` process
+
+`$$\rho_k=\phi_1\rho_{k-1},$$` for `\(k&gt;0\)`. Since `\(\rho_0=1,\)` for `\(k \geq 1\)`, we get
+
+`$$\rho_k=\phi_1^k$$`
 
 1. When `\(\phi_1&gt;0\)`, autocorrelation function decays exponentially to zero.
 
@@ -463,8 +468,7 @@ The `\(\theta_q\)` is defined as an MA operator.
 Any `\(MA(q)\)` process can be written as an `\(AR(\infty)\)` process if we impose some constraints on the MA parameters. Then it is called **invertible**.
 
 
-MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle, `\(|\theta| \geq 1\)`.
-
+MA model is called invertible if the roots of `\(\theta_q(B)=0\)` lie outside the unit circle.
 ---
 
 ## MA(1) process
@@ -530,10 +534,12 @@ and
 ## ARMA(p, q) process
 
 **Stationary condition**
-Roots of `$$\phi(B)=0$$` lie outside the unit circle.
+
+Roots of `\(\phi(B)=0\)` lie outside the unit circle.
 
 **Invertible condition**
-Roots of `$$\theta(B)=0$$` lie outside the unit circle.
+
+Roots of `\(\theta(B)=0\)` lie outside the unit circle.
 
 ---
 
@@ -681,6 +687,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -698,17 +730,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

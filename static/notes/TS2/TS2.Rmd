@@ -1,0 +1,113 @@
+---
+title: "Linear Time Series Analysis and Its Applications - Part 2" 
+author:
+- familyname: Talagala
+  othernames: Dr Thiyanga
+  address: University of Sri Jayewardenepura
+  email: ttalagala@sjp.ac.lk
+- familyname: 
+  othernames: Note
+  address: IM 532 3.0 Applied Time Series Forecasting, online teaching material - 1 during the COVID-19 outbreak. This is designed for self-study to support your learning.
+abstract: ""
+keywords: ""
+wpnumber: no/yr
+jelcodes: C10,C14,C22
+blind: true
+cover: true
+toc: true
+bibliography: references.bib
+biblio-style: authoryear-comp
+output:
+  MonashEBSTemplates::workingpaper:
+    fig_caption: yes
+    fig_height: 5
+    fig_width: 8
+    includes:
+      in_header: preamble.tex
+    keep_tex: yes
+    number_sections: yes
+    citation_package: biblatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, cache=TRUE, messages=FALSE, warning=FALSE)
+# Make sure you have the latest version of rmarkdown and bookdown
+#devtools::install_github("rstudio/rmarkdown")
+#devtools::install_github("rstudio/bookdown")
+library(ggplot2)
+```
+
+# Introduction: Different Types of Non-Stationary Models
+
+
+## Random walk 
+
+$$Y_t = Y_{t-1} + \epsilon_t$$
+
+### Random walk process: Mean
+
+$$E(Y_t) = E(Y_{t-1} + \epsilon_t)$$ 
+
+ - non-mean-reverting process:  move away from the mean either in a positive or negative direction.
+ 
+### Random walk process: Variance
+ 
+ - the variance evolves over time and goes to infinity as time goes to infinity;
+ 
+### Simulation
+
+```{r, comment=NA, messages=FALSE, eval=FALSE}
+library(forecast)
+y <- cumsum(rnorm(20))
+y <- as.ts(y)
+autoplot(y)+ggtitle("Random walk process")
+```
+
+## Random walk with drift
+
+
+### Simulation
+
+
+## Deterministic trend
+
+
+
+### Simulation
+
+```{r, message=FALSE, echo=TRUE}
+library(forecast)
+t <- 1:20
+y <- 5 + 10*t + rnorm(20)
+y <- as.ts(y)
+autoplot(y)+ggtitle("Deterministic trend process")
+```
+
+## Random walk with drift and deterministic trend
+
+# How to convert a nonstationary series to a stationary time series?
+
+## Difference stationary
+
+A random walk with or without a drift can be transformed to a stationary process by
+differencing (subtracting $Y_{t-1}$ from $Y_t$, taking the difference $Y_t - Y_{t-1}$).
+
+Let, $X_t$ be the difference series of a random walk process. Then,
+
+$$X_t=Y_t - Y_{t-1} = \epsilon_t.$$
+
+We can see $X_t$ is equal to a white noise process. 
+
+Similarly, the difference series of a random walk with drift process is
+
+$$X_t=Y_t - Y_{t-1} = \alpha + \epsilon_t,$$
+where $\alpha$ is a constant. Further for 
+
+
+## Trend stationary process
+
+
+## Unit root tests
+
+# Model Identification
+

@@ -1,0 +1,29 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1}Introduction: Different Types of Non-Stationary Models}{1}{section.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.1}Random walk}{1}{subsection.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.1.1}Random walk process: Mean}{1}{subsubsection.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.1.2}Random walk process: Variance}{1}{subsubsection.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.1.3}Simulation}{2}{subsubsection.1.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.2}Random walk with drift}{2}{subsection.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.2.1}Simulation}{2}{subsubsection.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.3}Deterministic trend}{2}{subsection.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {1.3.1}Simulation}{2}{subsubsection.1.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {1.4}Random walk with drift and deterministic trend}{2}{subsection.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2}How to convert a nonstationary series to a stationary time series?}{2}{section.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1}Difference stationary}{2}{subsection.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2}Trend stationary process}{3}{subsection.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3}Unit root tests}{3}{subsection.2.3}%
