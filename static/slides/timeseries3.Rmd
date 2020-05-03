@@ -55,6 +55,16 @@ $$Y_t = \alpha+  Y_{t-1} + \epsilon_t$$
  
       The process is also known as a **Difference-stationary process**.
 
+
+
+---
+
+# Trend stationary time series
+
+---
+
+# Difference stationary time series
+
 --
       
 # Notation: I(d)
@@ -63,15 +73,13 @@ Integrated to order $d$, $I(d)$:
 
 series can be made stationary by differencing $d$ times.
 
-**Question: ** Show that random walk process is an $I(1)$ process.
 
----
-
-# Trend stationary time series
 
 ---
 
 # Difference stationary process: Random walk model (RW)
+
+**Question: ** Show that random walk process is an $I(1)$ process.
 
 ---
 
@@ -84,17 +92,251 @@ series can be made stationary by differencing $d$ times.
 
 ---
 
-# Detecting non stationarity by visual inspections of plots and ACF
+# Variance stabilization
+
+Eg:
+
+- Square root: $W_t = \sqrt{Y_t}$
+
+- Logarithm: $W_t = log({Y_t})$
+
+     - This very useful.
+     
+     - Interpretable: Changes in a log value are **relative (percent) changes on the original sclae**.
+     
+
+
+---
+
+### Monthly Airline Passenger Numbers 1949-1960
 
 .pull-left[
 
+**Without transformations**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(elec)
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
 
 ]
 
 .pull-right[
 
+**Square root transformation**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(elec)
+autoplot(sqrt(AirPassengers))+ylab("sqrt(Monthly Airline Passenger Numbers 1949-1960)")
+```
+]
+---
+
+
+### Australian monthly electricity production: Jan 1956 – Aug 1995
+
+.pull-left[
+
+**Without transformations**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
 
 ]
+
+.pull-right[
+
+**Logarithm transformation**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(log(AirPassengers))+ylab("log(Monthly Airline Passenger Numbers 1949-1960)")
+```
+]
+
+---
+
+# Box-Cox transformation
+
+$$
+  f(x)=\begin{cases}
+    1, & \text{if $x<0$} \newline
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+
+
+Different values of $\lambda$ gives you different transformations.
+
+- $\lambda=1$: No **substantive** transformation
+
+- $\lambda = \frac{1}{2}$: Square root plus linear transformation
+
+- $\lambda=0$: Natural logarithm
+
+- $\lambda = -1$: Inverse plus 1
+
+Balance the seasonal fluctuations and random variation across the series.
+
+---
+
+# Box-Cox transformation: R codes
+
+**BoxCox.lambda: Automatic selection of Box Cox transformation parameter**
+
+```{r, warning=FALSE, message=FALSE, comment=NA}
+forecast::BoxCox.lambda(AirPassengers)
+```
+
+Some times this value is not sensible.
+
+**BoxCox: Transformation of the input variable using a Box-Cox transformation**
+
+```r
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+w <- BoxCox(AirPassengers, lambda)
+```
+
+You can pass a user-defined value for `lambda`.
+
+**InvBoxCox: Reverse transformation**
+
+```r
+InvBox(w)
+```
+
+---
+
+## Box-Cox transformation on `AirPassengers`
+
+.pull-left[
+
+**Without transformations**
+
+```r
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(AirPassengers)+
+  ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+]
+
+.pull-right[
+
+**Box-Cox transformation**
+
+```r
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+*autoplot(BoxCox(AirPassengers, lambda))+
+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+autoplot(BoxCox(AirPassengers, lambda))+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+]
+
+What differences do you notice in the scale?
+---
+
+## Note: Box-Cox Transformation
+
+- If $\lambda = 0$? 
+
+    - Behaves like log transformation. 
+    
+    - Force forecasts to be positive.
+--
+
+- If $\lambda =1$? No transformation is needed.
+--
+
+- If some $Y_t = 0$?, then must have $\lambda > 0$.
+--
+- If some $Y_t < 0$? Use power transformation or adjust the time series **by adding a constant to all values.**
+
+--
+
+- Choose a simple value of $\lambda$. It makes explanations easier.
+
+--
+
+- Transformation oftem makes little difference to forecasts but has large effects on PI.
+
+---
+# Application
+
+`snaive` + applying BoxCox transformation
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6}
+fit <- snaive(AirPassengers, lambda = 0)
+autoplot(fit)
+```
+]
+
+.pull-right[
+
+## Steps: 
+
+✅ apply Box-Cox transformation.
+
+✅ fit a model.
+
+✅ reverse transformation.
+
+]
+
+<!-- R will do the Box-Cox transformation, Fit model, back transformation-->
+
+---
+
+## What differences do you notice?
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, echo=FALSE}
+autoplot(AirPassengers)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, echo=FALSE}
+autoplot(cangas)
+```
+
+
+]
+
+<!--Monotonically increasing variance vs Non-monotonically increasing variance. Any monotonic transformation wouldn't work here. When you apply boxcox transformation it will transform one part and do the opposite for the other part. There are different ways to handle this. What transformation would work for cangas data set. Video:sd1-4 (48) -->
+
+---
+# Detecting non stationarity by visual inspections of plots and ACF
+
+
 ---
 
 # Testing for nonstationarity for the presence of unit roots
