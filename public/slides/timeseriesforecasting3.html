@@ -116,7 +116,7 @@ Eg:
 
 **Without transformations**
 
-![](timeseries3_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -124,7 +124,7 @@ Eg:
 
 **Square root transformation**
 
-![](timeseries3_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -135,7 +135,7 @@ Eg:
 
 **Without transformations**
 
-![](timeseries3_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -143,7 +143,7 @@ Eg:
 
 **Logarithm transformation**
 
-![](timeseries3_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -214,7 +214,7 @@ InvBox(w)
 autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -230,7 +230,7 @@ ylab("Monthly Airline Passenger Numbers 1949-1960")
 
 
 
-![](timeseries3_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 ]
 
 What differences do you notice in the scale?
@@ -273,7 +273,7 @@ fit &lt;- snaive(AirPassengers, lambda = 0)
 autoplot(fit)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -296,12 +296,12 @@ autoplot(fit)
 
 .pull-left[
 
-![](timeseries3_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 
-![](timeseries3_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -519,7 +519,7 @@ Stationary series:
 autoplot(AirPassengers)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -550,7 +550,7 @@ log.airpassenger &lt;- log(AirPassengers)
 autoplot(log.airpassenger)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -626,7 +626,7 @@ autoplot(log.airpassenger)
 autoplot(log.airpassenger)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -636,7 +636,7 @@ autoplot(log.airpassenger)
 ggAcf(log.airpassenger)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -652,7 +652,7 @@ ggAcf(log.airpassenger)
 autoplot(log.airpassenger)
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -664,7 +664,7 @@ library(magrittr) # to load %&gt;%
 log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 Does this look stationary?
 ]
@@ -682,7 +682,7 @@ library(magrittr) # to load %&gt;%
 log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -695,7 +695,7 @@ log.airpassenger %&gt;%
   ggAcf()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -714,7 +714,7 @@ log.airpassenger %&gt;%
   autoplot()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 &lt;!--Code for second-order differencing: 
 log.airpassenger %&gt;% 
@@ -735,7 +735,7 @@ log.airpassenger %&gt;%
   ggAcf()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -914,7 +914,7 @@ nsdiffs(sdiff.log.airpassenger)
 AirPassengers %&gt;% stl(s.window = 12) %&gt;% autoplot()
 ```
 
-![](timeseries3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 ]
 &lt;!--This is for number of seasonal differencing needed.--&gt;
