@@ -2,7 +2,7 @@
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
 author: "Thiyanga Talagala"
-date: "4 May 2020"
+date: "5 May 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -525,20 +525,20 @@ autoplot(AirPassengers)
 
 # Step 2: Apply transformations
 
-```{r, comment=NA, warning=FALSE, message=FALSE}
-
-log.airpassenger <- BoxCox(AirPassengers, lambda = 0)
+```{r, comment=NA, warning=FALSE, fig.height=5, fig.width=5, message=FALSE}
+log.airpassenger <- log(AirPassengers)
+#log.airpassenger <- BoxCox(AirPassengers, lambda = 0)
 autoplot(log.airpassenger)
 
 ```
 
 ---
 
-# Step 3: Take difference series
+## Step 3: Take difference series
 
-## Identifying non-stationarity by looking at plots
+### Identifying non-stationarity by looking at plots
 
-- time series plot
+- Time series plot
 
 - The ACF of stationary data drops to zero relatively quickly.
 
@@ -547,7 +547,7 @@ autoplot(log.airpassenger)
 - For non-stationary data, the value of $r_t$ is often large and positive.
 
 --
-## Recap: Non-seasonal differencing and seasonal differencing
+### Recap: Non-seasonal differencing and seasonal differencing
 
 ** Non seasonal first-order differencing:** $Y'_t=Y_t - Y_{t-1}$
 
@@ -557,19 +557,44 @@ autoplot(log.airpassenger)
 
 <!--Miss two observations-->
 
-**Seasonal first differencing:** $Y_t - Y_{t-m}$
+**Seasonal differencing:** $Y_t - Y_{t-m}$
 
-- For monthly, $m=12$.
+<!--To get rid from prominent seasonal components. -->
 
-- For quarterly, $m=4$.
+- For monthly, $m=12$, for quarterly, $m=4$.
+
+<!--We will loosefirst 12 observations-->
+
 
 - Seasonally differenced series will have $T-m$ observations.
 <!--Usually we do not consider differencing more than twice. -->
 
----
+> There are times differencing once is not enough. However, in practice,it is almost never necessary to go beyound second-order differencing.
 
+<!--Even the second-order differencing is very rare.-->
+
+---
 # Step 3: Take difference series (cont.)
 
+🙋
+
+.content-box-yellow[Seasonal differencing or Non-seasonal differencing?]
+
+<!--Take seasonal differencing first. Seasonal differencing might be enough, you do not need to do further differencing. First order seasonal differencing never removes the seasonal effect.-->
+
+🙋
+
+.content-box-yellow[Interpretation of differencing?]
+
+<!--It is important that if the differencing is used, the differences are interpretable. -->
+
+<!--First differences are the change between one observation and the next. Changes of index. Second order differencing is changes of changes.-->
+
+<!--Seasonal differences are the change between one year to the next.-->
+
+<!--But taking lag 3 differences for yearly data, for example, results in a model which cannot be sensible interpreted.-->
+
+<!--It is important that the differencing are interpretable.-->
 ---
 
 # Step 3: Take difference series (cont.)
@@ -593,27 +618,198 @@ ggAcf(log.airpassenger)
 
 ]
 
+---
+# Step 3: Take difference series (cont.)
 
+## Operations of differencing
+
+.pull-left[
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+autoplot(log.airpassenger)
+
+```
+
+]
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% diff(lag=12)  %>% autoplot()
+
+```
+
+Does this look stationary?
+]
+
+<!--Strongseasonal component is now vanished. Does this look stationary? -->
+
+---
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% diff(lag=12)  %>% autoplot()
+
+```
+
+]
+
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  ggAcf()
+
+```
+
+]
+
+---
+
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  autoplot()
+
+```
+
+<!--Code for second-order differencing: 
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  diff(lag=1) %>%
+  autoplot() -->
+
+]
+
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  ggAcf()
+
+```
+
+]
 ---
 
 # Testing for nonstationarity for the presence of unit roots
 
----
 
-# Dickey and Fuller (DF) tests
+- Dickey and Fuller (DF) test
 
+- Augmented DF test
 
----
+- Phillips and Perron (PP) nonparametric test
 
-# Augmented DF tests
-
-
----
-
-# Phillips and Perron (PP) nonparametric tests
+-  Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test
 
 ---
 
+# KPSS test
+
+**H0:** Series is level or trend stationary.
+
+**H1:** Series is not stationary.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(urca)
+diff.sdiff.log.passenger <- log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)
+
+diff.sdiff.log.passenger %>%
+  ur.kpss() %>%
+  summary()
+```
+
+---
+
+# KPSS test 
+
+```{r, comment=NA}
+ur.kpss(log.airpassenger) %>% summary()
+```
+
+```{r, comment=NA}
+sdiff.log.airpassenger <- AirPassengers %>% log() %>% diff(lag=12)
+ur.kpss(sdiff.log.airpassenger) %>% summary()
+```
+
+<!--This gives an idea about only non-seasonal differencing-->
+
+---
+
+# How many differences you need to take?
+
+Non-seasonal: Automatically selecting differences.
+
+<!--With this command you do not need to run KPSS test. It will automatically run the test inside and returns you how many times you need to do differencing.-->
+
+```{r, comment=NA}
+
+ndiffs(log.airpassenger)
+
+```
+
+```{r, comment=NA}
+
+ndiffs(sdiff.log.airpassenger)
+```
+
+```{r, comment=NA}
+ndiffs(diff.sdiff.log.passenger)
+```
+---
+# How many differences you need to take? (cont.)
+
+Seaonal - Automatically selecting differences.
+
+.pull-left[
+STL decomposition: $Y_t = T_t + S_t + R_t$
+
+Strength of seasonality: 
+
+$$F_s = max \left(0, 1-\frac{Var(R_t)}{Var(S_t + R_t)}\right)$$
+
+```{r, comment=NA}
+nsdiffs(log.airpassenger)
+```
+
+```{r, comment=NA}
+log.airpassenger %>% diff(lag=1) %>% nsdiffs()
+```
+
+```{r, comment=NA}
+nsdiffs(sdiff.log.airpassenger)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+AirPassengers %>% stl(s.window = 12) %>% autoplot()
+
+```
+
+]
+<!--This is for number of seasonal differencing needed.-->
+
+---
 # Step 6: Residual diagnostics
 
 ## Fitted values: 

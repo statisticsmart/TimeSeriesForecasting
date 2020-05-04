@@ -2,7 +2,7 @@
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
 author: "Thiyanga Talagala"
-date: "25 April 2020"
+date: "5 May 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -55,6 +55,16 @@ $$Y_t = \alpha+  Y_{t-1} + \epsilon_t$$
  
       The process is also known as a **Difference-stationary process**.
 
+
+
+---
+
+# Trend stationary time series
+
+---
+
+# Difference stationary time series
+
 --
       
 # Notation: I(d)
@@ -63,15 +73,13 @@ Integrated to order $d$, $I(d)$:
 
 series can be made stationary by differencing $d$ times.
 
-**Question: ** Show that random walk process is an $I(1)$ process.
 
----
-
-# Trend stationary time series
 
 ---
 
 # Difference stationary process: Random walk model (RW)
+
+**Question: ** Show that random walk process is an $I(1)$ process.
 
 ---
 
@@ -84,32 +92,789 @@ series can be made stationary by differencing $d$ times.
 
 ---
 
-# Detecting non stationarity by visual inspections of plots and ACF
+# Variance stabilization
+
+Eg:
+
+- Square root: $W_t = \sqrt{Y_t}$
+
+- Logarithm: $W_t = log({Y_t})$
+
+     - This very useful.
+     
+     - Interpretable: Changes in a log value are **relative (percent) changes on the original sclae**.
+     
+
+
+---
+
+### Monthly Airline Passenger Numbers 1949-1960
 
 .pull-left[
 
+**Without transformations**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(elec)
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
 
 ]
 
 .pull-right[
 
+**Square root transformation**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(elec)
+autoplot(sqrt(AirPassengers))+ylab("sqrt(Monthly Airline Passenger Numbers 1949-1960)")
+```
+]
+---
+
+
+### Australian monthly electricity production: Jan 1956 – Aug 1995
+
+.pull-left[
+
+**Without transformations**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+]
+
+.pull-right[
+
+**Logarithm transformation**
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(log(AirPassengers))+ylab("log(Monthly Airline Passenger Numbers 1949-1960)")
+```
+]
+
+---
+
+# Box-Cox transformation
+
+$$
+  f(x)=\begin{cases}
+    1, & \text{if $x<0$} \newline
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+
+
+Different values of $\lambda$ gives you different transformations.
+
+- $\lambda=1$: No **substantive** transformation
+
+- $\lambda = \frac{1}{2}$: Square root plus linear transformation
+
+- $\lambda=0$: Natural logarithm
+
+- $\lambda = -1$: Inverse plus 1
+
+Balance the seasonal fluctuations and random variation across the series.
+
+---
+
+# Box-Cox transformation: R codes
+
+**BoxCox.lambda: Automatic selection of Box Cox transformation parameter**
+
+```{r, warning=FALSE, message=FALSE, comment=NA}
+forecast::BoxCox.lambda(AirPassengers)
+```
+
+Some times this value is not sensible.
+
+**BoxCox: Transformation of the input variable using a Box-Cox transformation**
+
+```r
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+w <- BoxCox(AirPassengers, lambda)
+```
+
+You can pass a user-defined value for `lambda`.
+
+**InvBoxCox: Reverse transformation**
+
+```r
+InvBox(w)
+```
+
+---
+
+## Box-Cox transformation on `AirPassengers`
+
+.pull-left[
+
+**Without transformations**
+
+```r
+autoplot(AirPassengers)+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+data(AirPassengers)
+autoplot(AirPassengers)+
+  ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+]
+
+.pull-right[
+
+**Box-Cox transformation**
+
+```r
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+*autoplot(BoxCox(AirPassengers, lambda))+
+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(forecast)
+library(fpp2)
+lambda <- forecast::BoxCox.lambda(AirPassengers)
+autoplot(BoxCox(AirPassengers, lambda))+ylab("Monthly Airline Passenger Numbers 1949-1960")
+```
+]
+
+What differences do you notice in the scale?
+---
+
+## Note: Box-Cox Transformation
+
+- If $\lambda = 0$? 
+
+    - Behaves like log transformation. 
+    
+    - Force forecasts to be positive.
+--
+
+- If $\lambda =1$? No transformation is needed.
+--
+
+- If some $Y_t = 0$?, then must have $\lambda > 0$.
+--
+- If some $Y_t < 0$? Use power transformation or adjust the time series **by adding a constant to all values.**
+
+--
+
+- Choose a simple value of $\lambda$. It makes explanations easier.
+
+--
+
+- Transformation oftem makes little difference to forecasts but has large effects on PI.
+
+---
+# Application
+
+`snaive` + applying BoxCox transformation
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6}
+fit <- snaive(AirPassengers, lambda = 0)
+autoplot(fit)
+```
+]
+
+.pull-right[
+
+## Steps: 
+
+✅ apply Box-Cox transformation.
+
+✅ fit a model.
+
+✅ reverse transformation.
+
+]
+
+<!-- R will do the Box-Cox transformation, Fit model, back transformation-->
+
+---
+
+## What differences do you notice?
+
+.pull-left[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, echo=FALSE}
+autoplot(AirPassengers)
+```
+]
+
+.pull-right[
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=6, echo=FALSE}
+autoplot(cangas)
+```
+
+
+]
+
+<!--Monotonically increasing variance vs Non-monotonically increasing variance. Any monotonic transformation wouldn't work here. When you apply boxcox transformation it will transform one part and do the opposite for the other part. There are different ways to handle this. What transformation would work for cangas data set. Video:sd1-4 (48) -->
+
+---
+
+## ARMA(p, q) model
+
+
+$$Y_t=c+\phi_1Y_{t-1}+...+\phi_p Y_{t-p}+ \theta_1\epsilon_{t-1}+...+\theta_q\epsilon_{t-q}+\epsilon_t$$
+
+- These are stationary models.
+
+- They are only suitable for **stationary series**.
+
+## ARIMA(p, d, q) model
+
+Differencing --> ARMA
+
+**Step 1: Differencing**
+
+$$Y'_t = (1-B)^dY_t$$
+
+**Step 2: ARMA**
+
+$$Y'_t=c+\phi_1Y'_{t-1}+...+\phi_p Y'_{t-p}+ \theta_1\epsilon_{t-1}+...+\theta_q\epsilon_{t-q}+\epsilon_t$$
+
+---
+
+# Time series simulation
+
+$$Y_t = 0.8Y_{t-1}+\epsilon_t$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+set.seed(2020)
+ts.sim <- arima.sim(list(order = c(1,0,0), ar = 0.8), n = 50)
+ts.sim
+```
+
+> Use `?arima.sim` to view more examples.
+
+---
+
+# Automated ARIMA algorithm
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Arima(ts.sim, order=c(1, 0, 0), include.mean = FALSE)
+```
+
+<!--Not exactly equals to 0.8, due to an estimation error.-->
+---
+
+
+
+# Interpretation of R output: ARIMA model 
+
+.content-box-yellow[Intercept form]
+
+Using the backshift notation.
+
+$$(1-\phi_1B-...-\phi_pB^p)Y'_t=c+(1+\theta_1B+...+\theta_qB^q)\epsilon_t$$
+
+.content-box-yellow[Mean form]
+
+$$(1-\phi_1B-...-\phi_pB^p)(Y'_t-\mu)=c+(1+\theta_1B+...+\theta_qB^q)\epsilon_t$$
+Where,
+
+ - $Y'_t=(1-B)^dY_t$
+ 
+ - $\mu = E(Y'_t)$, when $d \neq 0$, otherwise $\mu = E(Y'_t)$.
+ 
+ - $c = \mu(1-\phi_1 - ... - \phi_p)$
+ 
+ R always return an estimate of $\mu$. 
+ 
+ 
+ <!--How constant relate to the mean of the process. These forms are equivalent. When you can relate c to mu. ARMA models are fitted to the stationary data. Hence, we get mean of stationary data. Data can be stationary in two ways, on it's own or by taking the differencing. If differencing is applied, then you get mean of differenced series, otherwise you get mean of original series.-->
+
+
+---
+
+# Example 1 
+
+**1. Generate data from the model**
+
+**2. Fit an ARIMA model to generated data**
+
+---
+
+# Example 2: Model with a constant
+
+---
+
+# Example 3: Model with a drift
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+ts.sim2 <- arima.sim(list(order = c(0,1,0)), n = 50)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Arima(ts.sim2, order=c(0, 1, 0))
+```
+
+---
+
+# `Arima` in R
+
+1. When $d=0$, provides estimate of $\mu = E(Y_t)$.
+
+2. Default setting is `include.mean=TRUE`. Setting `includemean=FALSE` will force $c=\mu=0$.
+
+3. When $d > 0$ sets $c=\mu=0$.
+
+4. When $d=1$ setting `include.drift=TRUE`, estimates $\mu\neq0$ as `drift`.
+
+5. When $d>1$ no constant is allowed.
+
+---
+class: duke-orange, center, middle
+
+# Identifying suitable ARIMA models
+
+---
+
+# Modelling steps
+
+1. Plot the data.
+
+--
+2. If necessary, transform the data (using a Box-Cox transformation) to stabilise the variance.
+--
+
+3. If the data are non-stationary, take first differences of the data until the data are stationary.
+--
+
+4. Examine the ACF/PACF to identify a suitable model.
+--
+
+5. Try your chosen model(s), and use the AICc to search for a better model.
+--
+
+6. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
+
+--
+7. Once the residuals look like white noise, calculate forecasts.
+
+Source: Forecasting: Principles and Practice, Rob J Hyndman and George Athanasopoulos
+
+---
+
+# Step 1: Plot data
+
+1. Detect unusual observations in the data
+
+1. Detect non-stationarity by visual inspections of plots
+
+Stationary series:
+
+- has a constant mean value and fluctuates around the mean.
+
+- constant variance.
+
+- no pattern predictable in the long-term.
+
+---
+
+# Step 1: Plot data (cont.)
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+autoplot(AirPassengers)
+```
+]
+
+.pull-right[
+
+1. Transformations help to stabilize the variance.
+
+1. Differencing helps to stabilize the mean.
+
+
+.content-box-yellow[
+
+1. Need transformations?
+
+2. Need differencing?
+
+]
+
+]
+
+---
+
+# Step 2: Apply transformations
+
+```{r, comment=NA, warning=FALSE, fig.height=5, fig.width=5, message=FALSE}
+log.airpassenger <- log(AirPassengers)
+#log.airpassenger <- BoxCox(AirPassengers, lambda = 0)
+autoplot(log.airpassenger)
+
+```
+
+---
+
+## Step 3: Take difference series
+
+### Identifying non-stationarity by looking at plots
+
+- Time series plot
+
+- The ACF of stationary data drops to zero relatively quickly.
+
+- The ACF of non-stationary data decreases slowly.
+
+- For non-stationary data, the value of $r_t$ is often large and positive.
+
+--
+### Recap: Non-seasonal differencing and seasonal differencing
+
+** Non seasonal first-order differencing:** $Y'_t=Y_t - Y_{t-1}$
+
+<!--Miss one observation-->
+
+**Non seasonal second-order differencing:** $Y''_t=Y'_t - Y'_{t-1}$
+
+<!--Miss two observations-->
+
+**Seasonal differencing:** $Y_t - Y_{t-m}$
+
+<!--To get rid from prominent seasonal components. -->
+
+- For monthly, $m=12$, for quarterly, $m=4$.
+
+<!--We will loosefirst 12 observations-->
+
+
+- Seasonally differenced series will have $T-m$ observations.
+<!--Usually we do not consider differencing more than twice. -->
+
+> There are times differencing once is not enough. However, in practice,it is almost never necessary to go beyound second-order differencing.
+
+<!--Even the second-order differencing is very rare.-->
+
+---
+# Step 3: Take difference series (cont.)
+
+🙋
+
+.content-box-yellow[Seasonal differencing or Non-seasonal differencing?]
+
+<!--Take seasonal differencing first. Seasonal differencing might be enough, you do not need to do further differencing. First order seasonal differencing never removes the seasonal effect.-->
+
+🙋
+
+.content-box-yellow[Interpretation of differencing?]
+
+<!--It is important that if the differencing is used, the differences are interpretable. -->
+
+<!--First differences are the change between one observation and the next. Changes of index. Second order differencing is changes of changes.-->
+
+<!--Seasonal differences are the change between one year to the next.-->
+
+<!--But taking lag 3 differences for yearly data, for example, results in a model which cannot be sensible interpreted.-->
+
+<!--It is important that the differencing are interpretable.-->
+---
+
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+autoplot(log.airpassenger)
+
+```
+
+]
+
+.pull-right[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+ggAcf(log.airpassenger)
+
+```
+
+]
+
+---
+# Step 3: Take difference series (cont.)
+
+## Operations of differencing
+
+.pull-left[
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+autoplot(log.airpassenger)
+
+```
+
+]
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% diff(lag=12)  %>% autoplot()
+
+```
+
+Does this look stationary?
+]
+
+<!--Strongseasonal component is now vanished. Does this look stationary? -->
+
+---
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% diff(lag=12)  %>% autoplot()
+
+```
+
+]
+
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  ggAcf()
+
+```
+
+]
+
+---
+
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+library(magrittr) # to load %>%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  autoplot()
+
+```
+
+<!--Code for second-order differencing: 
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  diff(lag=1) %>%
+  autoplot() -->
+
+]
+
+
+.pull-right[
+```{r,comment=NA, message=FALSE,  warning=FALSE}
+log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)  %>% 
+  ggAcf()
+
+```
 
 ]
 ---
 
 # Testing for nonstationarity for the presence of unit roots
 
+
+- Dickey and Fuller (DF) test
+
+- Augmented DF test
+
+- Phillips and Perron (PP) nonparametric test
+
+-  Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test
+
 ---
 
-# Dickey and Fuller (DF) tests
+# KPSS test
+
+**H0:** Series is level or trend stationary.
+
+**H1:** Series is not stationary.
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+library(urca)
+diff.sdiff.log.passenger <- log.airpassenger %>% 
+  diff(lag=12) %>% 
+  diff(lag=1)
+
+diff.sdiff.log.passenger %>%
+  ur.kpss() %>%
+  summary()
+```
+
+---
+
+# KPSS test 
+
+```{r, comment=NA}
+ur.kpss(log.airpassenger) %>% summary()
+```
+
+```{r, comment=NA}
+sdiff.log.airpassenger <- AirPassengers %>% log() %>% diff(lag=12)
+ur.kpss(sdiff.log.airpassenger) %>% summary()
+```
+
+<!--This gives an idea about only non-seasonal differencing-->
+
+---
+
+# How many differences you need to take?
+
+Non-seasonal: Automatically selecting differences.
+
+<!--With this command you do not need to run KPSS test. It will automatically run the test inside and returns you how many times you need to do differencing.-->
+
+```{r, comment=NA}
+
+ndiffs(log.airpassenger)
+
+```
+
+```{r, comment=NA}
+
+ndiffs(sdiff.log.airpassenger)
+```
+
+```{r, comment=NA}
+ndiffs(diff.sdiff.log.passenger)
+```
+---
+# How many differences you need to take? (cont.)
+
+Seaonal - Automatically selecting differences.
+
+.pull-left[
+STL decomposition: $Y_t = T_t + S_t + R_t$
+
+Strength of seasonality: 
+
+$$F_s = max \left(0, 1-\frac{Var(R_t)}{Var(S_t + R_t)}\right)$$
+
+```{r, comment=NA}
+nsdiffs(log.airpassenger)
+```
+
+```{r, comment=NA}
+log.airpassenger %>% diff(lag=1) %>% nsdiffs()
+```
+
+```{r, comment=NA}
+nsdiffs(sdiff.log.airpassenger)
+```
+]
+
+.pull-right[
+```{r, comment=NA}
+AirPassengers %>% stl(s.window = 12) %>% autoplot()
+
+```
+
+]
+<!--This is for number of seasonal differencing needed.-->
+
+---
+# Step 6: Residual diagnostics
+
+## Fitted values: 
+
+$\hat{Y}_{t|t-1}$: Forecast of $Y_t$ based on observations $Y_1,...Y_t$.
+
+
+## Residuals
+
+$$e_t=Y_t - \hat{Y}_{t|t-1}$$
+
+### Assumptions of residuals
+
+- $\{e_t\}$ uncorrelated. If they aren't, then information left in residuals that should be used in computing forecasts.
+
+<!--If you see autocorrelations, then you should go back and adjust residuals. In theoretically, If there is information leftover and we can do something better. But it is not the case you will also be able to do with. If can't you can't. Then stop. If you check you know you have done the best as you can.-->
+
+- $\{e_t\}$ have mean zero. If they don't, then forecasts are biased.
+
+<!--If you see autocorrelations, then you should go back and adjust residuals. We want our residuals to be unbiased. If the mean is not zero. Go and adjust the model. Add an intercept. Whatever you want to do.-->
+
+### Useful properties (for prediction intervals)
+
+- $\{e_t\}$ have constant variance.
+
+- $\{e_t\}$ are normally distributed.
+
+<!--If the following assumptions are wrong that doesn't mean your forecasts are incorrect. -->
+
+---
+
+# Step 6: Residual diagnostics
 
 
 ---
 
-# Augmented DF tests
-
+# Step 7: Calculate forecasts
 
 ---
 
-# Phillips and Perron (PP) nonparametric tests
+# Step 8: Evaluate forecast accuracy.
+
+## How well our model is doing for out-of-sample?
+
+
+<!--So far we have talked about fitted values and residuals.-->
+
+<!--Train data and Test data. We want to know if forecasts doing well for out-of-sample.-->
+
+Forecast error = True value - Observed value
+
+$$e_{T+h}=Y_{T+h}-\hat{Y}_{T+h|T}$$
+
+Where,
+
+$Y_{T+h}$: $(T+h)^{th}$ observation, $h=1,..., H$
+
+$\hat{Y}_{T+h|T}$: Forecast based on data uo to time $T$.
+
+- **True** forecast error as the test data is not used in computing $\hat{Y}_{T+h|T}$.
+
+- Unlike, residuals, forecast errors on the test set involve multi-step forecasts.
+
+- Use forecast error measures to evaluate the models.
+
+<!--Since, true forecast error, no hat involved.-->
+
 

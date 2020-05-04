@@ -34,27 +34,29 @@ ________________________________________________________________________________
 
 ## COVID-19 outbreak: distance learning/teaching materials.
 
+**Week 3: Theoretical derivations of linear models**
+
 ```diff
 ! Please go to Google Classroom for up-to-date information.
 ```
 
-📓[Linear Time Series Analysis and Its Applications - Part 1: theoretical properties of AR, MA and ARMA](/slides/video.pdf)
+📓[Linear Time Series Analysis and Its Applications - Part 1: theoretical properties of AR, MA and ARMA](/slides/8.png)
 
+**Week 4: ARIMA modelling using R**
 
-___________________________________________________________________________________________
+📈 [Slides](/slides/8.png) 📚 [Reading](https://otexts.com/fpp2/arima.html) 📋 [Exercises](https://otexts.com/fpp2/arima-exercises.html)
 
-
-**Week 3: Forecasting with Exponential smoothing models**
-
-
-📈 Slides 📚 Reading 📋 Exercises
-
-**Week 4: Dynamic regression models**
+**Week 5: Forecasting with Exponential smoothing models**
 
 
 📈 Slides 📚 Reading 📋 Exercises
 
-**Week 5: Advanced forecasting methods**
+**Week 6: Dynamic regression models**
+
+
+📈 Slides 📚 Reading 📋 Exercises
+
+**Week 7: Advanced forecasting methods**
 
 
 📈 Slides 📚 Reading 📋 Exercises

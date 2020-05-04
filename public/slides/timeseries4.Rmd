@@ -1,0 +1,104 @@
+---
+title: "IM532 3.0 Applied Time Series Forecasting"
+subtitle: "MSc in Industrial Mathematics"
+author: "Thiyanga Talagala"
+date: ""
+output:
+  xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css: 
+      - default
+      - default-fonts
+      - duke-blue
+      - hygge-duke
+      - libs/cc-fonts.css
+      - libs/figure-captions.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+## Time series decomposition
+
+### Recall: Time series patterns
+
+**Trend** ($T_t$)
+
+Long-term increase or decrease in the data.
+
+
+**Seasonal** ($S_t$)
+
+A seasonal pattern exists when a series is influenced by seasonal factors (e.g., the quarter of the year, the month, or day of the week). Seasonality is always of a fixed and known period. Hence, seasonal time series are sometimes called periodic time series.
+
+Period is unchanging and associated with some aspect of the calendar.
+
+**Cyclic** 
+
+A cyclic pattern exists when data exhibit rises and falls that are not of fixed period. The duration of these fluctuations is usually of at least 2 years.
+
+
+<!--Not too much into theory. -->
+
+---
+
+# Time series decomposition
+
+$$y_t = f(S_t, T_t, R_t)$$
+
+$y_t$: data at period $t$.
+
+$T_t$: trend-cycle component at period $t$.
+
+$S_t$: seasonal component at period $t$.
+
+$R_t$: remainder component at period $t$.
+
+## Additive decomposition
+
+$$y_t=S_t + T_t + R_t$$
+## Multiplicative decomposition
+
+$$y_t=S_t \times T_t \times R_t$$
+
+To transform from multiplicative to additive, you can use a Box-Cox transformation (particularly, **log** transformation).
+
+<!--Additive model appropriate if magnitude of **seasonal** fluctuations does not vary with level.-->
+
+<!-- If **seasonal** are proportional to level of a series then multiplicative model appropriate.-->
+
+<!-- Multiplicative decomposition more prevalent with economics models.-->
+
+---
+## Multiplicative vs. Additive
+
+.pull-left[
+
+
+]
+
+.pull-right[
+
+
+]
+
+---
+
+<!--Variation of seasonality change over time.-->
+
+## `AirPassengers`
+
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(forecast)
+library(fpp2)
+fit <- stl(AirPassengers, s.window = 12)
+autoplot(fit)
+```
+
+---

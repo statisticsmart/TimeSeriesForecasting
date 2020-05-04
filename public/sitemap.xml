@@ -23,7 +23,20 @@
   </url>
   
   <url>
+    <loc>/post/post/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>/post/post/</loc>
+  </url>
+  
+  <url>
+    <loc>/post/</loc>
   </url>
   
   <url>

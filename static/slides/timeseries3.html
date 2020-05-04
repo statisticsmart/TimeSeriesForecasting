@@ -4,7 +4,7 @@
     <title>IM532 3.0 Applied Time Series Forecasting</title>
     <meta charset="utf-8" />
     <meta name="author" content="Thiyanga Talagala" />
-    <meta name="date" content="2020-05-04" />
+    <meta name="date" content="2020-05-05" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -19,7 +19,7 @@ class: center, middle, inverse, title-slide
 # IM532 3.0 Applied Time Series Forecasting
 ## MSc in Industrial Mathematics
 ### Thiyanga Talagala
-### 4 May 2020
+### 5 May 2020
 
 ---
 
@@ -545,7 +545,8 @@ autoplot(AirPassengers)
 
 
 ```r
-log.airpassenger &lt;- BoxCox(AirPassengers, lambda = 0)
+log.airpassenger &lt;- log(AirPassengers)
+#log.airpassenger &lt;- BoxCox(AirPassengers, lambda = 0)
 autoplot(log.airpassenger)
 ```
 
@@ -553,11 +554,11 @@ autoplot(log.airpassenger)
 
 ---
 
-# Step 3: Take difference series
+## Step 3: Take difference series
 
-## Identifying non-stationarity by looking at plots
+### Identifying non-stationarity by looking at plots
 
-- time series plot
+- Time series plot
 
 - The ACF of stationary data drops to zero relatively quickly.
 
@@ -566,7 +567,7 @@ autoplot(log.airpassenger)
 - For non-stationary data, the value of `\(r_t\)` is often large and positive.
 
 --
-## Recap: Non-seasonal differencing and seasonal differencing
+### Recap: Non-seasonal differencing and seasonal differencing
 
 ** Non seasonal first-order differencing:** `\(Y'_t=Y_t - Y_{t-1}\)`
 
@@ -576,19 +577,44 @@ autoplot(log.airpassenger)
 
 &lt;!--Miss two observations--&gt;
 
-**Seasonal first differencing:** `\(Y_t - Y_{t-m}\)`
+**Seasonal differencing:** `\(Y_t - Y_{t-m}\)`
 
-- For monthly, `\(m=12\)`.
+&lt;!--To get rid from prominent seasonal components. --&gt;
 
-- For quarterly, `\(m=4\)`.
+- For monthly, `\(m=12\)`, for quarterly, `\(m=4\)`.
+
+&lt;!--We will loosefirst 12 observations--&gt;
+
 
 - Seasonally differenced series will have `\(T-m\)` observations.
 &lt;!--Usually we do not consider differencing more than twice. --&gt;
 
----
+&gt; There are times differencing once is not enough. However, in practice,it is almost never necessary to go beyound second-order differencing.
 
+&lt;!--Even the second-order differencing is very rare.--&gt;
+
+---
 # Step 3: Take difference series (cont.)
 
+🙋
+
+.content-box-yellow[Seasonal differencing or Non-seasonal differencing?]
+
+&lt;!--Take seasonal differencing first. Seasonal differencing might be enough, you do not need to do further differencing. First order seasonal differencing never removes the seasonal effect.--&gt;
+
+🙋
+
+.content-box-yellow[Interpretation of differencing?]
+
+&lt;!--It is important that if the differencing is used, the differences are interpretable. --&gt;
+
+&lt;!--First differences are the change between one observation and the next. Changes of index. Second order differencing is changes of changes.--&gt;
+
+&lt;!--Seasonal differences are the change between one year to the next.--&gt;
+
+&lt;!--But taking lag 3 differences for yearly data, for example, results in a model which cannot be sensible interpreted.--&gt;
+
+&lt;!--It is important that the differencing are interpretable.--&gt;
 ---
 
 # Step 3: Take difference series (cont.)
@@ -614,27 +640,286 @@ ggAcf(log.airpassenger)
 
 ]
 
+---
+# Step 3: Take difference series (cont.)
 
+## Operations of differencing
+
+.pull-left[
+
+
+```r
+autoplot(log.airpassenger)
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+```r
+library(magrittr) # to load %&gt;%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+Does this look stationary?
+]
+
+&lt;!--Strongseasonal component is now vanished. Does this look stationary? --&gt;
+
+---
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+
+```r
+library(magrittr) # to load %&gt;%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+]
+
+
+.pull-right[
+
+```r
+log.airpassenger %&gt;% 
+  diff(lag=12) %&gt;% 
+  ggAcf()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+
+```r
+library(magrittr) # to load %&gt;%
+#autoplot(diff(log.airpassenger,lag=12))
+log.airpassenger %&gt;% 
+  diff(lag=12) %&gt;% 
+  diff(lag=1)  %&gt;% 
+  autoplot()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+&lt;!--Code for second-order differencing: 
+log.airpassenger %&gt;% 
+  diff(lag=12) %&gt;% 
+  diff(lag=1)  %&gt;% 
+  diff(lag=1) %&gt;%
+  autoplot() --&gt;
+
+]
+
+
+.pull-right[
+
+```r
+log.airpassenger %&gt;% 
+  diff(lag=12) %&gt;% 
+  diff(lag=1)  %&gt;% 
+  ggAcf()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+]
 ---
 
 # Testing for nonstationarity for the presence of unit roots
 
----
 
-# Dickey and Fuller (DF) tests
+- Dickey and Fuller (DF) test
 
+- Augmented DF test
 
----
+- Phillips and Perron (PP) nonparametric test
 
-# Augmented DF tests
-
-
----
-
-# Phillips and Perron (PP) nonparametric tests
+-  Kwiatkowski-Phillips-Schmidt-Shin (KPSS) test
 
 ---
 
+# KPSS test
+
+**H0:** Series is level or trend stationary.
+
+**H1:** Series is not stationary.
+
+
+
+```r
+library(urca)
+diff.sdiff.log.passenger &lt;- log.airpassenger %&gt;% 
+  diff(lag=12) %&gt;% 
+  diff(lag=1)
+
+diff.sdiff.log.passenger %&gt;%
+  ur.kpss() %&gt;%
+  summary()
+```
+
+```
+
+####################### 
+# KPSS Unit Root Test # 
+####################### 
+
+Test is of type: mu with 4 lags. 
+
+Value of test-statistic is: 0.0844 
+
+Critical value for a significance level of: 
+                10pct  5pct 2.5pct  1pct
+critical values 0.347 0.463  0.574 0.739
+```
+
+---
+
+# KPSS test 
+
+
+```r
+ur.kpss(log.airpassenger) %&gt;% summary()
+```
+
+```
+
+####################### 
+# KPSS Unit Root Test # 
+####################### 
+
+Test is of type: mu with 4 lags. 
+
+Value of test-statistic is: 2.8287 
+
+Critical value for a significance level of: 
+                10pct  5pct 2.5pct  1pct
+critical values 0.347 0.463  0.574 0.739
+```
+
+
+```r
+sdiff.log.airpassenger &lt;- AirPassengers %&gt;% log() %&gt;% diff(lag=12)
+ur.kpss(sdiff.log.airpassenger) %&gt;% summary()
+```
+
+```
+
+####################### 
+# KPSS Unit Root Test # 
+####################### 
+
+Test is of type: mu with 4 lags. 
+
+Value of test-statistic is: 0.3682 
+
+Critical value for a significance level of: 
+                10pct  5pct 2.5pct  1pct
+critical values 0.347 0.463  0.574 0.739
+```
+
+&lt;!--This gives an idea about only non-seasonal differencing--&gt;
+
+---
+
+# How many differences you need to take?
+
+Non-seasonal: Automatically selecting differences.
+
+&lt;!--With this command you do not need to run KPSS test. It will automatically run the test inside and returns you how many times you need to do differencing.--&gt;
+
+
+```r
+ndiffs(log.airpassenger)
+```
+
+```
+[1] 1
+```
+
+
+```r
+ndiffs(sdiff.log.airpassenger)
+```
+
+```
+[1] 1
+```
+
+
+```r
+ndiffs(diff.sdiff.log.passenger)
+```
+
+```
+[1] 0
+```
+---
+# How many differences you need to take? (cont.)
+
+Seaonal - Automatically selecting differences.
+
+.pull-left[
+STL decomposition: `\(Y_t = T_t + S_t + R_t\)`
+
+Strength of seasonality: 
+
+`$$F_s = max \left(0, 1-\frac{Var(R_t)}{Var(S_t + R_t)}\right)$$`
+
+
+```r
+nsdiffs(log.airpassenger)
+```
+
+```
+[1] 1
+```
+
+
+```r
+log.airpassenger %&gt;% diff(lag=1) %&gt;% nsdiffs()
+```
+
+```
+[1] 1
+```
+
+
+```r
+nsdiffs(sdiff.log.airpassenger)
+```
+
+```
+[1] 0
+```
+]
+
+.pull-right[
+
+```r
+AirPassengers %&gt;% stl(s.window = 12) %&gt;% autoplot()
+```
+
+![](timeseries3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+]
+&lt;!--This is for number of seasonal differencing needed.--&gt;
+
+---
 # Step 6: Residual diagnostics
 
 ## Fitted values: 
