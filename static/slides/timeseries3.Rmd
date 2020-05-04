@@ -2,7 +2,7 @@
 title: "IM532 3.0 Applied Time Series Forecasting"
 subtitle: "MSc in Industrial Mathematics"
 author: "Thiyanga Talagala"
-date: "25 April 2020"
+date: "4 May 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -334,7 +334,264 @@ autoplot(cangas)
 <!--Monotonically increasing variance vs Non-monotonically increasing variance. Any monotonic transformation wouldn't work here. When you apply boxcox transformation it will transform one part and do the opposite for the other part. There are different ways to handle this. What transformation would work for cangas data set. Video:sd1-4 (48) -->
 
 ---
-# Detecting non stationarity by visual inspections of plots and ACF
+
+## ARMA(p, q) model
+
+
+$$Y_t=c+\phi_1Y_{t-1}+...+\phi_p Y_{t-p}+ \theta_1\epsilon_{t-1}+...+\theta_q\epsilon_{t-q}+\epsilon_t$$
+
+- These are stationary models.
+
+- They are only suitable for **stationary series**.
+
+## ARIMA(p, d, q) model
+
+Differencing --> ARMA
+
+**Step 1: Differencing**
+
+$$Y'_t = (1-B)^dY_t$$
+
+**Step 2: ARMA**
+
+$$Y'_t=c+\phi_1Y'_{t-1}+...+\phi_p Y'_{t-p}+ \theta_1\epsilon_{t-1}+...+\theta_q\epsilon_{t-q}+\epsilon_t$$
+
+---
+
+# Time series simulation
+
+$$Y_t = 0.8Y_{t-1}+\epsilon_t$$
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+set.seed(2020)
+ts.sim <- arima.sim(list(order = c(1,0,0), ar = 0.8), n = 50)
+ts.sim
+```
+
+> Use `?arima.sim` to view more examples.
+
+---
+
+# Automated ARIMA algorithm
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Arima(ts.sim, order=c(1, 0, 0), include.mean = FALSE)
+```
+
+<!--Not exactly equals to 0.8, due to an estimation error.-->
+---
+
+
+
+# Interpretation of R output: ARIMA model 
+
+.content-box-yellow[Intercept form]
+
+Using the backshift notation.
+
+$$(1-\phi_1B-...-\phi_pB^p)Y'_t=c+(1+\theta_1B+...+\theta_qB^q)\epsilon_t$$
+
+.content-box-yellow[Mean form]
+
+$$(1-\phi_1B-...-\phi_pB^p)(Y'_t-\mu)=c+(1+\theta_1B+...+\theta_qB^q)\epsilon_t$$
+Where,
+
+ - $Y'_t=(1-B)^dY_t$
+ 
+ - $\mu = E(Y'_t)$, when $d \neq 0$, otherwise $\mu = E(Y'_t)$.
+ 
+ - $c = \mu(1-\phi_1 - ... - \phi_p)$
+ 
+ R always return an estimate of $\mu$. 
+ 
+ 
+ <!--How constant relate to the mean of the process. These forms are equivalent. When you can relate c to mu. ARMA models are fitted to the stationary data. Hence, we get mean of stationary data. Data can be stationary in two ways, on it's own or by taking the differencing. If differencing is applied, then you get mean of differenced series, otherwise you get mean of original series.-->
+
+
+---
+
+# Example 1 
+
+**1. Generate data from the model**
+
+**2. Fit an ARIMA model to generated data**
+
+---
+
+# Example 2: Model with a constant
+
+---
+
+# Example 3: Model with a drift
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+ts.sim2 <- arima.sim(list(order = c(0,1,0)), n = 50)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+Arima(ts.sim2, order=c(0, 1, 0))
+```
+
+---
+
+# `Arima` in R
+
+1. When $d=0$, provides estimate of $\mu = E(Y_t)$.
+
+2. Default setting is `include.mean=TRUE`. Setting `includemean=FALSE` will force $c=\mu=0$.
+
+3. When $d > 0$ sets $c=\mu=0$.
+
+4. When $d=1$ setting `include.drift=TRUE`, estimates $\mu\neq0$ as `drift`.
+
+5. When $d>1$ no constant is allowed.
+
+---
+class: duke-orange, center, middle
+
+# Identifying suitable ARIMA models
+
+---
+
+# Modelling steps
+
+1. Plot the data.
+
+--
+2. If necessary, transform the data (using a Box-Cox transformation) to stabilise the variance.
+--
+
+3. If the data are non-stationary, take first differences of the data until the data are stationary.
+--
+
+4. Examine the ACF/PACF to identify a suitable model.
+--
+
+5. Try your chosen model(s), and use the AICc to search for a better model.
+--
+
+6. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
+
+--
+7. Once the residuals look like white noise, calculate forecasts.
+
+Source: Forecasting: Principles and Practice, Rob J Hyndman and George Athanasopoulos
+
+---
+
+# Step 1: Plot data
+
+1. Detect unusual observations in the data
+
+1. Detect non-stationarity by visual inspections of plots
+
+Stationary series:
+
+- has a constant mean value and fluctuates around the mean.
+
+- constant variance.
+
+- no pattern predictable in the long-term.
+
+---
+
+# Step 1: Plot data (cont.)
+
+.pull-left[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+autoplot(AirPassengers)
+```
+]
+
+.pull-right[
+
+1. Transformations help to stabilize the variance.
+
+1. Differencing helps to stabilize the mean.
+
+
+.content-box-yellow[
+
+1. Need transformations?
+
+2. Need differencing?
+
+]
+
+]
+
+---
+
+# Step 2: Apply transformations
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+log.airpassenger <- BoxCox(AirPassengers, lambda = 0)
+autoplot(log.airpassenger)
+
+```
+
+---
+
+# Step 3: Take difference series
+
+## Identifying non-stationarity by looking at plots
+
+- time series plot
+
+- The ACF of stationary data drops to zero relatively quickly.
+
+- The ACF of non-stationary data decreases slowly.
+
+- For non-stationary data, the value of $r_t$ is often large and positive.
+
+--
+## Recap: Non-seasonal differencing and seasonal differencing
+
+** Non seasonal first-order differencing:** $Y'_t=Y_t - Y_{t-1}$
+
+<!--Miss one observation-->
+
+**Non seasonal second-order differencing:** $Y''_t=Y'_t - Y'_{t-1}$
+
+<!--Miss two observations-->
+
+**Seasonal first differencing:** $Y_t - Y_{t-m}$
+
+- For monthly, $m=12$.
+
+- For quarterly, $m=4$.
+
+- Seasonally differenced series will have $T-m$ observations.
+<!--Usually we do not consider differencing more than twice. -->
+
+---
+
+# Step 3: Take difference series (cont.)
+
+---
+
+# Step 3: Take difference series (cont.)
+
+.pull-left[
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+autoplot(log.airpassenger)
+
+```
+
+]
+
+.pull-right[
+```{r, comment=NA, warning=FALSE, message=FALSE}
+
+ggAcf(log.airpassenger)
+
+```
+
+]
 
 
 ---
@@ -354,4 +611,74 @@ autoplot(cangas)
 ---
 
 # Phillips and Perron (PP) nonparametric tests
+
+---
+
+# Step 6: Residual diagnostics
+
+## Fitted values: 
+
+$\hat{Y}_{t|t-1}$: Forecast of $Y_t$ based on observations $Y_1,...Y_t$.
+
+
+## Residuals
+
+$$e_t=Y_t - \hat{Y}_{t|t-1}$$
+
+### Assumptions of residuals
+
+- $\{e_t\}$ uncorrelated. If they aren't, then information left in residuals that should be used in computing forecasts.
+
+<!--If you see autocorrelations, then you should go back and adjust residuals. In theoretically, If there is information leftover and we can do something better. But it is not the case you will also be able to do with. If can't you can't. Then stop. If you check you know you have done the best as you can.-->
+
+- $\{e_t\}$ have mean zero. If they don't, then forecasts are biased.
+
+<!--If you see autocorrelations, then you should go back and adjust residuals. We want our residuals to be unbiased. If the mean is not zero. Go and adjust the model. Add an intercept. Whatever you want to do.-->
+
+### Useful properties (for prediction intervals)
+
+- $\{e_t\}$ have constant variance.
+
+- $\{e_t\}$ are normally distributed.
+
+<!--If the following assumptions are wrong that doesn't mean your forecasts are incorrect. -->
+
+---
+
+# Step 6: Residual diagnostics
+
+
+---
+
+# Step 7: Calculate forecasts
+
+---
+
+# Step 8: Evaluate forecast accuracy.
+
+## How well our model is doing for out-of-sample?
+
+
+<!--So far we have talked about fitted values and residuals.-->
+
+<!--Train data and Test data. We want to know if forecasts doing well for out-of-sample.-->
+
+Forecast error = True value - Observed value
+
+$$e_{T+h}=Y_{T+h}-\hat{Y}_{T+h|T}$$
+
+Where,
+
+$Y_{T+h}$: $(T+h)^{th}$ observation, $h=1,..., H$
+
+$\hat{Y}_{T+h|T}$: Forecast based on data uo to time $T$.
+
+- **True** forecast error as the test data is not used in computing $\hat{Y}_{T+h|T}$.
+
+- Unlike, residuals, forecast errors on the test set involve multi-step forecasts.
+
+- Use forecast error measures to evaluate the models.
+
+<!--Since, true forecast error, no hat involved.-->
+
 
