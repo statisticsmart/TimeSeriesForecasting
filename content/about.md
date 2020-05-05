@@ -46,6 +46,8 @@ ________________________________________________________________________________
 
 📈 [Slides](/slides/8.png) 📚 [Reading](https://otexts.com/fpp2/arima.html) 📋 [Exercises](https://otexts.com/fpp2/arima-exercises.html)
 
+📉 [Pipe operator in R](https://hellor.netlify.app/slides/l7_intro_tidyverse.html#43)
+
 **Week 5: Forecasting with Exponential smoothing models**
 
 
