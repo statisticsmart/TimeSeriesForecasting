@@ -1288,7 +1288,16 @@ ggplot() +
 blue - Multi-step ahead; black - One-step ahead; red - True values
 
 ---
+background-image: url('arimaflowchart.png')
+background-position: right
+background-size: contain
 
+.footnote[.scriptsize[
+source: Forecasting: Principles and Practice, Rob Hyndman and George Athanasopoulos.
+]]
+
+
+---
 class: center, middle
 
 
