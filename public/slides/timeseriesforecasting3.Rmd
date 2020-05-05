@@ -109,7 +109,7 @@ $$
 \begin{aligned}
   Y_t &= Y_{t-1} + \epsilon_t \\
      Y_1    &= Y_0 + \epsilon_1 \\
-         Y_2 &=  Y_1 + \epsilon_1=Y_0 + \epsilon_1 + \epsilon_2\\
+         Y_2 &=  Y_1 + \epsilon_2=Y_0 + \epsilon_1 + \epsilon_2\\
           Y_3 &=  Y_2 + \epsilon_3=Y_0 + \epsilon_1 + \epsilon_2 +\epsilon_3\\
           .   \\
           Y_t &=Y_{t-1} + \epsilon_t=Y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 +...+ \epsilon_t = Y_0 + \sum_{i=1}^{t} \epsilon_t
@@ -170,7 +170,7 @@ $$
 \begin{aligned}
   Y_t &= Y_{t-1} + \epsilon_t \\
      Y_1    &= \alpha+Y_0 + \epsilon_1 \\
-         Y_2 &= \alpha+ Y_1 + \epsilon_1=2 \alpha+Y_0 + \epsilon_1 + \epsilon_2\\
+         Y_2 &= \alpha+ Y_1 + \epsilon_2=2 \alpha+Y_0 + \epsilon_1 + \epsilon_2\\
           Y_3 &= \alpha+ Y_2 + \epsilon_3= 3 \alpha+ Y_0 + \epsilon_1 + \epsilon_2 +\epsilon_3\\
           .   \\
           Y_t &= \alpha+Y_{t-1} + \epsilon_t= t \alpha+ Y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 +...+ \epsilon_t = t \alpha + Y_0 + \sum_{i=1}^{t} \epsilon_t
@@ -418,7 +418,7 @@ What differences do you notice in the scale?
 
 --
 
-- Transformation oftem makes little difference to forecasts but has large effects on PI.
+- Transformation often makes little difference to forecasts but has large effects on PI.
 
 ---
 # Application
@@ -548,7 +548,7 @@ Where,
 
 **1. Generate data from a model with a drift**
 
-$$Y_t = 10+0.5Y_{t-1}+\epsilon_t$$
+$$Y_t = 10+0.8Y_{t-1}+\epsilon_t$$
 ```{r, comment=NA}
 set.seed(22)
 y <- 10 + arima.sim(list(ar=.8),n=200)
@@ -563,7 +563,6 @@ Arima(as.ts(y),order=c(1,0,0))
 
 $E(Y_t)=\frac{\phi_0}{1-\phi_1}$
 
-$\phi_0 = 8.8345 \times (1-0.0384) = 9.575901$
 
 
 ---
@@ -583,7 +582,7 @@ Arima(ts.sim2, order=c(0, 1, 0))
 
 1. When $d=0$, provides estimate of $\mu = E(Y_t)$.
 
-2. Default setting is `include.mean=TRUE`. Setting `includemean=FALSE` will force $c=\mu=0$.
+2. Default setting is `include.mean=TRUE`. Setting `include.mean=FALSE` will force $c=\mu=0$.
 
 3. When $d > 0$ sets $c=\mu=0$.
 
@@ -706,7 +705,7 @@ autoplot(log.airpassenger)
 
 - The ACF of non-stationary data decreases slowly.
 
-- For non-stationary data, the value of $r_t$ is often large and positive.
+- For non-stationary data, the value of $r_1$ is often large and positive.
 
 --
 ### Recap: Non-seasonal differencing and seasonal differencing
@@ -731,7 +730,7 @@ autoplot(log.airpassenger)
 - Seasonally differenced series will have $T-m$ observations.
 <!--Usually we do not consider differencing more than twice. -->
 
-> There are times differencing once is not enough. However, in practice,it is almost never necessary to go beyound second-order differencing.
+> There are times differencing once is not enough. However, in practice,it is almost never necessary to go beyond second-order differencing.
 
 <!--Even the second-order differencing is very rare.-->
 
@@ -940,7 +939,7 @@ ndiffs(diff.sdiff.log.passenger)
 ---
 # How many differences you need to take? (cont.)
 
-Seaonal - Automatically selecting differences.
+Seasonal - Automatically selecting differences.
 
 .pull-left[
 STL decomposition: $Y_t = T_t + S_t + R_t$
@@ -988,7 +987,7 @@ background-size: contain
 - ACF dies out in an exponential or damped
 sine-wave manner.
 
-- there is a signicant spike at lag $p$ in PACF, but
+- there is a significant spike at lag $p$ in PACF, but
 none beyond $p$.
 
 ## MA(q)
