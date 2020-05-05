@@ -23,4 +23,6 @@ Week 5:  `29 March 2020, 2pm - 5pm`*
 
 ### Zoom lectures due to COVID19 - Outbreak
 
-`11 April 2020: 2pm - 4pm`
+`11 April 2020: 2pm - 4pm` 
+
+`5 May 2020: 1pm - 5pm`
