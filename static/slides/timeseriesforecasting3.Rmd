@@ -546,19 +546,27 @@ Where,
 
 ---
 
-# Example 1 
+**1. Generate data from a model with a drift**
 
-**1. Generate data from the model**
+$$Y_t = 10+0.5Y_{t-1}+\epsilon_t$$
+```{r, comment=NA}
+set.seed(22)
+y <- 10 + arima.sim(list(ar=.8),n=200)
+```
+
 
 **2. Fit an ARIMA model to generated data**
 
+```{r, comment=NA}
+Arima(as.ts(y),order=c(1,0,0))
+```
+
+$E(Y_t)=\frac{\phi_0}{1-\phi_1}$
+
+$\phi_0 = 8.8345 \times (1-0.0384) = 9.575901$
+
+
 ---
-
-# Example 2: Model with a constant
-
----
-
-# Example 3: Model with a drift
 
 ```{r, comment=NA, warning=FALSE, message=FALSE}
 

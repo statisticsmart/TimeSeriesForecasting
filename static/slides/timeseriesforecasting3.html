@@ -595,19 +595,42 @@ Where,
 
 ---
 
-# Example 1 
+**1. Generate data from a model with a drift**
 
-**1. Generate data from the model**
+`$$Y_t = 10+0.5Y_{t-1}+\epsilon_t$$`
+
+```r
+set.seed(22)
+y &lt;- 10 + arima.sim(list(ar=.8),n=200)
+```
+
 
 **2. Fit an ARIMA model to generated data**
 
+
+```r
+Arima(as.ts(y),order=c(1,0,0))
+```
+
+```
+Series: as.ts(y) 
+ARIMA(1,0,0) with non-zero mean 
+
+Coefficients:
+         ar1    mean
+      0.8345  9.2722
+s.e.  0.0384  0.4131
+
+sigma^2 estimated as 0.991:  log likelihood=-282.48
+AIC=570.95   AICc=571.07   BIC=580.85
+```
+
+`\(E(Y_t)=\frac{\phi_0}{1-\phi_1}\)`
+
+`\(\phi_0 = 8.8345 \times (1-0.0384) = 9.575901\)`
+
+
 ---
-
-# Example 2: Model with a constant
-
----
-
-# Example 3: Model with a drift
 
 
 ```r
@@ -623,8 +646,8 @@ Arima(ts.sim2, order=c(0, 1, 0))
 Series: ts.sim2 
 ARIMA(0,1,0) 
 
-sigma^2 estimated as 1.321:  log likelihood=-77.9
-AIC=157.8   AICc=157.89   BIC=159.72
+sigma^2 estimated as 1.044:  log likelihood=-72.02
+AIC=146.04   AICc=146.12   BIC=147.95
 ```
 
 ---
@@ -714,7 +737,7 @@ autoplot(AirPassengers) +
   geom_vline(xintercept = 1958, colour="forestgreen")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -742,7 +765,7 @@ Stationary series:
 autoplot(training.ap)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -773,7 +796,7 @@ log.airpassenger &lt;- log(training.ap)
 autoplot(log.airpassenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -849,7 +872,7 @@ autoplot(log.airpassenger)
 autoplot(log.airpassenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -859,7 +882,7 @@ autoplot(log.airpassenger)
 ggAcf(log.airpassenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -875,7 +898,7 @@ ggAcf(log.airpassenger)
 autoplot(log.airpassenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -887,7 +910,7 @@ library(magrittr) # to load %&gt;%
 log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 Does this look stationary?
 ]
@@ -905,7 +928,7 @@ library(magrittr) # to load %&gt;%
 log.airpassenger %&gt;% diff(lag=12)  %&gt;% autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -918,7 +941,7 @@ log.airpassenger %&gt;%
   ggAcf()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -937,7 +960,7 @@ log.airpassenger %&gt;%
   autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 &lt;!--Code for second-order differencing: 
 log.airpassenger %&gt;% 
@@ -958,7 +981,7 @@ log.airpassenger %&gt;%
   ggAcf()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -1137,7 +1160,7 @@ nsdiffs(sdiff.log.airpassenger)
 training.ap %&gt;% stl(s.window = 12) %&gt;% autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
 
 ]
 &lt;!--This is for number of seasonal differencing needed.--&gt;
@@ -1150,7 +1173,7 @@ training.ap %&gt;% stl(s.window = 12) %&gt;% autoplot()
 ggtsdisplay(diff.sdiff.log.passenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
 
 ---
 background-image: url('sar.PNG')
@@ -1226,7 +1249,7 @@ where `\(L\)` is the likelihood of the data, `\(k=1\)` if `\(c\neq 0\)` and `\(k
 ggtsdisplay(diff.sdiff.log.passenger)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-50-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1524,7 +1547,7 @@ H1: Data are serially correlated.
 checkresiduals(fit1)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
 
 ```
 
@@ -1544,7 +1567,7 @@ Model df: 2.   Total lags used: 22
 fit1 %&gt;% residuals() %&gt;% ggtsdisplay()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
 ---
 # Step 6: Residual diagnostics (cont.)
 
@@ -1553,7 +1576,7 @@ fit1 %&gt;% residuals() %&gt;% ggtsdisplay()
 checkresiduals(fit3)
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
 
 ```
 
@@ -1573,7 +1596,7 @@ Model df: 3.   Total lags used: 22
 fit3 %&gt;% residuals() %&gt;% ggtsdisplay()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
 ---
 
 # Step 7: Calculate forecasts
@@ -1587,7 +1610,7 @@ fit1 %&gt;% forecast(h=36) %&gt;%
   autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-63-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1599,7 +1622,7 @@ fit3 %&gt;% forecast(h=36) %&gt;%
   autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-64-1.png)&lt;!-- --&gt;
 
 ]
 ---
@@ -1840,7 +1863,7 @@ Your turn:
 fit.auto.arima %&gt;% checkresiduals()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-70-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-72-1.png)&lt;!-- --&gt;
 
 ```
 
@@ -1859,7 +1882,7 @@ Model df: 4.   Total lags used: 22
 fit.auto.arima %&gt;% residuals() %&gt;% ggtsdisplay()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-71-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-73-1.png)&lt;!-- --&gt;
 ---
 
 ### Change the number of lags and perform `Box.test` (optional)
@@ -1902,7 +1925,7 @@ X-squared = 17.549, df = 24, p-value = 0.8243
 fit.auto.arima %&gt;% forecast(h=36) %&gt;% autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-73-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-75-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -2031,7 +2054,7 @@ forecast.auto.arima %&gt;%
     col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-76-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-78-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -2050,7 +2073,7 @@ ggplot() +
     ), col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-77-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-79-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -2159,7 +2182,7 @@ ggplot() +
     ), col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-81-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -2198,7 +2221,7 @@ Test set     0.426944178  1.174056
 # Multi-step
 
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-85-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -2207,7 +2230,7 @@ Test set     0.426944178  1.174056
 
 # One-step ahead
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-86-1.png)&lt;!-- --&gt;
 
 
 ]
