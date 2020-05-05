@@ -546,12 +546,11 @@ Where,
 
 ---
 
-**1. Generate data from a model with a drift**
+**1. Generate data**
 
-$$Y_t = 10+0.8Y_{t-1}+\epsilon_t$$
 ```{r, comment=NA}
 set.seed(22)
-y <- 10 + arima.sim(list(ar=.8),n=200)
+y <- arima.sim(list(ar=.8),n=200, mean=10)
 ```
 
 
@@ -561,9 +560,9 @@ y <- 10 + arima.sim(list(ar=.8),n=200)
 Arima(as.ts(y),order=c(1,0,0))
 ```
 
-$E(Y_t)=\frac{\phi_0}{1-\phi_1}$
+Theoritical: $E(Y_t)=\mu=\frac{\phi_0}{1-\phi_1}$
 
-
+Estimated: $\hat{\mu} = 49.2685$, $\hat{\phi_1}=0.8346$, $\hat{\phi_0}=49.2685 \times (1-0.8346)=8.14901$.
 
 ---
 
