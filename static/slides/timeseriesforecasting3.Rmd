@@ -1041,6 +1041,8 @@ $$BIC=AIC+[log(T)-2](p+q+k-1)$$
  - Good models are obtained by minimizing either the $AIC, AICc$ or $BIC$. 
  
  - Our preference is to use the $AICc$.
+ 
+ - AICc comparisons must have the same orders of differencing.
 
 
 ---
