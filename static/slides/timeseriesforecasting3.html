@@ -330,9 +330,9 @@ Eg:
 # Box-Cox transformation
 
 $$
-  f(x)=\begin{cases}
-    1, &amp; \text{if `\(x&lt;0\)`} \newline
-    0, &amp; \text{otherwise}.
+  w_t=\begin{cases}
+    log(y_t), &amp; \text{if `\(\lambda=0\)`} \newline
+    (Y_t^\lambda - 1)/ \lambda, &amp; \text{otherwise}.
   \end{cases}
 $$
 
@@ -710,7 +710,8 @@ test.ap
 
 
 ```r
-autoplot(AirPassengers) 
+autoplot(AirPassengers) + 
+  geom_vline(xintercept = 1958, colour="forestgreen")
 ```
 
 ![](timeseriesforecasting3_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
@@ -1133,7 +1134,7 @@ nsdiffs(sdiff.log.airpassenger)
 .pull-right[
 
 ```r
-AirPassengers %&gt;% stl(s.window = 12) %&gt;% autoplot()
+training.ap %&gt;% stl(s.window = 12) %&gt;% autoplot()
 ```
 
 ![](timeseriesforecasting3_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
@@ -1142,6 +1143,345 @@ AirPassengers %&gt;% stl(s.window = 12) %&gt;% autoplot()
 &lt;!--This is for number of seasonal differencing needed.--&gt;
 
 ---
+# Step 4: Examine the ACF/PACF to identify a suitable model
+
+
+```r
+ggtsdisplay(diff.sdiff.log.passenger)
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-47-1.png)&lt;!-- --&gt;
+
+---
+background-image: url('sar.PNG')
+background-position: center
+background-size: contain
+---
+## AR(p)
+
+- ACF dies out in an exponential or damped
+sine-wave manner.
+
+- there is a signicant spike at lag `\(p\)` in PACF, but
+none beyond `\(p\)`.
+
+## MA(q)
+
+- ACF has all zero spikes beyond the `\(q^{th}\)` spike.
+
+- PACF dies out in an exponential or damped
+sine-wave manner.
+
+## Seasonal components
+
+- The seasonal part of an AR or MA model will be seen
+in the seasonal lags of the PACF and ACF.
+
+.pull-left[
+**ARIMA(0,0,0)(0,0,1)12 will show**
+ 
+  - a spike at lag 12 in the ACF but no other significant spikes.
+
+  - The PACF will show exponential decay in the seasonal lags  12, 24, 36, . . . .
+]
+
+.pull-right[
+**ARIMA(0,0,0)(1,0,0)12 will show**
+
+  - exponential decay in the seasonal lags of the ACF.
+    
+  - a single significant spike at lag 12 in the PACF.
+]
+---
+background-image: url(Akaike.jpg)
+background-size: 100px
+background-position: 98% 6%
+
+# Information criteria
+
+
+- Akaike's Information Criterion (AIC)
+
+`$$AIC = -2log(L)+2(p+q+k+1)$$`
+where `\(L\)` is the likelihood of the data, `\(k=1\)` if `\(c\neq 0\)` and `\(k=0\)` if `\(c=0\)`.
+
+- Corrected AIC
+
+`$$AICc=AIC + \frac{2(p+q+k+1)(p+q+k+2)}{T-p-q-k-2}$$`
+-Bayesian Information Criterion
+
+`$$BIC=AIC+[log(T)-2](p+q+k-1)$$`
+
+ - Good models are obtained by minimizing either the `\(AIC, AICc\)` or `\(BIC\)`. 
+ 
+ - Our preference is to use the `\(AICc\)`.
+
+
+---
+
+## Step 4: Examine the ACF/PACF to identify a suitable model (cont.)
+
+
+```r
+ggtsdisplay(diff.sdiff.log.passenger)
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+
+---
+
+## Step 4: Examine the ACF/PACF to identify a suitable model (cont.)
+
+- `\(d=1\)` and `\(D=1\)` (from step 3)
+
+- Significant spike at lag 1 in ACF suggests
+non-seasonal MA(1) component.
+
+- Significant spike at lag 12 in ACF suggests seasonal
+MA(1) component.
+
+- Initial candidate model: `\(ARIMA(0,1,1)(0,1,1)_{12}\)`.
+
+- By analogous logic applied to the PACF, we could also have started with `\(ARIMA(1,1,0)(1,1,0)_{12}\)`.
+
+- Let's try both
+&lt;!--Since the second is not significant, I did not consider 3. I started with the simplest.--&gt;
+
+---
+
+**Initial model:**
+
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)`
+
+`\(ARIMA(1,1,0)(1,1,0)_{12}\)`
+
+**Try some variations of the initial model:**
+
+`\(ARIMA(0,1,1)(1,1,1)_{12}\)`
+
+`\(ARIMA(1,1,1)(1,1,0)_{12}\)`
+
+`\(ARIMA(1,1,1)(1,1,1)_{12}\)`
+
+
+Both the ACF and PACF show significant spikes at lag 3, and almost significant spikes at lag 3, indicating that some additional non-seasonal terms need to be included in the model.
+
+`\(ARIMA(3,1,1)(1,1,1)_{12}\)`
+
+`\(ARIMA(1,1,3)(1,1,1)_{12}\)`
+
+`\(ARIMA(3,1,3)(1,1,1)_{12}\)`
+---
+.pull-left[
+
+```r
+fit1 &lt;- Arima(training.ap, 
+              order=c(0,1,1),
+seasonal=c(0,1,1), lambda = 0)
+fit1
+```
+
+```
+Series: training.ap 
+ARIMA(0,1,1)(0,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+          ma1     sma1
+      -0.3864  -0.5885
+s.e.   0.1097   0.0927
+
+sigma^2 estimated as 0.001416:  log likelihood=175.3
+AIC=-344.59   AICc=-344.33   BIC=-336.93
+```
+]
+
+---
+
+
+```r
+fit2 &lt;- Arima(training.ap, 
+              order=c(1,1,0),
+seasonal=c(1,1,0), lambda = 0)
+fit2
+```
+
+```
+Series: training.ap 
+ARIMA(1,1,0)(1,1,0)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+          ar1     sar1
+      -0.3635  -0.4548
+s.e.   0.0957   0.0889
+
+sigma^2 estimated as 0.001578:  log likelihood=171.29
+AIC=-336.59   AICc=-336.32   BIC=-328.92
+```
+
+---
+
+```r
+fit3 &lt;- Arima(training.ap, 
+              order=c(0,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit3
+```
+
+```
+Series: training.ap 
+ARIMA(0,1,1)(1,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+          ma1     sar1     sma1
+      -0.3941  -0.0714  -0.5347
+s.e.   0.1108   0.1798   0.1672
+
+sigma^2 estimated as 0.00143:  log likelihood=175.37
+AIC=-342.75   AICc=-342.3   BIC=-332.53
+```
+---
+
+
+```r
+fit4 &lt;- Arima(training.ap, 
+              order=c(1,1,1),
+seasonal=c(1,1,0), lambda = 0)
+fit4
+```
+
+```
+Series: training.ap 
+ARIMA(1,1,1)(1,1,0)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+         ar1      ma1     sar1
+      0.1015  -0.5221  -0.4600
+s.e.  0.2423   0.2113   0.0887
+
+sigma^2 estimated as 0.001561:  log likelihood=172.26
+AIC=-336.52   AICc=-336.08   BIC=-326.31
+```
+---
+
+
+```r
+fit5 &lt;- Arima(training.ap, 
+              order=c(1,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit5
+```
+
+```
+Series: training.ap 
+ARIMA(1,1,1)(1,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+         ar1      ma1     sar1     sma1
+      0.2565  -0.6243  -0.0599  -0.5574
+s.e.  0.2759   0.2289   0.1765   0.1670
+
+sigma^2 estimated as 0.00143:  log likelihood=175.71
+AIC=-341.42   AICc=-340.74   BIC=-328.65
+```
+---
+
+
+```r
+fit6 &lt;- Arima(training.ap, 
+              order=c(3,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit6
+```
+
+```
+Series: training.ap 
+ARIMA(3,1,1)(1,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+         ar1     ar2      ar3      ma1     sar1     sma1
+      0.1451  0.0681  -0.1705  -0.5133  -0.0165  -0.5928
+s.e.  0.3473  0.1598   0.1139   0.3440   0.1822   0.1703
+
+sigma^2 estimated as 0.001418:  log likelihood=177.09
+AIC=-340.17   AICc=-338.89   BIC=-322.3
+```
+
+---
+
+
+```r
+fit7 &lt;- Arima(training.ap, 
+              order=c(1,1,3),
+seasonal=c(1,1,1), lambda = 0)
+fit7
+```
+
+```
+Series: training.ap 
+ARIMA(1,1,3)(1,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+         ar1      ma1     ma2      ma3     sar1    sma1
+      0.0567  -0.4268  0.0831  -0.2275  -0.0094  -0.617
+s.e.  0.3512   0.3362  0.1663   0.1182   0.1775   0.166
+
+sigma^2 estimated as 0.001402:  log likelihood=177.35
+AIC=-340.71   AICc=-339.42   BIC=-322.83
+```
+
+---
+
+```r
+fit8 &lt;- Arima(training.ap, 
+              order=c(3,1,3),
+seasonal=c(1,1,1), lambda = 0)
+fit8
+```
+
+```
+Series: training.ap 
+ARIMA(3,1,3)(1,1,1)[12] 
+Box Cox transformation: lambda= 0 
+
+Coefficients:
+          ar1     ar2     ar3     ma1      ma2      ma3    sar1     sma1
+      -0.8843  0.6075  0.5633  0.4941  -0.9725  -0.5215  0.0243  -0.5959
+s.e.   0.5123  0.2072  0.3099  0.6076   0.0814   0.5842  0.2091   0.1773
+
+sigma^2 estimated as 0.001368:  log likelihood=177.88
+AIC=-337.77   AICc=-335.65   BIC=-314.78
+```
+
+---
+**Initial model: AICc**
+
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)`: -344.33 (the smallest AICc)
+
+`\(ARIMA(1,1,0)(1,1,0)_{12}\)`: -336.32
+
+**Try some variations of the initial model:**
+
+`\(ARIMA(0,1,1)(1,1,1)_{12}\)`: -342.3 (second smallest AICc)
+
+`\(ARIMA(1,1,1)(1,1,0)_{12}\)`: -336.08
+
+`\(ARIMA(1,1,1)(1,1,1)_{12}\)`: -340.74
+
+`\(ARIMA(3,1,1)(1,1,1)_{12}\)`: -338.89 
+
+`\(ARIMA(1,1,3)(1,1,1)_{12}\)`: -339.42 
+
+`\(ARIMA(3,1,3)(1,1,1)_{12}\)`: -335.65
+
+---
+
 # Step 6: Residual diagnostics
 
 ## Fitted values: 
@@ -1171,18 +1511,143 @@ AirPassengers %&gt;% stl(s.window = 12) %&gt;% autoplot()
 
 &lt;!--If the following assumptions are wrong that doesn't mean your forecasts are incorrect. --&gt;
 
+
 ---
+# Step 6: Residual diagnostics (cont.)
 
-# Step 6: Residual diagnostics
+H0: Data are not serially correlated.
+
+H1: Data are serially correlated.
 
 
+```r
+checkresiduals(fit1)
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
+
+```
+
+	Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,1)(0,1,1)[12]
+Q* = 14.495, df = 20, p-value = 0.8045
+
+Model df: 2.   Total lags used: 22
+```
+
+---
+# Step 6: Residual diagnostics (cont.)
+
+
+```r
+fit1 %&gt;% residuals() %&gt;% ggtsdisplay()
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-58-1.png)&lt;!-- --&gt;
+---
+# Step 6: Residual diagnostics (cont.)
+
+
+```r
+checkresiduals(fit3)
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+
+```
+
+	Ljung-Box test
+
+data:  Residuals from ARIMA(0,1,1)(1,1,1)[12]
+Q* = 13.971, df = 19, p-value = 0.7854
+
+Model df: 3.   Total lags used: 22
+```
+
+---
+# Step 6: Residual diagnostics (cont.)
+
+
+```r
+fit3 %&gt;% residuals() %&gt;% ggtsdisplay()
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
 ---
 
 # Step 7: Calculate forecasts
 
+.pull-left[
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)`
+
+
+```r
+fit1 %&gt;% forecast(h=36) %&gt;% 
+  autoplot()
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+`\(ARIMA(0,1,1)(1,1,1)_{12}\)`
+
+
+```r
+fit3 %&gt;% forecast(h=36) %&gt;% 
+  autoplot()
+```
+
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+
+]
 ---
 
-# Step 8: Evaluate forecast accuracy.
+
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)`
+
+
+```r
+fit1.forecast &lt;- fit1 %&gt;% forecast(h=36) 
+fit1.forecast$mean
+```
+
+```
+          Jan      Feb      Mar      Apr      May      Jun      Jul      Aug
+1958 350.6592 339.1766 396.7654 389.3934 394.7295 460.6986 512.2818 507.5185
+1959 394.8025 381.8745 446.7129 438.4129 444.4207 518.6945 576.7713 571.4083
+1960 444.5029 429.9474 502.9482 493.6032 500.3674 583.9912 649.3792 643.3411
+          Sep      Oct      Nov      Dec
+1958 445.0042 386.2473 339.3564 381.5803
+1959 501.0243 434.8708 382.0769 429.6162
+1960 564.0966 489.6152 430.1753 483.6992
+```
+
+
+`\(ARIMA(0,1,1)(1,1,1)_{12}\)`
+
+
+```r
+fit3.forecast &lt;- fit3 %&gt;% forecast(h=36) 
+fit3.forecast$mean
+```
+
+```
+          Jan      Feb      Mar      Apr      May      Jun      Jul      Aug
+1958 351.0115 339.0589 396.3161 389.4484 395.0305 461.6590 513.6099 507.9900
+1959 395.2760 381.5215 446.3245 438.4261 444.8906 520.5608 578.7432 573.0358
+1960 444.7886 429.3347 502.2289 493.3544 500.6143 585.7116 651.2077 644.7354
+          Sep      Oct      Nov      Dec
+1958 445.3297 386.3269 339.4872 381.8812
+1959 501.8766 435.0725 382.3290 429.4328
+1960 564.7108 489.5677 430.2174 483.2724
+```
+
+
+---
+
+# Step 8: Evaluate forecast accuracy
 
 ## How well our model is doing for out-of-sample?
 
@@ -1208,6 +1673,53 @@ Where,
 - Use forecast error measures to evaluate the models.
 
 &lt;!--Since, true forecast error, no hat involved.--&gt;
+
+
+---
+
+# Step 7: Evaluate forecast accuracy
+
+
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)`
+
+
+```r
+fit1.forecast &lt;- fit1 %&gt;% 
+  forecast(h=36) 
+```
+
+
+```r
+accuracy(fit1.forecast$mean, test.ap)
+```
+
+```
+                ME   RMSE      MAE       MPE     MAPE       ACF1 Theil's U
+Test set -33.71566 36.559 33.71566 -8.112567 8.112567 0.08524612 0.7974916
+```
+
+
+
+`\(ARIMA(0,1,1)(1,1,1)_{12}\)`
+
+
+```r
+fit3.forecast &lt;- fit3 %&gt;% 
+  forecast(h=36) 
+```
+
+
+```r
+accuracy(fit3.forecast$mean, test.ap)
+```
+
+```
+                ME     RMSE      MAE       MPE     MAPE       ACF1 Theil's U
+Test set -34.12174 36.87661 34.12174 -8.190874 8.190874 0.06782645 0.8019226
+```
+
+
+`\(ARIMA(0,1,1)(0,1,1)_{12}\)` MAE, MAPE is smaller than `\(ARIMA(0,1,1)(1,1,1)_{12}\)`. Hence, we select `\(ARIMA(0,1,1)(0,1,1)_{12}\)` to forecast future values.
 
 ---
 class: duke-orange, center, middle
@@ -1245,6 +1757,49 @@ class: duke-orange, center, middle
 1. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
 
 1. Once the residuals look like white noise, calculate forecasts.
+--
+# Introduction: `auto.arima`
+
+- Hyndman and Khandakar ([JSS, 2008](/slides/v27iO3.pdf)) algorithm.
+
+- Select no differences **d** and **D** via KPSS test and strength of seasonality measurement.
+
+- Select **p, q** by minimising AICc.
+
+- Use stepwise search to traverse model space.
+
+---
+
+**What is happening under the hood of `auto.arima`?**
+--
+
+**Step 1:** Select the number of differences d and D via unit root tests and strength of seasonality measure.
+--
+
+**Step 2:** Try four possible models to start with:
+
+i) `\(ARIMA(2, d, 2)\)` if `\(m = 1\)` and `\(ARIMA(2, d, 2)(1, D, 1)_m\)` if `\(m &gt; 1\)`.
+
+ii) `\(ARIMA(0, d, 0)\)` if `\(m = 1\)` and `\(ARIMA(0, d, 0)(0, D, 0)_m\)` if `\(m &gt; 1\)`.
+
+iii) `\(ARIMA(1, d, 0)\)` if `\(m = 1\)` and `\(ARIMA(1, d, 0)(1, D, 0)_m\)` if `\(m &gt; 1\)`.
+
+iv) `\(ARIMA(0, d, 1)\)` if `\(m = 1\)` and `\(ARIMA(0, d, 1)(0, D, 1)_m\)` if `\(m &gt; 1\)`.
+--
+
+**Step 3:** Select the model with the smallest AICc from step 2. This becomes the current model.
+--
+
+**Step 4:** Consider up to 13 variations on the current model:
+
+i) Vary one of `\(p, q, P\)` and `\(Q\)` from the current model by `\(\pm 1\)`.
+
+ii) `\(p, q\)` both vary from the current model by `\(\pm 1\)`.
+
+iii) `\(P, Q\)` both vary from the current model by `\(\pm 1\)`.
+
+iv) Include or exclude the constant term from the current model. Repeat step 4 until no lower AICc can be found. 
+
 
 ---
 
@@ -1285,7 +1840,7 @@ Your turn:
 fit.auto.arima %&gt;% checkresiduals()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-48-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-70-1.png)&lt;!-- --&gt;
 
 ```
 
@@ -1304,7 +1859,7 @@ Model df: 4.   Total lags used: 22
 fit.auto.arima %&gt;% residuals() %&gt;% ggtsdisplay()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-49-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-71-1.png)&lt;!-- --&gt;
 ---
 
 ### Change the number of lags and perform `Box.test` (optional)
@@ -1347,7 +1902,7 @@ X-squared = 17.549, df = 24, p-value = 0.8243
 fit.auto.arima %&gt;% forecast(h=36) %&gt;% autoplot()
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-51-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-73-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1476,7 +2031,7 @@ forecast.auto.arima %&gt;%
     col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-76-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1495,7 +2050,7 @@ ggplot() +
     ), col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-55-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-77-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1529,9 +2084,18 @@ This repeatedly feeds the **predicted data point** back into the prediction equa
 &lt;!--Resources: https://stats.stackexchange.com/questions/217955/difference-between-first-one-step-ahead-forecast-and-first-forecast-from-fitted--&gt;
 
 ---
-## Apply already fit model to new data
+background-image: url('multi.PNG')
+background-position: center
+background-size: contain
 
-One-step ahead forecast: Continually updating the prediction equation with **new data**.
+---
+background-image: url('one.PNG')
+background-position: center
+background-size: contain
+---
+## One-step ahead forecast.
+
+Continually updating the prediction equation with **new data**.
 
 
 
@@ -1595,7 +2159,7 @@ ggplot() +
     ), col = "red")
 ```
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-59-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-81-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -1603,14 +2167,12 @@ ggplot() +
 
 
 ```r
-accuracy(air_model_test) # One-step ahead
+accuracy(one_step_forecasts, test.ap) # One-step ahead
 ```
 
 ```
-                    ME     RMSE      MAE        MPE    MAPE      MASE
-Training set -2.029239 12.72677 8.175988 -0.4076894 1.86015 0.1718246
-                   ACF1
-Training set -0.2234696
+                ME     RMSE      MAE        MPE    MAPE       ACF1 Theil's U
+Test set -2.029239 12.72677 8.175988 -0.4076894 1.86015 -0.2234696 0.2654171
 ```
 
 ```r
@@ -1626,6 +2188,7 @@ Training set 0.008773659        NA
 Test set     0.426944178  1.174056
 ```
 
+
 ---
 
 ## Multi-step ahead vs One-step ahead
@@ -1635,7 +2198,7 @@ Test set     0.426944178  1.174056
 # Multi-step
 
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-61-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-83-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -1644,7 +2207,7 @@ Test set     0.426944178  1.174056
 
 # One-step ahead
 
-![](timeseriesforecasting3_files/figure-html/unnamed-chunk-62-1.png)&lt;!-- --&gt;
+![](timeseriesforecasting3_files/figure-html/unnamed-chunk-84-1.png)&lt;!-- --&gt;
 
 
 ]
@@ -1659,6 +2222,50 @@ background-size: contain
 .footnote[.scriptsize[
 source: Forecasting: Principles and Practice, Rob Hyndman and George Athanasopoulos.
 ]]
+
+---
+
+# Comparison of accuracy measures of different approaches
+
+## ARIMA - manual selection
+
+
+```r
+accuracy(fit1.forecast$mean, test.ap) # Multiple-step ahead
+```
+
+```
+                ME   RMSE      MAE       MPE     MAPE       ACF1 Theil's U
+Test set -33.71566 36.559 33.71566 -8.112567 8.112567 0.08524612 0.7974916
+```
+
+You can try one-step ahead forecast for this one too.
+
+## `auto.arima`
+
+
+```r
+accuracy(one_step_forecasts, test.ap) # One-step ahead
+```
+
+```
+                ME     RMSE      MAE        MPE    MAPE       ACF1 Theil's U
+Test set -2.029239 12.72677 8.175988 -0.4076894 1.86015 -0.2234696 0.2654171
+```
+
+```r
+accuracy(forecast.auto.arima, test.ap) # Multi-step ahead
+```
+
+```
+                      ME      RMSE       MAE          MPE      MAPE      MASE
+Training set   0.2519501  7.374714  5.349687   0.04655079  2.410305 0.1749812
+Test set     -52.2999480 55.777025 52.299948 -12.30660303 12.306603 1.7106627
+                    ACF1 Theil's U
+Training set 0.008773659        NA
+Test set     0.426944178  1.174056
+```
+
 
 
 ---

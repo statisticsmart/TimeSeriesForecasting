@@ -305,9 +305,9 @@ autoplot(log(AirPassengers))+ylab("log(Monthly Airline Passenger Numbers 1949-19
 # Box-Cox transformation
 
 $$
-  f(x)=\begin{cases}
-    1, & \text{if $x<0$} \newline
-    0, & \text{otherwise}.
+  w_t=\begin{cases}
+    log(y_t), & \text{if $\lambda=0$} \newline
+    (Y_t^\lambda - 1)/ \lambda, & \text{otherwise}.
   \end{cases}
 $$
 
@@ -627,7 +627,8 @@ test.ap
 ---
 
 ```{r}
-autoplot(AirPassengers) 
+autoplot(AirPassengers) + 
+  geom_vline(xintercept = 1958, colour="forestgreen")
 
 ```
 
@@ -955,7 +956,7 @@ nsdiffs(sdiff.log.airpassenger)
 
 .pull-right[
 ```{r, comment=NA}
-AirPassengers %>% stl(s.window = 12) %>% autoplot()
+training.ap %>% stl(s.window = 12) %>% autoplot()
 
 ```
 
@@ -963,6 +964,219 @@ AirPassengers %>% stl(s.window = 12) %>% autoplot()
 <!--This is for number of seasonal differencing needed.-->
 
 ---
+# Step 4: Examine the ACF/PACF to identify a suitable model
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+ggtsdisplay(diff.sdiff.log.passenger)
+```
+
+---
+background-image: url('sar.PNG')
+background-position: center
+background-size: contain
+---
+## AR(p)
+
+- ACF dies out in an exponential or damped
+sine-wave manner.
+
+- there is a signicant spike at lag $p$ in PACF, but
+none beyond $p$.
+
+## MA(q)
+
+- ACF has all zero spikes beyond the $q^{th}$ spike.
+
+- PACF dies out in an exponential or damped
+sine-wave manner.
+
+## Seasonal components
+
+- The seasonal part of an AR or MA model will be seen
+in the seasonal lags of the PACF and ACF.
+
+.pull-left[
+**ARIMA(0,0,0)(0,0,1)12 will show**
+ 
+  - a spike at lag 12 in the ACF but no other significant spikes.
+
+  - The PACF will show exponential decay in the seasonal lags  12, 24, 36, . . . .
+]
+
+.pull-right[
+**ARIMA(0,0,0)(1,0,0)12 will show**
+
+  - exponential decay in the seasonal lags of the ACF.
+    
+  - a single significant spike at lag 12 in the PACF.
+]
+---
+background-image: url(Akaike.jpg)
+background-size: 100px
+background-position: 98% 6%
+
+# Information criteria
+
+
+- Akaike's Information Criterion (AIC)
+
+$$AIC = -2log(L)+2(p+q+k+1)$$
+where $L$ is the likelihood of the data, $k=1$ if $c\neq 0$ and $k=0$ if $c=0$.
+
+- Corrected AIC
+
+$$AICc=AIC + \frac{2(p+q+k+1)(p+q+k+2)}{T-p-q-k-2}$$
+-Bayesian Information Criterion
+
+$$BIC=AIC+[log(T)-2](p+q+k-1)$$
+
+ - Good models are obtained by minimizing either the $AIC, AICc$ or $BIC$. 
+ 
+ - Our preference is to use the $AICc$.
+
+
+---
+
+## Step 4: Examine the ACF/PACF to identify a suitable model (cont.)
+
+```{r, comment=NA,  warning=FALSE, message=FALSE}
+ggtsdisplay(diff.sdiff.log.passenger)
+```
+
+---
+
+## Step 4: Examine the ACF/PACF to identify a suitable model (cont.)
+
+- $d=1$ and $D=1$ (from step 3)
+
+- Significant spike at lag 1 in ACF suggests
+non-seasonal MA(1) component.
+
+- Significant spike at lag 12 in ACF suggests seasonal
+MA(1) component.
+
+- Initial candidate model: $ARIMA(0,1,1)(0,1,1)_{12}$.
+
+- By analogous logic applied to the PACF, we could also have started with $ARIMA(1,1,0)(1,1,0)_{12}$.
+
+- Let's try both
+<!--Since the second is not significant, I did not consider 3. I started with the simplest.-->
+
+---
+
+**Initial model:**
+
+$ARIMA(0,1,1)(0,1,1)_{12}$
+
+$ARIMA(1,1,0)(1,1,0)_{12}$
+
+**Try some variations of the initial model:**
+
+$ARIMA(0,1,1)(1,1,1)_{12}$
+
+$ARIMA(1,1,1)(1,1,0)_{12}$
+
+$ARIMA(1,1,1)(1,1,1)_{12}$
+
+
+Both the ACF and PACF show significant spikes at lag 3, and almost significant spikes at lag 3, indicating that some additional non-seasonal terms need to be included in the model.
+
+$ARIMA(3,1,1)(1,1,1)_{12}$
+
+$ARIMA(1,1,3)(1,1,1)_{12}$
+
+$ARIMA(3,1,3)(1,1,1)_{12}$
+---
+.pull-left[
+```{r, comment=NA}
+fit1 <- Arima(training.ap, 
+              order=c(0,1,1),
+seasonal=c(0,1,1), lambda = 0)
+fit1
+```
+]
+
+---
+
+```{r, comment=NA}
+fit2 <- Arima(training.ap, 
+              order=c(1,1,0),
+seasonal=c(1,1,0), lambda = 0)
+fit2
+```
+
+---
+```{r, comment=NA}
+fit3 <- Arima(training.ap, 
+              order=c(0,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit3
+```
+---
+
+```{r, comment=NA}
+fit4 <- Arima(training.ap, 
+              order=c(1,1,1),
+seasonal=c(1,1,0), lambda = 0)
+fit4
+```
+---
+
+```{r, comment=NA}
+fit5 <- Arima(training.ap, 
+              order=c(1,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit5
+```
+---
+
+```{r, comment=NA}
+fit6 <- Arima(training.ap, 
+              order=c(3,1,1),
+seasonal=c(1,1,1), lambda = 0)
+fit6
+```
+
+---
+
+```{r, comment=NA}
+fit7 <- Arima(training.ap, 
+              order=c(1,1,3),
+seasonal=c(1,1,1), lambda = 0)
+fit7
+```
+
+---
+```{r, comment=NA}
+fit8 <- Arima(training.ap, 
+              order=c(3,1,3),
+seasonal=c(1,1,1), lambda = 0)
+fit8
+```
+
+---
+**Initial model: AICc**
+
+$ARIMA(0,1,1)(0,1,1)_{12}$: -344.33 (the smallest AICc)
+
+$ARIMA(1,1,0)(1,1,0)_{12}$: -336.32
+
+**Try some variations of the initial model:**
+
+$ARIMA(0,1,1)(1,1,1)_{12}$: -342.3 (second smallest AICc)
+
+$ARIMA(1,1,1)(1,1,0)_{12}$: -336.08
+
+$ARIMA(1,1,1)(1,1,1)_{12}$: -340.74
+
+$ARIMA(3,1,1)(1,1,1)_{12}$: -338.89 
+
+$ARIMA(1,1,3)(1,1,1)_{12}$: -339.42 
+
+$ARIMA(3,1,3)(1,1,1)_{12}$: -335.65
+
+---
+
 # Step 6: Residual diagnostics
 
 ## Fitted values: 
@@ -992,18 +1206,84 @@ $$e_t=Y_t - \hat{Y}_{t|t-1}$$
 
 <!--If the following assumptions are wrong that doesn't mean your forecasts are incorrect. -->
 
+
 ---
+# Step 6: Residual diagnostics (cont.)
 
-# Step 6: Residual diagnostics
+H0: Data are not serially correlated.
 
+H1: Data are serially correlated.
 
+```{r, comment=NA, warning=FALSE, message=FALSE,fig.height=3}
+checkresiduals(fit1)
+```
+
+---
+# Step 6: Residual diagnostics (cont.)
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit1 %>% residuals() %>% ggtsdisplay()
+```
+---
+# Step 6: Residual diagnostics (cont.)
+
+```{r, comment=NA, warning=FALSE, message=FALSE, fig.height=4}
+checkresiduals(fit3)
+```
+
+---
+# Step 6: Residual diagnostics (cont.)
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit3 %>% residuals() %>% ggtsdisplay()
+```
 ---
 
 # Step 7: Calculate forecasts
 
+.pull-left[
+$ARIMA(0,1,1)(0,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit1 %>% forecast(h=36) %>% 
+  autoplot()
+
+```
+]
+
+.pull-right[
+$ARIMA(0,1,1)(1,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit3 %>% forecast(h=36) %>% 
+  autoplot()
+
+```
+
+]
 ---
 
-# Step 8: Evaluate forecast accuracy.
+
+$ARIMA(0,1,1)(0,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit1.forecast <- fit1 %>% forecast(h=36) 
+fit1.forecast$mean
+
+```
+
+
+$ARIMA(0,1,1)(1,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit3.forecast <- fit3 %>% forecast(h=36) 
+fit3.forecast$mean
+```
+
+
+---
+
+# Step 8: Evaluate forecast accuracy
 
 ## How well our model is doing for out-of-sample?
 
@@ -1029,6 +1309,41 @@ $\hat{Y}_{T+h|T}$: Forecast based on data uo to time $T$.
 - Use forecast error measures to evaluate the models.
 
 <!--Since, true forecast error, no hat involved.-->
+
+
+---
+
+# Step 7: Evaluate forecast accuracy
+
+
+$ARIMA(0,1,1)(0,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit1.forecast <- fit1 %>% 
+  forecast(h=36) 
+
+```
+
+```{r, comment=NA}
+accuracy(fit1.forecast$mean, test.ap)
+```
+
+
+
+$ARIMA(0,1,1)(1,1,1)_{12}$
+
+```{r, comment=NA, warning=FALSE, message=FALSE}
+fit3.forecast <- fit3 %>% 
+  forecast(h=36) 
+
+```
+
+```{r, comment=NA}
+accuracy(fit3.forecast$mean, test.ap)
+```
+
+
+$ARIMA(0,1,1)(0,1,1)_{12}$ MAE, MAPE is smaller than $ARIMA(0,1,1)(1,1,1)_{12}$. Hence, we select $ARIMA(0,1,1)(0,1,1)_{12}$ to forecast future values.
 
 ---
 class: duke-orange, center, middle
@@ -1066,6 +1381,49 @@ class: duke-orange, center, middle
 1. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
 
 1. Once the residuals look like white noise, calculate forecasts.
+--
+# Introduction: `auto.arima`
+
+- Hyndman and Khandakar ([JSS, 2008](/slides/v27iO3.pdf)) algorithm.
+
+- Select no differences **d** and **D** via KPSS test and strength of seasonality measurement.
+
+- Select **p, q** by minimising AICc.
+
+- Use stepwise search to traverse model space.
+
+---
+
+**What is happening under the hood of `auto.arima`?**
+--
+
+**Step 1:** Select the number of differences d and D via unit root tests and strength of seasonality measure.
+--
+
+**Step 2:** Try four possible models to start with:
+
+i) $ARIMA(2, d, 2)$ if $m = 1$ and $ARIMA(2, d, 2)(1, D, 1)_m$ if $m > 1$.
+
+ii) $ARIMA(0, d, 0)$ if $m = 1$ and $ARIMA(0, d, 0)(0, D, 0)_m$ if $m > 1$.
+
+iii) $ARIMA(1, d, 0)$ if $m = 1$ and $ARIMA(1, d, 0)(1, D, 0)_m$ if $m > 1$.
+
+iv) $ARIMA(0, d, 1)$ if $m = 1$ and $ARIMA(0, d, 1)(0, D, 1)_m$ if $m > 1$.
+--
+
+**Step 3:** Select the model with the smallest AICc from step 2. This becomes the current model.
+--
+
+**Step 4:** Consider up to 13 variations on the current model:
+
+i) Vary one of $p, q, P$ and $Q$ from the current model by $\pm 1$.
+
+ii) $p, q$ both vary from the current model by $\pm 1$.
+
+iii) $P, Q$ both vary from the current model by $\pm 1$.
+
+iv) Include or exclude the constant term from the current model. Repeat step 4 until no lower AICc can be found. 
+
 
 ---
 
@@ -1189,9 +1547,18 @@ This repeatedly feeds the **predicted data point** back into the prediction equa
 <!--Resources: https://stats.stackexchange.com/questions/217955/difference-between-first-one-step-ahead-forecast-and-first-forecast-from-fitted-->
 
 ---
-## Apply already fit model to new data
+background-image: url('multi.PNG')
+background-position: center
+background-size: contain
 
-One-step ahead forecast: Continually updating the prediction equation with **new data**.
+---
+background-image: url('one.PNG')
+background-position: center
+background-size: contain
+---
+## One-step ahead forecast.
+
+Continually updating the prediction equation with **new data**.
 
 
 ```{r, comment=NA}
@@ -1234,9 +1601,10 @@ ggplot() +
 ## Comparison of accuracy: Multi-step ahead vs one-step ahead
 
 ```{r, comment=NA}
-accuracy(air_model_test) # One-step ahead
+accuracy(one_step_forecasts, test.ap) # One-step ahead
 accuracy(forecast.auto.arima, test.ap) # Multi-step ahead
 ```
+
 
 ---
 
@@ -1295,6 +1663,26 @@ background-size: contain
 .footnote[.scriptsize[
 source: Forecasting: Principles and Practice, Rob Hyndman and George Athanasopoulos.
 ]]
+
+---
+
+# Comparison of accuracy measures of different approaches
+
+## ARIMA - manual selection
+
+```{r, comment=NA}
+accuracy(fit1.forecast$mean, test.ap) # Multiple-step ahead
+```
+
+You can try one-step ahead forecast for this one too.
+
+## `auto.arima`
+
+```{r, comment=NA}
+accuracy(one_step_forecasts, test.ap) # One-step ahead
+accuracy(forecast.auto.arima, test.ap) # Multi-step ahead
+```
+
 
 
 ---
