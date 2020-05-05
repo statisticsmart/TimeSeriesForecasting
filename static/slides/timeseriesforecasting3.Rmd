@@ -23,6 +23,57 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
+# Necessary R packages
+
+```{r, comment=NA}
+library(forecast)
+library(fpp2)
+```
+---
+# Recap: Stationarity
+
+.pull-left[
+
+```{r, message=FALSE}
+library(forecast)
+set.seed(20205)
+ts.wn <- as.ts(rnorm(20))
+autoplot(ts.wn)
+```
+]
+
+.pull-right[
+
+```{r}
+ggAcf(ts.wn)
+```
+
+]
+
+White noise implies stationarity.
+
+---
+
+# Recap: Stationarity
+
+.pull-left[
+
+```{r, message=FALSE}
+library(fpp2)
+autoplot(uschange[,"Consumption"], main="Changes in US consumption and income")
+```
+]
+
+.pull-right[
+
+```{r}
+ggAcf(uschange[,"Consumption"])
+```
+
+]
+
+Stationarity does not imply white noise.
+---
 # Non-Stationary Time Series
 
 **1. Deterministic trend**
@@ -34,18 +85,125 @@ where $\epsilon_t \sim iid(0, \sigma^2)$, $t = 1, 2, ...T$
 
 Mean of the process is time dependent, but the variance of the process is constant.
 
-**2. Random walk**
+**2. Random walk** 
 
 $$Y_t = Y_{t-1} + \epsilon_t$$
+
+- Random walk has a stochastic trend.
+
+- Model behind naive method.
 
 **3. Random walk with drift**
 
 $$Y_t = \alpha+  Y_{t-1} + \epsilon_t$$
 
-**4. Random walk with drift and deterministic trend**
+- Random walk with drift has a stochastic trend and a deterministic trend.
+
+- Model behind drift method.
+---
+
+# Random walk
+
+
+$$
+\begin{aligned}
+  Y_t &= Y_{t-1} + \epsilon_t \\
+     Y_1    &= Y_0 + \epsilon_1 \\
+         Y_2 &=  Y_1 + \epsilon_1=Y_0 + \epsilon_1 + \epsilon_2\\
+          Y_3 &=  Y_2 + \epsilon_3=Y_0 + \epsilon_1 + \epsilon_2 +\epsilon_3\\
+          .   \\
+          Y_t &=Y_{t-1} + \epsilon_t=Y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 +...+ \epsilon_t = Y_0 + \sum_{i=1}^{t} \epsilon_t
+\end{aligned}
+$$
+
+Mean: $E(Y_t) = Y_0$.
+
+Variance: $Var(Y_t)=t \sigma^2$.
+
+
 
 ---
-# Common trend removal (de-trending) procedures
+
+## Random walk generation 
+
+.pull-left[
+```{r, comment=NA}
+# method 1
+set.seed(100)
+n <- 100
+error <- rnorm(n, sd=2)
+# assume y0=0 (starting at 0)
+rw.ts <- cumsum(error)
+```
+
+```{r, comment=NA, fig.height=4}
+autoplot(as.ts(rw.ts))
+```
+
+]
+
+
+
+.pull-right[
+```{r, comment=NA}
+
+# method 2
+rw.ts <- rep(0, n)
+for (i in seq.int(2, n)){
+  rw.ts[i] <- rw.ts[i-1] + error[i]
+}
+rw.ts <- rw.ts 
+
+```
+
+```{r, comment=NA, fig.height=4}
+autoplot(as.ts(rw.ts))
+```
+]
+
+---
+
+# Random walk with drift
+
+
+$$
+\begin{aligned}
+  Y_t &= Y_{t-1} + \epsilon_t \\
+     Y_1    &= \alpha+Y_0 + \epsilon_1 \\
+         Y_2 &= \alpha+ Y_1 + \epsilon_1=2 \alpha+Y_0 + \epsilon_1 + \epsilon_2\\
+          Y_3 &= \alpha+ Y_2 + \epsilon_3= 3 \alpha+ Y_0 + \epsilon_1 + \epsilon_2 +\epsilon_3\\
+          .   \\
+          Y_t &= \alpha+Y_{t-1} + \epsilon_t= t \alpha+ Y_0 + \epsilon_1 + \epsilon_2 + \epsilon_3 +...+ \epsilon_t = t \alpha + Y_0 + \sum_{i=1}^{t} \epsilon_t
+\end{aligned}
+$$
+
+It has a *deterministic trend* $(Y_0 + t \alpha)$ and a *stochastic trend* $\sum_{i=1}^{t} \epsilon_t$.
+
+Mean: $E(Y_t) = Y_0 + t\alpha$
+
+Variance: $Var(Y_t) = t\sigma^2$.
+
+There is a trend in both mean and variance. 
+
+
+---
+
+# Simulate a random walk with drift
+
+```{r, fig.height=5}
+n <- 200
+error <- rnorm(n, sd=2)
+alpha <- 2
+y1 <- rep(0, n)
+for (i in seq.int(2, n)){
+  y1[i] <- alpha + y1[i-1] + error[i]
+}
+
+autoplot(as.ts(y1))
+```
+
+---
+## Common trend removal (de-trending) procedures
 
 1. Deterministic trend: Time-trend regression
 
@@ -55,40 +213,18 @@ $$Y_t = \alpha+  Y_{t-1} + \epsilon_t$$
  
       The process is also known as a **Difference-stationary process**.
 
-
-
----
-
-# Trend stationary time series
-
----
-
-# Difference stationary time series
-
---
       
 # Notation: I(d)
 
-Integrated to order $d$, $I(d)$:
-
-series can be made stationary by differencing $d$ times.
-
-
-
----
-
-# Difference stationary process: Random walk model (RW)
+Integrated to order $d$: Series can be made stationary by differencing $d$ times.
+ 
+ - Known as $I(d)$ process.
+ 
 
 **Question: ** Show that random walk process is an $I(1)$ process.
 
----
-
-# Deterministic trend + Stochastic trend: Random walk with drift (RWD)
-
-
----
-
-# Summary: RW vs RWD
+The random walk process is called a unit root process.
+(If one of the roots turns out to be one, then the process is called unit root process.)
 
 ---
 
@@ -479,6 +615,23 @@ class: duke-orange, center, middle
 Source: Forecasting: Principles and Practice, Rob J Hyndman and George Athanasopoulos
 
 ---
+# Step 0: Split time series into training and test sets
+
+```{r, comment=NA}
+training.ap <- window(AirPassengers, end=c(1957, 12))
+training.ap
+test.ap <- window(AirPassengers, start=c(1958, 1))
+test.ap
+```
+
+---
+
+```{r}
+autoplot(AirPassengers) 
+
+```
+
+---
 
 # Step 1: Plot data
 
@@ -500,7 +653,7 @@ Stationary series:
 
 .pull-left[
 ```{r, comment=NA, warning=FALSE, message=FALSE}
-autoplot(AirPassengers)
+autoplot(training.ap)
 ```
 ]
 
@@ -526,8 +679,8 @@ autoplot(AirPassengers)
 # Step 2: Apply transformations
 
 ```{r, comment=NA, warning=FALSE, fig.height=5, fig.width=5, message=FALSE}
-log.airpassenger <- log(AirPassengers)
-#log.airpassenger <- BoxCox(AirPassengers, lambda = 0)
+log.airpassenger <- log(training.ap)
+#log.airpassenger <- BoxCox(training.ap, lambda = 0)
 autoplot(log.airpassenger)
 
 ```
@@ -747,7 +900,7 @@ ur.kpss(log.airpassenger) %>% summary()
 ```
 
 ```{r, comment=NA}
-sdiff.log.airpassenger <- AirPassengers %>% log() %>% diff(lag=12)
+sdiff.log.airpassenger <- training.ap %>% log() %>% diff(lag=12)
 ur.kpss(sdiff.log.airpassenger) %>% summary()
 ```
 
@@ -877,4 +1030,267 @@ $\hat{Y}_{T+h|T}$: Forecast based on data uo to time $T$.
 
 <!--Since, true forecast error, no hat involved.-->
 
+---
+class: duke-orange, center, middle
 
+# Automated ARIMA algorithm: `auto.arima`
+
+---
+
+# Modelling steps: `auto.arima` 
+
+1. Plot the data.
+
+1. If necessary, transform the data (using a Box-Cox transformation) to stabilise the variance.
+
+1. ~~If the data are non-stationary, take first differences of the data until the data are stationary.~~
+
+1. ~~Examine the ACF/PACF to identify a suitable model.~~
+
+1. ~~Try your chosen model(s), and use the AICc to search for a better model.~~
+
+1. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
+
+1. Once the residuals look like white noise, calculate forecasts.
+
+---
+
+#  Modelling steps: `auto.arima`
+
+1. Plot the data.
+
+1. If necessary, transform the data (using a Box-Cox transformation) to stabilise the variance.
+
+1. **Use `auto.arima` to select a model.**
+
+1. Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
+
+1. Once the residuals look like white noise, calculate forecasts.
+
+---
+
+# `auto.arima` with AirPassenger 
+
+```{r, comment=NA}
+fit.auto.arima <- auto.arima(training.ap, lambda = 0)
+fit.auto.arima
+```
+
+Your turn:
+
+ > Check the residuals from your chosen model by plotting the ACF of the residuals, and doing a portmanteau test of the residuals. If they do not look like white noise, try a modified model.
+ 
+ > Calculate forecasts.
+
+---
+
+# Check the residuals
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+fit.auto.arima %>% checkresiduals()
+```
+
+---
+
+```{r, comment=NA, message=FALSE, fig.height=7}
+fit.auto.arima %>% residuals() %>% ggtsdisplay()
+```
+---
+
+### Change the number of lags and perform `Box.test` (optional)
+
+Note that in `fit.auto.arima %>% checkresiduals()` performed the test for 22 lags.
+
+```{r, comment=NA, message=FALSE}
+# lag=2m where m is the period of seasonality
+# https://robjhyndman.com/hyndsight/ljung-box-test/
+fit.auto.arima.resid <- fit.auto.arima %>% residuals()
+Box.test(fit.auto.arima.resid, lag = 24, type = "Ljung-Box")
+Box.test(fit.auto.arima.resid, lag = 24, type = "Box-Pierce")
+```
+---
+
+# Forecasting
+
+```{r, comment=NA, message=FALSE, fig.height=7}
+fit.auto.arima %>% forecast(h=36) %>% autoplot()
+```
+
+---
+
+## Structure of the forecasting output
+
+```{r, comment=NA, message=FALSE, fig.height=7}
+forecast.auto.arima <- fit.auto.arima %>% forecast(h=36) 
+str(forecast.auto.arima)
+
+```
+---
+
+# Extract forecasts
+
+```{r, comment=NA}
+forecast.auto.arima$mean
+head(forecast.auto.arima$lower, 3)
+head(forecast.auto.arima$upper, 3)
+```
+
+---
+
+# Plot true values and forecasts
+
+```{r, fig.height=5}
+forecast.auto.arima %>%
+  autoplot() +
+  geom_line(
+    aes(
+      x = as.numeric(time(test.ap)),
+      y = as.numeric(test.ap)
+    ),
+    col = "red")
+
+```
+
+---
+
+```{r, comment=NA, fig.height=4}
+ggplot() +
+  geom_line(
+    aes(
+      x = as.numeric(time(forecast.auto.arima$mean)),
+      y = as.numeric(forecast.auto.arima$mean)
+    ), col = "blue") +
+  geom_line(
+    aes(
+      x = as.numeric(time(test.ap)),
+      y = as.numeric(test.ap)
+    ), col = "red")
+```
+
+---
+
+## Forecast accuracy
+
+```{r, comment=NA, message=FALSE}
+accuracy(forecast.auto.arima, test.ap)
+```
+---
+
+## Multi-step ahead forecast
+
+```r
+fit.auto.arima %>% forecast(h=36)
+```
+
+This repeatedly feeds the **predicted data point** back into the prediction equation to get the next prediction.
+
+<!--Predict the next value. Fit that back to data and refit the original model(same parameter estimates) and then forecast the next. Next forecast is again feed back and refit the original model and predict the next.-->
+
+<!--Resources: https://stats.stackexchange.com/questions/217955/difference-between-first-one-step-ahead-forecast-and-first-forecast-from-fitted-->
+
+---
+## Apply already fit model to new data
+
+One-step ahead forecast: Continually updating the prediction equation with **new data**.
+
+
+```{r, comment=NA}
+air_model_test <- Arima(test.ap, model = fit.auto.arima)
+# Uses the same coef as the air_model. Nothing is actually "refit"
+coef(fit.auto.arima) # Model from auto.arima
+coef(air_model_test) # Refit the same model to test
+
+```
+
+---
+
+# Obtain one-step ahead forecast
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+one_step_forecasts <- fitted(air_model_test)
+one_step_forecasts
+```
+
+---
+
+# Comparison between one-step ahead forecasts and true values
+
+```{r, comment=NA, fig.height=4}
+ggplot() +
+  geom_line(
+    aes(
+      x = as.numeric(time(one_step_forecasts)),
+      y = as.numeric(one_step_forecasts)
+    ), col = "black") +
+  geom_line(
+    aes(
+      x = as.numeric(time(test.ap)),
+      y = as.numeric(test.ap)
+    ), col = "red")
+```
+
+---
+
+## Comparison of accuracy: Multi-step ahead vs one-step ahead
+
+```{r, comment=NA}
+accuracy(air_model_test) # One-step ahead
+accuracy(forecast.auto.arima, test.ap) # Multi-step ahead
+```
+
+---
+
+## Multi-step ahead vs One-step ahead
+
+.pull-left[
+
+# Multi-step
+
+
+```{r, comment=NA, echo=FALSE}
+ggplot() +
+  geom_line(
+    aes(
+      x = as.numeric(time(forecast.auto.arima$mean)),
+      y = as.numeric(forecast.auto.arima$mean)
+    ), col = "blue") +
+  geom_line(
+    aes(
+      x = as.numeric(time(test.ap)),
+      y = as.numeric(test.ap)
+    ), col = "red")
+```
+
+
+]
+
+.pull-right[
+
+# One-step ahead
+
+```{r, comment=NA, echo=FALSE}
+ggplot() +
+  geom_line(
+    aes(
+      x = as.numeric(time(one_step_forecasts)),
+      y = as.numeric(one_step_forecasts)
+    ), col = "black") +
+  geom_line(
+    aes(
+      x = as.numeric(time(test.ap)),
+      y = as.numeric(test.ap)
+    ), col = "red")
+```
+
+
+]
+
+blue - Multi-step ahead; black - One-step ahead; red - True values
+
+---
+
+class: center, middle
+
+
+
+All rights reserved by [Thiyanga S. Talagala](https://thiyanga.netlify.app/)
