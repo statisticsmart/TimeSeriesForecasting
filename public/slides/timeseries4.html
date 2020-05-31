@@ -121,17 +121,17 @@ background-size: contain
 
 ## Naive approach
 
-`$$\hat{y}_{t+h|t} = y_t$$`
+`$$\hat{Y}_{t+h|t} = y_t$$`
 
 
 ## Average method 
 
-`$$\hat{y}_{t+h|T} = \bar{y}=(y_1 + y_2 + ... + y_t)/t$$`
+`$$\hat{Y}_{t+h|t} = \bar{y}=(y_1 + y_2 + ... + y_t)/t$$`
 
 
 ## Exponential smoothing method
 
-`$$\hat{Y}_{t+1|t}=\alpha y_t + (1-\alpha) \hat{Y}_T$$`
+`$$\hat{Y}_{t+1|t}=\alpha y_t + (1-\alpha) \hat{Y}_t$$`
 
 where `\(0 &lt; \alpha &lt; 1\)`.
 
