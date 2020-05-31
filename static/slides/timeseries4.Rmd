@@ -173,7 +173,7 @@ The $\alpha$ producing the smallest forecast error is chosen for use in calculat
 
 Period| $\alpha=0.1$| $\alpha=0.6$ 
 ---|:---:|:---:|
-$t$| $.100$ | $.900$
+$t$| $.100$ | $.600$
 $t-1$| $.9 \times .1=.090$ | $.4 \times .6=.240$
 $t-2$| $.9 \times .9 \times .1=.081$ | $.4 \times.4 \times .6=.096$
 $t-3$| $.9 \times .9 \times .9 \times .1=.073$ | $.4 \times .4 \times.4 \times .6=.038$
