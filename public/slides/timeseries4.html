@@ -218,6 +218,19 @@ minimizing SSE
 
 ---
 
+# Example
+
+Calculate forecasts for 2020 and 2021.
+
+`$$y_{2019}=92.04$$`
+
+`$$\hat{Y}_{2019}=86.46$$`
+
+Find `\(\hat{Y}_{2020}\)` and  `\(\hat{Y}_{2021}\)` when `\(\alpha=0.04\)`.
+
+
+---
+
 # Example: oil production
 
 
@@ -306,7 +319,7 @@ ses.fcast %&gt;%
 ---
 class: duke-orange, center, middle
 
-# ExponenTial Smoothing Models (ETS models)
+# Exponential Smoothing Models
 
 ## Trend Methods
 
@@ -330,8 +343,8 @@ class: duke-orange, center, middle
 
 **Smoothing parameters**
 
-`$$0 \leq \alpha$$`
-`$$\beta^{*} \leq 1$$`
+`$$0 \leq \alpha \leq 1$$`
+`$$0 \leq \beta^{*} \leq 1$$`
 Choose `\(\alpha\)`, `\(\beta^{*}\)`, `\(l_0\)` and `\(b_0\)` minimizing SSE.
 ---
 # Example: Sri Lanka GDP
@@ -458,7 +471,7 @@ autoplot(slgdp.ts) + xlab("Year") + ylab("GDP")+
 ---
 class: duke-orange, center, middle
 
-# ExponenTial Smoothing Models (ETS models)
+# Exponential Smoothing Models 
 
 ## Trend + Seasonal 
 
@@ -810,8 +823,9 @@ class: duke-orange, center, middle
 # Automated ETS algorithm
 
 ![](ETS_taxonomy.png)
+30 models `\(\rightarrow\)` 19 numerically stable $\rightarrow$15 models (multiplicative trend gives poor forecast)
 
-The steps involved are summarised below [@Hyndman2008]:
+The steps involved are summarised below [Hyndman et al., 2008]:
 
 1. For each series, apply each of the 15 models that are appropriate for the data.
 
@@ -918,12 +932,12 @@ accuracy(auto.ets.fcast, AirPassengers.test)
 ```
 
 ```
-##                     ME      RMSE       MAE       MPE     MAPE      MASE
-## Training set  1.511141  9.353686  6.980909 0.4422335 2.761156 0.2292581
-## Test set     12.084843 27.398040 22.804502 2.0517668 4.655647 0.7489163
-##                   ACF1 Theil's U
-## Training set 0.0457192        NA
-## Test set     0.4844065 0.5419859
+                    ME      RMSE       MAE       MPE     MAPE      MASE
+Training set  1.511141  9.353686  6.980909 0.4422335 2.761156 0.2292581
+Test set     12.084843 27.398040 22.804502 2.0517668 4.655647 0.7489163
+                  ACF1 Theil's U
+Training set 0.0457192        NA
+Test set     0.4844065 0.5419859
 ```
 
 *Previous results: Holt-Winters' additive method and Holt-Winters' multiplicative method*

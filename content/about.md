@@ -53,13 +53,7 @@ ________________________________________________________________________________
 
 📈 [Slides](/slides/timeseries4.html) 📚 [Reading](https://otexts.com/fpp2/expsmooth.html) 📋 [Exercises](https://otexts.com/fpp2/expsmooth.html)
 
-**Week 6: Dynamic regression models**
-
-
-📈 Slides 📚 Reading 📋 Exercises
-
-**Week 7: Advanced forecasting methods**
-
+**Week 6: Dynamic regression models and Advanced forecasting methods**
 
 📈 Slides 📚 Reading 📋 Exercises
 
