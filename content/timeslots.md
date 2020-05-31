@@ -25,4 +25,6 @@ Week 5:  `29 March 2020, 2pm - 5pm`*
 
 `11 April 2020: 2pm - 4pm` 
 
-`5 May 2020: 1pm - 5pm`
+`5 May 2020: 1pm - 4pm`
+
+`31 May 2020: 2pm - 4pm`

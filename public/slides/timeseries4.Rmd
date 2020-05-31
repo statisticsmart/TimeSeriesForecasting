@@ -1,7 +1,7 @@
 ---
 title: "IM532 3.0 Applied Time Series Forecasting"
-subtitle: "MSc in Industrial Mathematics"
-author: "Thiyanga Talagala"
+subtitle: "Exponential Smoothing Method"
+author: "Dr Thiyanga Talagala"
 date: "31 May 2020"
 output:
   xaringan::moon_reader:
@@ -79,20 +79,34 @@ To transform from multiplicative to additive, you can use a Box-Cox transformati
 
 .pull-left[
 
-## `AirPassengers`
+## Multiplicative
+
+`AirPassengers`
 
 
 ```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
 library(forecast)
 library(fpp2)
-fit <- stl(AirPassengers, s.window = 12)
-autoplot(fit)
+fit1 <- stl(AirPassengers, s.window = 12)
+autoplot(fit1)
 ```
 
 
 ]
 
 .pull-right[
+
+## Additive
+
+`log(AirPassengers)`
+
+```{r, comment=NA, message=FALSE, warning=FALSE, echo=FALSE}
+library(forecast)
+library(fpp2)
+fit2 <- stl(log(AirPassengers), s.window = 12)
+autoplot(fit2)
+```
+
 
 
 ]
@@ -145,6 +159,8 @@ $\alpha$ - smoothing constant
 Continued substitution for $\hat{Y}_{t-1}$ and so forth shows $\hat{Y}_{t+1}$ can be written as a sum of current and previous $y$'s with exponentially declining weights.
 
 $$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}+\alpha(1-\alpha)^3y_{t-3}+...$$
+$\hat{Y}_{t+1}$ is an exponentially smoothed value.
+
 --
 The speed at which past observations lose their impact depends on the value of $\alpha$.
 
@@ -180,22 +196,21 @@ $$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}
 
 ---
 
-# Example 
-
-
----
-
 # Single Exponential Smoothing (SES)
+
+- Suitable when data has no clear trend or seasonal pattern.
 
 ## Component form
 
 **Forecasting equation**
 
-$$\hat{Y}_{t+1|t}=l_t$$
+$$\hat{Y}_{t+h|t}=l_t$$
 
 **Smoothing equation**
 
 $$l_t=\alpha y_{t} + (1-\alpha)l_{t-1}$$
+
+$l_t$ - level (or smoothed value) at time $t$
 
 ## Weighted average form
 
@@ -205,13 +220,49 @@ $$\hat{Y}_{t+1|t}=\sum_{j=0}^{t-1} \alpha (1-\alpha)^j y_{t-j} + (1-\alpha)^tl_0
 
 # How to find $\alpha$ and $l_0$?
 
-minimum SSE 
+minimizing SSE 
 
 $$SSE = \sum_{t=1}^T (y_t - \hat{Y}_{t|t-1})^2=\sum_{t=1}^{T}e_t^2$$
 
 ---
 
-# Example 
+# Example: oil production
+
+```{r, echo=FALSE}
+library(forecast)
+library(fpp2)
+library(magrittr)
+```
+
+```{r, comment=NA}
+# forecast, fpp2
+autoplot(oil)
+```
+
+---
+# Example: oil production (cont.)
+
+
+```{r, comment=NA}
+oil1996 <- window(oil, start = 1996)
+ses.fcast <- ses(oil1996, h=5)
+ses.fcast
+```
+---
+
+# Example: oil production (cont.)
+
+```{r, comment=NA}
+summary(ses.fcast)
+```
+---
+# Example: oil production (cont.)
+
+```{r, comment=NA, fig.height=6}
+ses.fcast %>%
+  autoplot() +
+  ylab("Oil production (millions of tonnes)") + xlab("Year")
+```
 
 ---
 class: duke-orange, center, middle
@@ -225,26 +276,355 @@ class: duke-orange, center, middle
 
 # Holt's linear trend
 
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t + hb_t$$
+
+**Smoothing equation**
+
+$$l_t=\alpha y_{t} + (1-\alpha)(l_{t-1}-b_{t-1})$$
+**Trend**
+
+$$b_t=\beta^{*}(l_t - l_{t-1})+(1-\beta^*)b_{t-1}$$
+
+**Smoothing parameters**
+
+$$0 \leq \alpha$$
+$$\beta^{*} \leq 1$$
+Choose $\alpha$, $\beta^{*}$, $l_0$ and $b_0$ minimizing SSE.
+---
+# Example: Sri Lanka GDP
+
+```{r, comment=NA, fig.height=6}
+slgdp <- c(56.73, 65.29, 68.43, 74.32, 79.36, 80.6, 82.4, 88.02, 88.9, 91)
+slgdp.ts <- ts(slgdp, start=2010)
+autoplot(slgdp.ts)+ggtitle("Sri Lanka GDP")
+```
+
+
+---
+# Example: Sri Lanka GDP (cont)
+
+```{r, comment=NA, fig.height=6}
+fcast.holt <- slgdp.ts %>% holt(h=5)
+fcast.holt
+```
+
+```{r, comment=NA, fig.height=4}
+fcast.holt %>% autoplot()
+```
+
+---
+# Example: Sri Lanka GDP (cont)
+
+```{r, comment=NA, fig.height=6, fig.height=5}
+summary(fcast.holt)
+```
+
 ---
 
 # Damped trend method
 
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t + (\phi+\phi^2+...+\phi^h)$$
+
+**Smoothing equation**
+
+$$l_t=\alpha y_{t} + (1-\alpha)(l_{t-1}-\phi b_{t-1})$$
+**Trend**
+
+$$b_t=\beta^{*}(l_t - l_{t-1})+(1-\beta^*)\phi b_{t-1}$$
+
+Damping parameter: $0 < \phi < 1$.
+
+If $\phi=1$, identical to Holt's linear trend.
+
+
+<!--Short-run forecasts trended, long-run forecasts constant-->
+
+---
+# Example
+
+```{r, comment=NA, fig.height=5}
+fcast_holt <- slgdp.ts %>% holt(h=7)
+fcast_holt_damped <- slgdp.ts %>% holt(h=7, damped = TRUE)
+autoplot(slgdp.ts) + xlab("Year") + ylab("GDP")+
+  autolayer(fcast.holt, series="Linear trend")+
+  autolayer(fcast_holt_damped, series="Damped trend")
+```
 ---
 class: duke-orange, center, middle
 
 # ExponenTial Smoothing Models (ETS models)
 
-## Seasonal Methods
+## Trend + Seasonal 
 
+---
+
+# Holt-Winters' additive method
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t+hb_t+s_{t-m+h_m^+}$$
+
+**Smoothing equation**
+
+$$l_t=\alpha(y_t-s_{t-m})+(1-\alpha)(l_{t-1}+b_{t-1})$$
+$$b_t=\beta^*(l_t-l_{t-1})+(1-\beta^*)b_{t-1}$$
+$$s_t=\gamma(y_t-l_{t-1}-b_{t-1})+(1-\gamma)s_{t-m}$$
+- $s_{t-1+h_m^+}$ - seasonal component from last year of data
+
+- Smoothing parameters:
+
+$0 \leq \alpha \leq 1$, $0 \leq \beta^* \leq 1$ and $0 \leq \gamma \leq 1-\alpha$
+
+- m: seasonal period
+
+<!--seasonal component averages zero-->
+---
+
+# Holt-Winters' multiplicative method
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=(l_t+hb_t)s_{t-m+h_m^+}$$
+
+**Smoothing equation**
+
+$$l_t=\alpha \frac{y_t}{s_{t-m}}+(1-\alpha)(l_{t-1}+b_{t-1})$$
+$$b_t=\beta^*(l_t-l_{t-1})+(1-\beta^*)b_{t-1}$$
+$$s_t=\gamma \frac{y_t}{(l_{t-1}+b_{t-1})}+(1-\gamma)s_{t-m}$$
+- $s_{t-1+h_m^+}$ - seasonal component from last year of data
+
+- Smoothing parameters:
+
+$0 \leq \alpha \leq 1$, $0 \leq \beta^* \leq 1$ and $0 \leq \gamma \leq 1-\alpha$
+
+- m: seasonal period
+
+---
+# Example 
+
+```{r, comment=NA, message=FALSE}
+AirPassengers.trn <- window(AirPassengers, end=c(1959, 12))
+fcast.additive <- hw(AirPassengers.trn, seasonal="additive", h=12)
+fcast.multiplicative <- hw(AirPassengers.trn, seasonal="multiplicative", 
+                           h=12)
+```
+
+```{r, comment=NA}
+fcast.additive
+```
+---
+# Example (cont.)
+
+```{r, comment=NA}
+fcast.multiplicative
+```
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+summary(fcast.additive)
+summary(fcast.multiplicative)
+```
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+summary(fcast.multiplicative)
+```
+
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+AirPassengers.test <- window(AirPassengers, start=1960)
+accuracy(fcast.additive, AirPassengers.test)
+accuracy(fcast.multiplicative, AirPassengers.test)
+```
+
+---
+# Example (cont.)
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE}
+autoplot(AirPassengers) + xlab("Time") + ylab("Total")
+
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+fcast.additive.no.PI <- hw(AirPassengers.trn, seasonal="additive", h=12, PI=FALSE)
+fcast.multiplicative.no.PI <- hw(AirPassengers.trn, seasonal="multiplicative", 
+                           h=12, PI=FALSE)
+autoplot(AirPassengers) + xlab("Time") + ylab("Total")+
+  autolayer(fcast.additive.no.PI, series="HW additive")+
+  autolayer(fcast.multiplicative.no.PI, series="HW multiplicative")
+
+```
+]
 ---
 
 class: duke-orange, center, middle
 
-# Taxonomy
+# Taxonomy of ETS methods
 
+---
+## Taxonomy of ETS methods
+
+![](ETS_taxonomy.png)
+
+*Trend*
+
+$(N, N)$: Simple exponential smoothing - `ses()`
+
+$(A, N)$: Holt's linear method - `holt()`
+
+$(A_d, N)$: Additive damped trend method - `hw()`
+
+*Trend+Seasonal*
+
+$(A, A)$: Additive Holt-Winter's method - `hw()`
+
+$(A, M)$: Multiplicative Holt-Winter's method - `hw()`
+
+$(A_d, M)$: Damped Multiplicative Holt-Winter's method - `hw()`
+---
+# Innovations state space models
+
+- [Error, Trend, Seasonal]
+
+    - Error: ${Additive-A, Multiplicative-M}$
+    
+    - Trend: ${No trend-N, Trend-A, Damped trend - A_d}$
+    
+    - Seasonal: ${No seasonal - N, Additive- A, Multiplicative _ M}$
+    
+- Example:
+
+$ETS(A, A, A)$
+
+---
+
+# Automated ETS algorithm
+
+![](ETS_taxonomy.png)
+
+The steps involved are summarised below [@Hyndman2008]:
+
+1. For each series, apply each of the 15 models that are appropriate for the data.
+
+2. For each model, optimise the parameters (smoothing parameters and initial values for the states) using maximum likelihood estimation.
+
+    - For models with additive errors, this is equivalent to minimizing SSE.
+
+3. Select the best model using the corrected Akaike's Information Criterion (AICc) and produce forecasts using the best selected model.
 ---
 class: duke-orange, center, middle
 
 # Automated ETS algorithm in R
+---
 
+# Automated ETS algorithm in R
 
+```{r, comment=NA}
+ets.auto <- ets(AirPassengers.trn)
+ets.auto
+```
+---
+
+# Automated ETS algorithm in R (cont.)
+
+```{r, comment=NA}
+auto.ets.fcast <- forecast(ets.auto, h=12)
+auto.ets.fcast
+```
+
+---
+# Automated ETS algorithm in R (cont.)
+
+```{r, comment=NA}
+auto.ets.fcast %>% autoplot()
+```
+---
+# Automated ETS algorithm in R (cont.)
+
+```{r}
+accuracy(auto.ets.fcast, AirPassengers.test)
+```
+
+---
+## Comparison
+
+```{r}
+accuracy(auto.ets.fcast, AirPassengers.test)
+```
+
+*Previos results: Holt-Winters' additive method and Holt-Winters' multiplicative method*
+
+```{r, comment=NA}
+accuracy(fcast.additive, AirPassengers.test)
+accuracy(fcast.multiplicative, AirPassengers.test)
+```
+---
+
+# Check Residuals
+
+```{r, comment=NA, fig.height=4}
+checkresiduals(ets.auto)
+```
+---
+
+# Check Residuals (cont.)
+
+```{r, comment=NA, fig.height=4}
+checkresiduals(fcast.additive)
+```
+---
+# Check Residuals (cont.)
+
+```{r, comment=NA, fig.height=4}
+checkresiduals(fcast.multiplicative)
+```
+---
+
+class: duke-orange, center, middle
+
+# Your turn
+
+Identify a suitable ETS to forecast Australian air traffic data.
+
+```{r, comment=NA, fig.height=5}
+autoplot(ausair)
+```
+
+---
+
+```{r, comment=NA}
+ausair
+```
+
+```{r, comment=NA}
+ausair.tr <- window(ausair, end=2011)
+ausair.tr
+```
+---
+```{r, comment=NA}
+ausair.test <- window(ausair, start=2012)
+ausair.test
+```

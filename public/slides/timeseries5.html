@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>IM532 3.0 Applied Time Series Forecasting</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Thiyanga Talagala" />
-    <meta name="date" content="2020-03-08" />
+    <meta name="date" content="2020-05-20" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,110 +17,12 @@
 class: center, middle, inverse, title-slide
 
 # IM532 3.0 Applied Time Series Forecasting
-## MSc in Industrial Mathematics
+## Dynamic Regression Models - Part 1
 ### Dr. Thiyanga Talagala
-### 8 March 2020
+### 20 May 2020
 
 ---
 
-
-
-# Hierarchical time series
-
-- Forecasting time series that are hierarchical in structure
-
-- Clusters of time sereis may be correlated.
-
----
-
-# Notation for hierarchical forecasting
-
-## Aggregated series and Disaggregated series
-
----
-exclude: true
-
-# Importance of modelling the entire hierarchy of time series simultaneously.
-
-- The verious components of the hierarchy can interact in varying and complex ways. 
-
-- A change in one series at one level, can have a consequential impact on oter series at the same level, as well as series at higher and lower levels. 
-
-- Current forecasting methodology for hierarchical systems has not attempted to model this complex behaviour at all. By modelling the entire hierarchy of time series simultaneouly, we will obtain better forecasts of the component series. 
-
----
-
-class: middleclass, duke-blue
-
-# Approaches of Forecasting Hierarchical Time Series
-
-1. top-down
-
-2. bottom-up
-
-3. combination of top-down and bottom-up (sometimes called "middle-out")
-
-
----
-
-# Top-down approach
-
-1. Forecasting the compeletely aggregated time series.
-
-2. Disaggregating the forecasts based on historical proportions.
-
-3. Different ways of choosing proportions (Gross and Sohl, 1990)
-
----
-
-# Bottom-up approach
-
-1. Forecasting each of the disaggregated series at the lowest level of the hierarchy.
-
-2. Aggregate the time series.
-
-
----
-
-# Middle-out approach
-
-
-1. Forecast are obtained for each series at an intermediate level of the hierarchy.
-
-2.  Then,
-
-      - Aggregate - to obtain forecasts at higher levels.
-
-      - Disaggregate - obtain forecasts at lower levels.
-
-
----
-
-exclude: true
-
-
-Of course, it is also possible to forecast all series at all levels independently, but this has the undesirable consequence of the higher level forecasts not being equal to the sum of the lower level forecasts. Consequently, if this method is used, some adjustment is then carried out to ensure the forecasts add upp appropriately.  These adjustments are usually done in an ad hoc manner.
-
-
-- An early contribution was Grunfeld and Griliches (1960) who argued that the disaggregated data are arror-prone and that **top-down forecasts may therefore be more accurate**.
-
----
-
-# Limitations 
-
-- Does not take account of the inherent correlation structure of the hierarchy. 
-
-- Does not take account of the covariance structure of the component series.
-
-- Difficult to obtain prediction intervals.
-
----
-
-# Notations
-
-## Aggregate of all series at time t
-
-`$$Y_t=\sum_i Y_{i, t}$$`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -168,6 +70,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -185,17 +113,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {
