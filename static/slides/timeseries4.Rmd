@@ -575,7 +575,7 @@ accuracy(auto.ets.fcast, AirPassengers.test)
 accuracy(auto.ets.fcast, AirPassengers.test)
 ```
 
-*Previos results: Holt-Winters' additive method and Holt-Winters' multiplicative method*
+*Previous results: Holt-Winters' additive method and Holt-Winters' multiplicative method*
 
 ```{r, comment=NA}
 accuracy(fcast.additive, AirPassengers.test)
