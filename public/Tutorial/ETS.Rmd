@@ -1,0 +1,29 @@
+---
+title: "ETS_exercise"
+author: "Thiyanga Talagala"
+date: "31/05/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(forecast)
+library(fpp2)
+```
+
+```{r, comment=NA}
+ausair.tr <- window(ausair, end=2011)
+ausair.tr
+ausair.test <- window(ausair, start=2012)
+ausair.test
+```
+
+```{r}
+autoplot(ausair.tr)
+ets(ausair.tr)
+```
+
+```{}
