@@ -1,8 +1,8 @@
 ---
 title: "IM532 3.0 Applied Time Series Forecasting"
-subtitle: "MSc in Industrial Mathematics"
-author: "Thiyanga Talagala"
-date: ""
+subtitle: "Exponential Smoothing Method"
+author: "Dr Thiyanga Talagala"
+date: "31 May 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -79,18 +79,6 @@ To transform from multiplicative to additive, you can use a Box-Cox transformati
 
 .pull-left[
 
-
-]
-
-.pull-right[
-
-
-]
-
----
-
-<!--Variation of seasonality change over time.-->
-
 ## `AirPassengers`
 
 
@@ -101,4 +89,410 @@ fit <- stl(AirPassengers, s.window = 12)
 autoplot(fit)
 ```
 
+
+]
+
+.pull-right[
+
+
+]
+
 ---
+class: duke-orange, center, middle
+
+# ExponenTial Smoothing Models (ETS models)
+
+---
+
+background-image: url('ETS.png')
+background-position: center
+background-size: contain
+
+
+---
+
+# Introduction
+
+## Naive approach
+
+$$\hat{y}_{t+h|t} = y_t$$
+
+
+## Average method 
+
+$$\hat{y}_{t+h|T} = \bar{y}=(y_1 + y_2 + ... + y_t)/t$$
+
+
+## Exponential smoothing method
+
+$$\hat{Y}_{t+1|t}=\alpha y_t + (1-\alpha) \hat{Y}_T$$
+
+where $0 < \alpha < 1$.
+
+$$\text{New forecast} = [\alpha \times \text{New observed value}] + [(1-\alpha) \times \text{Previous forecast}]$$
+$\alpha$ - smoothing constant
+---
+
+# Exponential Smoothing Method
+
+
+\begin{eqnarray}
+\hat{Y}_{t+1|t} & = & \alpha y_t + (1-\alpha) \hat{Y}_t\\
+& = & \alpha y_t + (1-\alpha)[\alpha y_{t-1} + (1-\alpha)\hat{Y}_{t-1}]\\
+& = & \alpha y_t + \alpha (1-\alpha) y_{t-1} + (1-\alpha)^2\hat{Y}_{t-1}
+\end{eqnarray}
+--
+Continued substitution for $\hat{Y}_{t-1}$ and so forth shows $\hat{Y}_{t+1}$ can be written as a sum of current and previous $y$'s with exponentially declining weights.
+
+$$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}+\alpha(1-\alpha)^3y_{t-3}+...$$
+$\hat{Y}_{t+1}$ is an exponentially smoothed value.
+
+--
+The speed at which past observations lose their impact depends on the value of $\alpha$.
+
+--
+The $\alpha$ producing the smallest forecast error is chosen for use in calculating future forecasts.
+
+---
+
+# Comparison of different values for $\alpha$
+
+Period| $\alpha=0.1$| $\alpha=0.6$ 
+---|:---:|:---:|
+$t$| $.100$ | $.900$
+$t-1$| $.9 \times .1=.090$ | $.4 \times .6=.240$
+$t-2$| $.9 \times .9 \times .1=.081$ | $.4 \times.4 \times .6=.096$
+$t-3$| $.9 \times .9 \times .9 \times .1=.073$ | $.4 \times .4 \times.4 \times .6=.038$
+$t-4$| $.9 \times .9 \times .9 \times .9 \times .1=.066$ | $.4 \times .4 \times .4 \times .4 \times .6=.015$
+$.$| $.$ | $.$
+$.$| $.$ | $.$
+$.$| $.$ | $.$
+
+--
+
+**Factors that affects the values of forecasts**
+
+$$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}+\alpha(1-\alpha)^3y_{t-3}+...$$
+
+- choice of $\alpha$
+
+- initial value $y_t$
+
+<!--The influence of the initial forecast diminishes greatly as t increases.-->
+
+---
+
+# Single Exponential Smoothing (SES)
+
+- Suitable when data has no clear trend or seasonal pattern.
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t$$
+
+**Smoothing equation**
+
+$$l_t=\alpha y_{t} + (1-\alpha)l_{t-1}$$
+
+$l_t$ - level (or smoothed value) at time $t$
+
+## Weighted average form
+
+$$\hat{Y}_{t+1|t}=\sum_{j=0}^{t-1} \alpha (1-\alpha)^j y_{t-j} + (1-\alpha)^tl_0$$
+
+---
+
+# How to find $\alpha$ and $l_0$?
+
+minimizing SSE 
+
+$$SSE = \sum_{t=1}^T (y_t - \hat{Y}_{t|t-1})^2=\sum_{t=1}^{T}e_t^2$$
+
+---
+
+# Example: oil production
+
+```{r, echo=FALSE}
+library(forecast)
+library(fpp2)
+library(magrittr)
+```
+
+```{r, comment=NA}
+# forecast, fpp2
+autoplot(oil)
+```
+
+---
+# Example: oil production (cont.)
+
+
+```{r, comment=NA}
+oil1996 <- window(oil, start = 1996)
+ses.fcast <- ses(oil1996, h=5)
+ses.fcast
+```
+---
+
+# Example: oil production (cont.)
+
+```{r, comment=NA}
+summary(ses.fcast)
+```
+---
+# Example: oil production (cont.)
+
+```{r, comment=NA, fig.height=6}
+ses.fcast %>%
+  autoplot() +
+  ylab("Oil production (millions of tonnes)") + xlab("Year")
+```
+
+---
+class: duke-orange, center, middle
+
+# ExponenTial Smoothing Models (ETS models)
+
+## Trend Methods
+
+
+---
+
+# Holt's linear trend
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t + hb_t$$
+
+**Smoothing equation**
+
+$$l_t=\alpha y_{t} + (1-\alpha)(l_{t-1}-b_{t-1})$$
+**Trend**
+
+$$b_t=\beta^{*}(l_t - l_{t-1})+(1-\beta^*)b_{t-1}$$
+
+**Smoothing parameters**
+
+$$0 \leq \alpha$$
+$$\beta^{*} \leq 1$$
+Choose $\alpha$, $\beta^{*}$, $l_0$ and $b_0$ minimizing SSE.
+---
+# Example: Sri Lanka GDP
+
+```{r, comment=NA, fig.height=6}
+slgdp <- c(56.73, 65.29, 68.43, 74.32, 79.36, 80.6, 82.4, 88.02, 88.9, 91)
+slgdp.ts <- ts(slgdp, start=2010)
+autoplot(slgdp.ts)+ggtitle("Sri Lanka GDP")
+```
+
+
+---
+# Example: Sri Lanka GDP (cont)
+
+```{r, comment=NA, fig.height=6}
+fcast.holt <- slgdp.ts %>% holt(h=5)
+fcast.holt
+```
+
+```{r, comment=NA, fig.height=4}
+fcast.holt %>% autoplot()
+```
+
+---
+# Example: Sri Lanka GDP (cont)
+
+```{r, comment=NA, fig.height=6, fig.height=5}
+summary(fcast.holt)
+```
+
+---
+
+# Damped trend method
+
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t + (\phi+\phi^2+...+\phi^h)$$
+
+**Smoothing equation**
+
+$$l_t=\alpha y_{t} + (1-\alpha)(l_{t-1}-\phi b_{t-1})$$
+**Trend**
+
+$$b_t=\beta^{*}(l_t - l_{t-1})+(1-\beta^*)\phi b_{t-1}$$
+
+Damping parameter: $0 < \phi < 1$.
+
+If $\phi=1$, identical to Holt's linear trend.
+
+
+<!--Short-run forecasts trended, long-run forecasts constant-->
+
+---
+# Example
+
+```{r, comment=NA, fig.height=5}
+fcast_holt <- slgdp.ts %>% holt(h=7)
+fcast_holt_damped <- slgdp.ts %>% holt(h=7, damped = TRUE)
+autoplot(slgdp.ts) + xlab("Year") + ylab("GDP")+
+  autolayer(fcast.holt, series="Linear trend")+
+  autolayer(fcast_holt_damped, series="Damped trend")
+```
+---
+class: duke-orange, center, middle
+
+# ExponenTial Smoothing Models (ETS models)
+
+## Trend + Seasonal 
+
+---
+
+# Holt-Winters' additive method
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=l_t+hb_t+s_{t-m+h_m^+}$$
+
+**Smoothing equation**
+
+$$l_t=\alpha(y_t-s_{t-m})+(1-\alpha)(l_{t-1}+b_{t-1})$$
+$$b_t=\beta^*(l_t-l_{t-1})+(1-\beta^*)b_{t-1}$$
+$$s_t=\gamma(y_t-l_{t-1}-b_{t-1})+(1-\gamma)s_{t-m}$$
+- $s_{t-1+h_m^+}$ - seasonal component from last year of data
+
+- Smoothing parameters:
+
+$0 \leq \alpha \leq 1$, $0 \leq \beta^* \leq 1$ and $0 \leq \gamma \leq 1-\alpha$
+
+- m: seasonal period
+
+<!--seasonal component averages zero-->
+---
+
+# Holt-Winters' multiplicative method
+
+## Component form
+
+**Forecasting equation**
+
+$$\hat{Y}_{t+h|t}=(l_t+hb_t)s_{t-m+h_m^+}$$
+
+**Smoothing equation**
+
+$$l_t=\alpha \frac{y_t}{s_{t-m}}+(1-\alpha)(l_{t-1}+b_{t-1})$$
+$$b_t=\beta^*(l_t-l_{t-1})+(1-\beta^*)b_{t-1}$$
+$$s_t=\gamma \frac{y_t}{(l_{t-1}+b_{t-1})}+(1-\gamma)s_{t-m}$$
+- $s_{t-1+h_m^+}$ - seasonal component from last year of data
+
+- Smoothing parameters:
+
+$0 \leq \alpha \leq 1$, $0 \leq \beta^* \leq 1$ and $0 \leq \gamma \leq 1-\alpha$
+
+- m: seasonal period
+
+---
+# Example 
+
+```{r, comment=NA, message=FALSE}
+AirPassengers.trn <- window(AirPassengers, end=c(1959, 12))
+fcast.additive <- hw(AirPassengers.trn, seasonal="additive", h=12)
+fcast.multiplicative <- hw(AirPassengers.trn, seasonal="multiplicative", 
+                           h=12)
+```
+
+```{r, comment=NA}
+fcast.additive
+```
+---
+# Example (cont.)
+
+```{r, comment=NA}
+fcast.multiplicative
+```
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+summary(fcast.additive)
+summary(fcast.multiplicative)
+```
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+summary(fcast.multiplicative)
+```
+
+
+---
+# Example (cont.)
+
+```{r, comment=NA}
+AirPassengers.test <- window(AirPassengers, start=1960)
+accuracy(fcast.additive, AirPassengers.test)
+accuracy(fcast.multiplicative, AirPassengers.test)
+```
+
+---
+# Example (cont.)
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE}
+autoplot(AirPassengers) + xlab("Time") + ylab("Total")
+
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+fcast.additive.no.PI <- hw(AirPassengers.trn, seasonal="additive", h=12, PI=FALSE)
+fcast.multiplicative.no.PI <- hw(AirPassengers.trn, seasonal="multiplicative", 
+                           h=12, PI=FALSE)
+autoplot(AirPassengers) + xlab("Time") + ylab("Total")+
+  autolayer(fcast.additive.no.PI, series="HW additive")+
+  autolayer(fcast.multiplicative.no.PI, series="HW multiplicative")
+
+```
+]
+---
+
+class: duke-orange, center, middle
+
+# Taxonomy of ETS methods
+
+---
+# Taxonomy of ETS methods
+
+![](ETS_taxonomy.png)
+
+(N, N): Simple exponential smoothing - `ses()`
+
+(A, N): Holt's linear method - `holt()`
+
+---
+
+
+
+The steps involved are summarised below [@Hyndman2008]:
+
+1. For each series, apply each of the 15 models that are appropriate for the data.
+
+2. For each model, optimise the parameters (smoothing parameters and initial values for the states) using maximum likelihood estimation.
+
+3. Select the best model using the corrected Akaike's Information Criterion (AICc) and produce forecasts using the best selected model.
+---
+class: duke-orange, center, middle
+
+# Automated ETS algorithm in R
+
+

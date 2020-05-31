@@ -51,7 +51,7 @@ ________________________________________________________________________________
 **Week 5: Forecasting with Exponential smoothing models**
 
 
-📈 Slides 📚 Reading 📋 Exercises
+📈 [Slides](/slides/timeseries4.html) 📚 Reading 📋 Exercises
 
 **Week 6: Dynamic regression models**
 

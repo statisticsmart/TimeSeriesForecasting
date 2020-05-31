@@ -18,7 +18,6 @@ class: center, middle, inverse, title-slide
 # IM532 3.0 Applied Time Series Forecasting
 ## MSc in Industrial Mathematics
 ### Thiyanga Talagala
-### Time Series Decomposition
 
 ---
 
@@ -80,6 +79,11 @@ To transform from multiplicative to additive, you can use a Box-Cox transformati
 
 .pull-left[
 
+## `AirPassengers`
+
+
+![](timeseries4_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
 
 ]
 
@@ -89,15 +93,154 @@ To transform from multiplicative to additive, you can use a Box-Cox transformati
 ]
 
 ---
+class: duke-orange, center, middle
 
-&lt;!--Variation of seasonality change over time.--&gt;
-
-## `AirPassengers`
-
-
-![](timeseries4_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+# ExponenTial Smoothing Models (ETS models)
 
 ---
+
+background-image: url('ETS.png')
+background-position: center
+background-size: contain
+
+
+---
+
+# Introduction
+
+## Naive approach
+
+`$$\hat{y}_{t+h|t} = y_t$$`
+
+
+## Average method 
+
+`$$\hat{y}_{t+h|T} = \bar{y}=(y_1 + y_2 + ... + y_t)/t$$`
+
+
+## Exponential smoothing method
+
+`$$\hat{Y}_{t+1|t}=\alpha y_t + (1-\alpha) \hat{Y}_T$$`
+
+where `\(0 &lt; \alpha &lt; 1\)`.
+
+`$$\text{New forecast} = [\alpha \times \text{New observed value}] + [(1-\alpha) \times \text{Previous forecast}]$$`
+`\(\alpha\)` - smoothing constant
+---
+
+# Exponential Smoothing Method
+
+
+`\begin{eqnarray}
+\hat{Y}_{t+1|t} &amp; = &amp; \alpha y_t + (1-\alpha) \hat{Y}_t\\
+&amp; = &amp; \alpha y_t + (1-\alpha)[\alpha y_{t-1} + (1-\alpha)\hat{Y}_{t-1}]\\
+&amp; = &amp; \alpha y_t + \alpha (1-\alpha) y_{t-1} + (1-\alpha)^2\hat{Y}_{t-1}
+\end{eqnarray}`
+--
+Continued substitution for `\(\hat{Y}_{t-1}\)` and so forth shows `\(\hat{Y}_{t+1}\)` can be written as a sum of current and previous `\(y\)`'s with exponentially declining weights.
+
+`$$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}+\alpha(1-\alpha)^3y_{t-3}+...$$`
+--
+The speed at which past observations lose their impact depends on the value of `\(\alpha\)`.
+
+--
+The `\(\alpha\)` producing the smallest forecast error is chosen for use in calculating future forecasts.
+
+---
+
+# Comparison of different values for `\(\alpha\)`
+
+Period| `\(\alpha=0.1\)`| `\(\alpha=0.6\)` 
+---|:---:|:---:|
+`\(t\)`| `\(.100\)` | `\(.900\)`
+`\(t-1\)`| `\(.9 \times .1=.090\)` | `\(.4 \times .6=.240\)`
+`\(t-2\)`| `\(.9 \times .9 \times .1=.081\)` | `\(.4 \times.4 \times .6=.096\)`
+`\(t-3\)`| `\(.9 \times .9 \times .9 \times .1=.073\)` | `\(.4 \times .4 \times.4 \times .6=.038\)`
+`\(t-4\)`| `\(.9 \times .9 \times .9 \times .9 \times .1=.066\)` | `\(.4 \times .4 \times .4 \times .4 \times .6=.015\)`
+`\(.\)`| `\(.\)` | `\(.\)`
+`\(.\)`| `\(.\)` | `\(.\)`
+`\(.\)`| `\(.\)` | `\(.\)`
+
+--
+
+**Factors that affects the values of forecasts**
+
+`$$\hat{Y}_{t+1|t}=\alpha y_t + \alpha(1-\alpha)y_{t-1}+\alpha(1-\alpha)^2y_{t-2}+\alpha(1-\alpha)^3y_{t-3}+...$$`
+
+- choice of `\(\alpha\)`
+
+- initial value `\(y_t\)`
+
+&lt;!--The influence of the initial forecast diminishes greatly as t increases.--&gt;
+
+---
+
+# Example 
+
+
+---
+
+# Single Exponential Smoothing (SES)
+
+## Component form
+
+**Forecasting equation**
+
+`$$\hat{Y}_{t+1|t}=l_t$$`
+
+**Smoothing equation**
+
+`$$l_t=\alpha y_{t} + (1-\alpha)l_{t-1}$$`
+
+## Weighted average form
+
+`$$\hat{Y}_{t+1|t}=\sum_{j=0}^{t-1} \alpha (1-\alpha)^j y_{t-j} + (1-\alpha)^tl_0$$`
+
+---
+
+# How to find `\(\alpha\)` and `\(l_0\)`?
+
+minimum SSE 
+
+`$$SSE = \sum_{t=1}^T (y_t - \hat{Y}_{t|t-1})^2=\sum_{t=1}^{T}e_t^2$$`
+
+---
+
+# Example 
+
+---
+class: duke-orange, center, middle
+
+# ExponenTial Smoothing Models (ETS models)
+
+## Trend Methods
+
+
+---
+
+# Holt's linear trend
+
+---
+
+# Damped trend method
+
+---
+class: duke-orange, center, middle
+
+# ExponenTial Smoothing Models (ETS models)
+
+## Seasonal Methods
+
+---
+
+class: duke-orange, center, middle
+
+# Taxonomy
+
+---
+class: duke-orange, center, middle
+
+# Automated ETS algorithm in R
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

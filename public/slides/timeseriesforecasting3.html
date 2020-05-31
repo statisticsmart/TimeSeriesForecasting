@@ -595,13 +595,12 @@ Where,
 
 ---
 
-**1. Generate data from a model with a drift**
+**1. Generate data**
 
-`$$Y_t = 10+0.8Y_{t-1}+\epsilon_t$$`
 
 ```r
 set.seed(22)
-y &lt;- 10 + arima.sim(list(ar=.8),n=200)
+y &lt;- arima.sim(list(ar=.8),n=200, mean=10)
 ```
 
 
@@ -617,17 +616,17 @@ Series: as.ts(y)
 ARIMA(1,0,0) with non-zero mean 
 
 Coefficients:
-         ar1    mean
-      0.8345  9.2722
-s.e.  0.0384  0.4131
+         ar1     mean
+      0.8346  49.2685
+s.e.  0.0384   0.4133
 
-sigma^2 estimated as 0.991:  log likelihood=-282.48
-AIC=570.95   AICc=571.07   BIC=580.85
+sigma^2 estimated as 0.9909:  log likelihood=-282.46
+AIC=570.92   AICc=571.04   BIC=580.82
 ```
 
-`\(E(Y_t)=\frac{\phi_0}{1-\phi_1}\)`
+Theoritical: `\(E(Y_t)=\mu=\frac{\phi_0}{1-\phi_1}\)`
 
-
+Estimated: `\(\hat{\mu} = 49.2685\)`, `\(\hat{\phi_1}=0.8346\)`, `\(\hat{\phi_0}=49.2685 \times (1-0.8346)=8.14901\)`.
 
 ---
 
