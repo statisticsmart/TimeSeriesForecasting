@@ -27,12 +27,12 @@ options(htmltools.dir.version = FALSE)
 
 ### Recall: Time series patterns
 
-**Trend** ($T_t$)
+**Trend** ( $T_t$ )
 
 Long-term increase or decrease in the data.
 
 
-**Seasonal** ($S_t$)
+**Seasonal** ( $S_t$ )
 
 A seasonal pattern exists when a series is influenced by seasonal factors (e.g., the quarter of the year, the month, or day of the week). Seasonality is always of a fixed and known period. Hence, seasonal time series are sometimes called periodic time series.
 
@@ -538,7 +538,7 @@ $ETS(A, A, A)$
 # Automated ETS algorithm
 
 ![](ETS_taxonomy.png)
-30 models $\rightarrow$ 19 numerically stable $\rightarrow$15 models (multiplicative trend gives poor forecast)
+30 models $\rightarrow$ 19 numerically stable $\rightarrow$ 15 models (multiplicative trend gives poor forecast)
 
 The steps involved are summarised below [Hyndman et al., 2008]:
 
