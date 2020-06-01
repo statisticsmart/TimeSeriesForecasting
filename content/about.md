@@ -40,7 +40,7 @@ ________________________________________________________________________________
 ! Please go to Google Classroom for up-to-date information.
 ```
 
-📓[Linear Time Series Analysis and Its Applications - Part 1: theoretical properties of AR, MA and ARMA](/slides/8.png)
+📓[Linear Time Series Analysis and Its Applications - Part 1: theoretical properties of AR, MA and ARMA](/slides/lm.png)
 
 **Week 4: ARIMA modelling using R**
 
