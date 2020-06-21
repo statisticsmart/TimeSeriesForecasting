@@ -1,0 +1,46 @@
+---
+title: "Assignment 3"
+author: "IM 532 3.0 Applied Time Series Forecasting"
+date: "14/06/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+Data set `fma::books` contains the daily sales of paperback and hardcover books at the same store.
+
+```{r, comment=NA, message=FALSE}
+library(fma)
+books
+```
+
+The task is to forecast the next four days’ sales for paperback and hardcover books.
+
+i) Plot the data and describe the main features of the series.
+
+ii) Use an ETS(A,N,N) model to forecast each series, and plot the forecasts.
+
+iii) Compute the RMSE values for the training data in each case.
+
+## Question 2
+
+For this exercise use data set `expsmooth::visitors`, the monthly Australian short-term overseas visitors data, May 1985–April 2005
+
+```{r, comment=NA, message=FALSE}
+library(expsmooth)
+visitors
+```
+
+i. Make a time plot of your data and describe the main features of the series.
+
+ii. Create a training set that withholds the last two years of available data.
+
+iii. Use ARIMA, snaive, random walk, random walk with drift, average method on the time series. Which method gives the best forecasts? Give reasons for your answer.
+
+**Due date: ** 20 June 2020
+
+

@@ -55,6 +55,6 @@ ________________________________________________________________________________
 
 **Week 6: Dynamic regression models and Advanced forecasting methods**
 
-📈 Slides 📚 Reading 📋 Exercises
+📈 [Slides](/slides/timeseries5dynamicregression.html) 📚 [Reading - 9.1/ 9.2/ 9.3/ 9.5](https://otexts.com/fpp2/dynamic.html) 📋 [Exercises: 1-2](https://otexts.com/fpp2/dynamic-exercises.html)
 
 - Class materials (slides, in-class activities, etc.) will be added on the day of class.

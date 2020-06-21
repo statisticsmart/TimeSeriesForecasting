@@ -4,7 +4,7 @@
     <title>IM532 3.0 Applied Time Series Forecasting</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Thiyanga Talagala" />
-    <meta name="date" content="2020-05-20" />
+    <meta name="date" content="2020-06-21" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
     <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
@@ -17,12 +17,716 @@
 class: center, middle, inverse, title-slide
 
 # IM532 3.0 Applied Time Series Forecasting
-## Dynamic Regression Models - Part 1
+## Time Series Regression Models
 ### Dr. Thiyanga Talagala
-### 20 May 2020
+### 21 June 2020
 
 ---
 
+
+
+# Introduction
+
+- The time series of interest `\(Y\)` has a linear relationship with other time series `\(X\)`.
+
+- `\(Y\)` - **Forecasting**/ Regressand/ Dependent/ Explained Variable
+
+- `\(X\)` - **Predictor**/ Regressors/ Independent/ Explanatory Variables
+
+
+
+---
+
+# Simple linear regressin
+
+.pull-left[
+![](timeseries5_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-left[
+
+`$$Y=\beta_0+\beta_1X$$`
+
+`$$y_i = \beta_0 + \beta_1x_i + \epsilon_i \text{where  i=1, 2, 3, ...n}$$`
+
+`\(\beta_0\)` - predicted value of 
+`\(y\)` when `\(x=0\)`.
+
+`\(\beta_1\)` - average predicted change in  
+`\(y\)` resulting from a one unit increase in `\(x\)`.
+ 
+ 
+&lt;!--We can think of each observation  
+y
+t
+  as consisting of the systematic or explained part of the model,  
+β
+0
++
+β
+1
+x
+t
+ , and the random “error”,  
+ε
+t
+ . The “error” term does not imply a mistake, but a deviation from the underlying straight line model. It captures anything that may affect  
+y
+t
+  other than  
+x
+t
+ .--&gt;
+]
+
+---
+
+# Assumptions
+
+- The relationship between the forecast variable and the predictor variables satisfies the linear equation.
+
+- Each predictor `\(X\)` is not a random.
+
+&lt;!--With observational data (including most data in business and economics), it is not possible to control the value of  
+x
+ , we simply observe it. Hence we make this an assumption.--&gt;
+
+** Assumptions about the errors**
+
+- Zero mean
+
+- Not autocorrelated
+
+- Unrelated to the predictor variables
+
+- It is also useful to have the errors being normally distributed with a constant variance  `\(\sigma^2\)` in order to easily produce prediction intervals.
+---
+# Least square estimation
+
+
+.pull-left[
+![](timeseries5_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+]
+
+
+
+Choose coefficients by minimizing the sum of squared errors (SSE); `\(\sum_{t=1}^T \epsilon_i^2\)`. 
+
+---
+# Example: US consumption expenditure
+
+
+```r
+head(uschange)
+```
+
+```
+        Consumption     Income Production   Savings Unemployment
+1970 Q1   0.6159862  0.9722610 -2.4527003 4.8103115          0.9
+1970 Q2   0.4603757  1.1690847 -0.5515251 7.2879923          0.5
+1970 Q3   0.8767914  1.5532705 -0.3587079 7.2890131          0.5
+1970 Q4  -0.2742451 -0.2552724 -2.1854549 0.9852296          0.7
+1971 Q1   1.8973708  1.9871536  1.9097341 3.6577706         -0.1
+1971 Q2   0.9119929  1.4473342  0.9015358 6.0513418         -0.1
+```
+
+---
+
+# Example: US consumption expenditure
+
+
+```r
+autoplot(uschange, facets = TRUE, col=TRUE) 
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+# Example: US consumption expenditure
+
+
+```r
+uschange %&gt;% as.data.frame() %&gt;% GGally::ggpairs()
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+# Example: US consumption expenditure
+
+
+```r
+fit.consMR &lt;- tslm(
+  Consumption ~ Income + Production + Unemployment + Savings,
+  data=uschange)
+summary(fit.consMR)
+```
+
+```
+
+Call:
+tslm(formula = Consumption ~ Income + Production + Unemployment + 
+    Savings, data = uschange)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.88296 -0.17638 -0.03679  0.15251  1.20553 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   0.26729    0.03721   7.184 1.68e-11 ***
+Income        0.71449    0.04219  16.934  &lt; 2e-16 ***
+Production    0.04589    0.02588   1.773   0.0778 .  
+Unemployment -0.20477    0.10550  -1.941   0.0538 .  
+Savings      -0.04527    0.00278 -16.287  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3286 on 182 degrees of freedom
+Multiple R-squared:  0.754,	Adjusted R-squared:  0.7486 
+F-statistic: 139.5 on 4 and 182 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+# Example: US consumption expenditure
+
+## Fitted values
+
+
+```r
+autoplot(uschange[,'Consumption'], series="Data") +
+  autolayer(fitted(fit.consMR), series="Fitted") +
+  xlab("Year") + ylab("") +
+  ggtitle("Percent change in US consumption expenditure") +
+  guides(colour=guide_legend(title=" "))
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# Example: US consumption expenditure
+
+## Fitted values
+
+
+```r
+df &lt;- cbind(Data = uschange[,"Consumption"],
+      Fitted = fitted(fit.consMR)) %&gt;%
+  as.data.frame() 
+ggplot(df, aes(x=Data, y=Fitted)) + geom_point() +
+    ylab("Fitted (predicted values)") +
+    xlab("Data (actual values)") +
+    ggtitle("Percent change in US consumption expenditure") + geom_abline(intercept=0, slope=1)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+# Example: US consumption expenditure
+
+## Goodness-of-fit
+
+- Coefficient of determination
+
+- Standard error of the regression
+
+---
+# Example: US consumption expenditure
+
+## Evaluating the model
+
+
+```r
+checkresiduals(fit.consMR)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+```
+
+	Breusch-Godfrey test for serial correlation of order up to 8
+
+data:  Residuals from Linear regression model
+LM test = 14.874, df = 8, p-value = 0.06163
+```
+
+The `checkresiduals()` function will use the Breusch-Godfrey test for regression models, but the Ljung-Box test otherwise.
+
+---
+
+# Example: US consumption expenditure
+
+## Residual plots
+
+![](timeseries5_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+## Residuals vs Fitted values
+
+
+```r
+cbind(Fitted = fitted(fit.consMR),
+      Residuals=residuals(fit.consMR)) %&gt;%
+  as.data.frame() %&gt;%
+  ggplot(aes(x=Fitted, y=Residuals)) + geom_point()
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+# Some useful predictors
+
+- Trend
+
+`$$Y_t = \beta_0 + \beta_1t + \epsilon_t \text{where} t=1, 2, ... T$$`
+
+- Dummy variables
+
+    - public holiday: yes, no
+    
+- Seasonal dummy variables
+
+|$d_{1t}$|$d_{2t}$|$d_{3t}$|$d_{4t}$|$d_{5t}$|$d_{6t}$
+---|---|---|---|---|---|---
+Monday|1|0|0|0|0|0
+Tuesday|0|1|0|0|0|0
+Wednesday|0|0|1|0|0|0
+Thursday|0|0|0|1|0|0
+Friday|0|0|0|0|1|0
+Saturday|0|0|0|0|0|1
+
+---
+# Australian quarterly beer production
+
+
+```r
+beer2 &lt;- window(ausbeer, start=1992)
+frequency(beer2)
+```
+
+```
+[1] 4
+```
+
+```r
+autoplot(beer2) + xlab("Year") + ylab("Megalitres")
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+---
+# Australian quarterly beer production
+
+## Fit a model
+
+
+```r
+fit.beer &lt;- tslm(beer2~trend+season)
+summary(fit.beer)
+```
+
+```
+
+Call:
+tslm(formula = beer2 ~ trend + season)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-42.903  -7.599  -0.459   7.991  21.789 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 441.80044    3.73353 118.333  &lt; 2e-16 ***
+trend        -0.34027    0.06657  -5.111 2.73e-06 ***
+season2     -34.65973    3.96832  -8.734 9.10e-13 ***
+season3     -17.82164    4.02249  -4.430 3.45e-05 ***
+season4      72.79641    4.02305  18.095  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.23 on 69 degrees of freedom
+Multiple R-squared:  0.9243,	Adjusted R-squared:  0.9199 
+F-statistic: 210.7 on 4 and 69 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+# Australian quarterly beer production
+
+## Fit a model
+
+
+```r
+fit.beer
+```
+
+```
+## 
+## Call:
+## tslm(formula = beer2 ~ trend + season)
+## 
+## Coefficients:
+## (Intercept)        trend      season2      season3      season4  
+##    441.8004      -0.3403     -34.6597     -17.8216      72.7964
+```
+
+---
+# Australian quarterly beer production
+
+## Fitted model
+
+
+```r
+autoplot(beer2, series="Data") +
+  autolayer(fitted(fit.beer), series="Fitted") +
+  xlab("Year") + ylab("Megalitres") +
+  ggtitle("Quarterly Beer Production")
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+
+# Australian quarterly beer production
+
+## Fitted model
+
+![](timeseries5_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+---
+# Some useful predictors (cont)
+
+- Intervention variables
+
+- Trading days
+
+- Distributed lags
+
+- Holidays (eg: Easter)
+
+    - Dummy variable can be used with value one where the holiday falls in the particular time period and zero otherwise.
+
+---
+
+# Selecting predictors
+
+- Cross validation: smallest
+
+- Akaike's information criterion: smallest
+
+- Corrected Akaike's Information Criterion: smallest
+
+- Schwarz's Bayesian Information Criterion: smallest
+
+```r
+CV(fit.consMR)
+```
+
+```
+          CV          AIC         AICc          BIC        AdjR2 
+   0.1163477 -409.2980298 -408.8313631 -389.9113781    0.7485856 
+```
+
+
+- Adjusted `\(R^2\)`: largest
+
+---
+# Example: US consumption
+
+
+```r
+fit.consMR2 &lt;- tslm(
+  Consumption ~ Income +  Unemployment + Savings,data=uschange)
+CV(fit.consMR2)
+```
+
+```
+          CV          AIC         AICc          BIC        AdjR2 
+   0.1160223 -408.0941325 -407.7626408 -391.9385894    0.7456386 
+```
+
+
+```r
+fit.consMR1 &lt;- tslm(
+  Consumption ~ Income + Production +  Savings,data=uschange)
+CV(fit.consMR1)
+```
+
+```
+          CV          AIC         AICc          BIC        AdjR2 
+   0.1178681 -407.4669279 -407.1354362 -391.3113848    0.7447840 
+```
+
+
+```r
+fit.consMR1 &lt;- tslm(
+  Consumption ~ Income +  Savings,data=uschange)
+CV(fit.consMR1)
+```
+
+```
+          CV          AIC         AICc          BIC        AdjR2 
+   0.1286616 -388.7271972 -388.5074170 -375.8027628    0.7163990 
+```
+
+---
+
+# Ex-ante versus ex-post forecasts
+
+## Ex-ante forecasts
+
+- Use the **forecasts** of the predictors.
+
+## Ex-post forecasts
+
+- Use the **observed values** of the predictors.
+
+- Useful for evaluating the behaviour of forecast models.
+---
+## Ex-ante forecasts = Ex-post forecasts
+
+
+```r
+beer2 &lt;- window(ausbeer, start=1992)
+fit.beer &lt;- tslm(beer2 ~ trend + season)
+fcast &lt;- forecast(fit.beer)
+autoplot(fcast) +
+ggtitle("Forecasts of beer production using regression") +
+xlab("Year") + ylab("megalitres")
+```
+
+
+
+![](timeseries5_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+
+---
+# Transformations
+
+- Transform the forecast variable and/or the predictor variables before estimating a
+regression model.
+
+---
+# Marathon data
+
+
+```r
+h &lt;- 10
+fit.lin &lt;- tslm(marathon ~ trend)
+fcasts.lin &lt;- forecast(fit.lin, h = h)
+autoplot(marathon) +
+autolayer(fitted(fit.lin), series = "Linear")
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+# Marathon data
+
+
+```r
+h &lt;- 10
+fit.lin &lt;- tslm(marathon ~ trend)
+fcasts.lin &lt;- forecast(fit.lin, h = h)
+p &lt;- autoplot(marathon) +
+autolayer(fitted(fit.lin), series = "Linear")+
+  autolayer(fcasts.lin, series="Linear", PI=FALSE)
+p
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+---
+# Marathon data + Transformation
+
+
+```r
+fit.exp&lt;- tslm(marathon ~ trend, lambda = 0)
+fcasts.exp &lt;- forecast(fit.exp, h = h)
+p &lt;- p +
+autolayer(fitted(fit.exp), series = "Exponential")+
+  autolayer(fcasts.exp, series="Exponential", PI=FALSE)
+p
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+
+---
+
+# Nonlinear regression
+
+`$$Y = f(X) + \epsilon$$`
+
+where `\(f\)` is a non-linear function.
+
+- Piecewise linear regression
+
+- Natural cubic smoothing splines
+
+---
+
+# Marathon data + Piecewise linear
+
+
+```r
+t &lt;- time(marathon)
+t.break1 &lt;- 1940
+t.break2 &lt;- 1980
+tb1 &lt;- ts(pmax(0, t - t.break1), start = 1897)
+tb2 &lt;- ts(pmax(0, t - t.break2), start = 1897)
+```
+
+---
+# Marathon data + Piecewise linear (cont.)
+
+
+```r
+tb1
+```
+
+```
+Time Series:
+Start = 1897 
+End = 2016 
+Frequency = 1 
+  [1]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+ [26]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  2  3  4  5  6
+ [51]  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+ [76] 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56
+[101] 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76
+```
+
+```r
+tb2
+```
+
+```
+Time Series:
+Start = 1897 
+End = 2016 
+Frequency = 1 
+  [1]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+ [26]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+ [51]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+ [76]  0  0  0  0  0  0  0  0  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+[101] 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+```
+
+---
+# Marathon data + Piecewise linear (cont.)
+
+
+```r
+fit.pw &lt;- tslm(marathon ~ t + tb1 + tb2)
+t.new &lt;- t[length(t)] + seq(h)
+tb1.new &lt;- tb1[length(tb1)] + seq(h)
+tb2.new &lt;- tb2[length(tb2)] + seq(h)
+newdata &lt;- cbind(t=t.new, tb1=tb1.new, tb2=tb2.new) %&gt;%
+as.data.frame()
+fcasts.pw &lt;- forecast(fit.pw, newdata = newdata)
+p &lt;- p +
+autolayer(fitted(fit.pw), series = "Piecewise")+
+  autolayer(fcasts.pw, series="Piecewise", PI=FALSE)
+p
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+
+---
+# Cubic spline
+
+
+```r
+fit.spline &lt;- tslm(marathon ~ t + I(t^2) + I(t^3) +
+I(tb1^3) + I(tb2^3))
+fcasts.spl &lt;- forecast(fit.spline, newdata = newdata)
+p &lt;- p +
+autolayer(fitted(fit.spline), series = "Cubic Spline")+
+  autolayer(fcasts.spl, series="Cubic Spline", PI=FALSE)
+p
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+# Check Residuals: linear model
+
+
+```r
+checkresiduals(fit.lin)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+```
+
+	Breusch-Godfrey test for serial correlation of order up to 10
+
+data:  Residuals from Linear regression model
+LM test = 32.783, df = 10, p-value = 0.0002962
+```
+
+---
+# Check Residuals: Exponential model
+
+
+```r
+checkresiduals(fit.exp)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+```
+
+	Breusch-Godfrey test for serial correlation of order up to 10
+
+data:  Residuals from Linear regression model
+LM test = 34.656, df = 10, p-value = 0.0001429
+```
+
+---
+# Check Residuals: Piecewise model
+
+
+```r
+checkresiduals(fit.pw)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+```
+
+	Breusch-Godfrey test for serial correlation of order up to 10
+
+data:  Residuals from Linear regression model
+LM test = 21.597, df = 10, p-value = 0.0173
+```
+
+---
+# Check Residuals: Cubic Spline
+
+
+```r
+checkresiduals(fit.spline)
+```
+
+![](timeseries5_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+```
+
+	Breusch-Godfrey test for serial correlation of order up to 10
+
+data:  Residuals from Linear regression model
+LM test = 13.695, df = 10, p-value = 0.1874
+```
+---
+# References
+
+1. Forecasting: Principles and Practice - Chapter 5
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

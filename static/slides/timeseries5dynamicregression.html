@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>IM532 3.0 Applied Time Series Forecasting</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Thiyanga Talagala" />
+    <meta name="date" content="2020-06-21" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/remark-css/duke-blue.css" rel="stylesheet" />
+    <link href="libs/remark-css/hygge-duke.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cc-fonts.css" type="text/css" />
+    <link rel="stylesheet" href="libs/figure-captions.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# IM532 3.0 Applied Time Series Forecasting
+## Dynamic regression models
+### Dr. Thiyanga Talagala
+### 21 June 2020
+
+---
+
+
+
+# Introduction
+
+- ARIMA models
+
+- ETS models
+
+- Dynamic regression models: How to include external variables
+
+## Regression model
+
+`$$y_t=\beta_0 + \beta_1x_{1,t}+...+\beta_kx_{k,t}+\epsilon_t$$`
+
+## Allow the errors from a regression to contain autocorrelation.
+
+`$$y_t=\beta_0 + \beta_1x_{1,t}+...+\beta_kx_{k,t}+\eta_t$$`
+`$$(1-\phi_1 B)(1-B)\eta_t=(1+\theta_1B)\epsilon_t$$`
+
+where `\(\epsilon_t\)` is a white noise series.
+
+`\(\eta_t\)` follows an `\(ARIMA(1, 1, 1)\)`
+
+---
+
+# Stationary variables vs Nonstationary Variables
+
+- If all of the variables in the model are stationary, then we only need to consider ARMA errors for the residuals
+
+- Regression model with ARIMA errors is equivalent to a regression model in differences with ARMA errors.
+
+`$$y'_t=\beta_0 + \beta_1x'_{1,t}+...+\beta_kx'_{k,t}+\eta'_t$$`
+
+`$$(1-\phi_1 B)(1-B)\eta'_t=(1+\theta_1B)\epsilon_t$$`
+
+`$$y'_t=y_t - y_{t-1}$$`
+
+`$$x'_{t,i}=x_{t, i} - x_{t-1, i}$$`
+
+`$$\eta'_{t}=\eta_{t} - \eta_{t-1}$$`
+
+---
+
+# Regression  with ARIMA errors in R
+
+To fit
+
+`$$y'_t = \beta_1x'_t+\eta'_t,$$`
+
+where `\(\eta'_t=\phi_1\eta'_{t-1}+\epsilon_t\)` is an `\(AR(1)\)` error.
+
+This is equivalent to 
+
+`$$y_t=\beta_0 + \beta_1x_t + \eta_t$$`
+where `\(\eta_t\)` is an `\(ARIMA(1, 1, 0)\)` error.
+
+Constant term disappears due to the differencing.
+```r
+fit &lt;- Arima(y, xreg=x, order=c(1,1,0))
+```
+---
+# Using automated ARIMA algorithm
+
+
+```r
+library(forecast)
+library(fpp2)
+head(uschange)
+```
+
+```
+        Consumption     Income Production   Savings Unemployment
+1970 Q1   0.6159862  0.9722610 -2.4527003 4.8103115          0.9
+1970 Q2   0.4603757  1.1690847 -0.5515251 7.2879923          0.5
+1970 Q3   0.8767914  1.5532705 -0.3587079 7.2890131          0.5
+1970 Q4  -0.2742451 -0.2552724 -2.1854549 0.9852296          0.7
+1971 Q1   1.8973708  1.9871536  1.9097341 3.6577706         -0.1
+1971 Q2   0.9119929  1.4473342  0.9015358 6.0513418         -0.1
+```
+
+---
+# Using automated ARIMA algorithm
+
+
+```r
+autoplot(uschange[,1:2], facets=TRUE) +
+xlab("Year") + ylab("") +
+ggtitle("Quarterly changes in US consumption
+and personal income")
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+---
+# Using automated ARIMA algorithm
+
+
+```r
+fit &lt;- auto.arima(uschange[,"Consumption"],
+xreg=uschange[,"Income"])
+fit
+```
+
+```
+Series: uschange[, "Consumption"] 
+Regression with ARIMA(1,0,2) errors 
+
+Coefficients:
+         ar1      ma1     ma2  intercept    xreg
+      0.6922  -0.5758  0.1984     0.5990  0.2028
+s.e.  0.1159   0.1301  0.0756     0.0884  0.0461
+
+sigma^2 estimated as 0.3219:  log likelihood=-156.95
+AIC=325.91   AICc=326.37   BIC=345.29
+```
+
+The fitted model is
+
+`\(\hat{y}_t=0.599 + 0.203x_t + \eta_t\)`
+
+`\(\eta_t=0.692\eta_{t-1}+\epsilon_t-0.576\epsilon_{t-1}+0.198\epsilon_{t-2}\)`
+
+`\(\epsilon_t \sim NID(0, 0.322)\)`
+
+
+---
+
+# plot `\(\eta_t\)` and `\(\epsilon_t\)`
+
+
+```r
+library(magrittr)
+cbind("Regression Errors" = residuals(fit, type="regression"),
+"ARIMA errors" = residuals(fit, type="innovation")) %&gt;%
+autoplot(facets=TRUE)
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+checkresiduals(fit)
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+```
+
+	Ljung-Box test
+
+data:  Residuals from Regression with ARIMA(1,0,2) errors
+Q* = 5.8916, df = 3, p-value = 0.117
+
+Model df: 5.   Total lags used: 8
+```
+
+---
+
+# Calculate forecasts
+
+1. We first need to forecast predictors
+
+
+```r
+fcast &lt;- forecast(fit, xreg=rep(mean(uschange[,2]),8))
+autoplot(fcast) + xlab("Year") + ylab("Percentage change")
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+---
+
+# Forecasting electricity demand
+
+
+```r
+xreg &lt;- cbind(MaxTemp = elecdaily[, "Temperature"],
+MaxTempSq = elecdaily[, "Temperature"]^2,
+Workday = elecdaily[, "WorkDay"])
+fit &lt;- auto.arima(elecdaily[, "Demand"], xreg = xreg)
+fit
+```
+
+```
+Series: elecdaily[, "Demand"] 
+Regression with ARIMA(2,1,2)(2,0,0)[7] errors 
+
+Coefficients:
+          ar1     ar2      ma1      ma2    sar1    sar2    drift  MaxTemp
+      -0.0622  0.6731  -0.0234  -0.9301  0.2012  0.4021  -0.0191  -7.4996
+s.e.   0.0714  0.0667   0.0413   0.0390  0.0533  0.0567   0.1091   0.4409
+      MaxTempSq  Workday
+         0.1789  30.5695
+s.e.     0.0084   1.2891
+
+sigma^2 estimated as 43.72:  log likelihood=-1200.7
+AIC=2423.4   AICc=2424.15   BIC=2466.27
+```
+
+---
+
+# Forecasting electricity demand (cont.)
+
+
+```r
+checkresiduals(fit)
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+```
+
+	Ljung-Box test
+
+data:  Residuals from Regression with ARIMA(2,1,2)(2,0,0)[7] errors
+Q* = 28.229, df = 4, p-value = 1.121e-05
+
+Model df: 10.   Total lags used: 14
+```
+
+---
+# Lagged predictors
+
+`$$y_t = \beta_0 + \gamma_0x_t + \gamma_1x_{t-1}+...+\gamma_kx_{t-k}+\eta_t$$`
+
+where `\(\eta_t\)` is an `\(ARIMA\)` process. 
+
+## How to select `\(k\)` ? 
+
+Use AICc along with the values of `\(p\)` and `\(q\)`.
+
+---
+
+
+```r
+autoplot(insurance, facets=TRUE) +
+xlab("Year") + ylab("") +
+ggtitle("Insurance advertising and quotations")
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+## Lagged predictors
+
+
+```r
+Advert &lt;- cbind(
+AdLag0 = insurance[,"TV.advert"],
+AdLag1 = stats::lag(insurance[,"TV.advert"],-1),
+AdLag2 = stats::lag(insurance[,"TV.advert"],-2),
+AdLag3 = stats::lag(insurance[,"TV.advert"],-3)) %&gt;%
+head(NROW(insurance))
+
+head(Advert)
+```
+
+```
+           AdLag0   AdLag1   AdLag2   AdLag3
+Jan 2002 7.212725       NA       NA       NA
+Feb 2002 9.443570 7.212725       NA       NA
+Mar 2002 7.534250 9.443570 7.212725       NA
+Apr 2002 7.212725 7.534250 9.443570 7.212725
+May 2002 9.443570 7.212725 7.534250 9.443570
+Jun 2002 6.415215 9.443570 7.212725 7.534250
+```
+
+---
+## Lagged predictors (cont.)
+
+
+```r
+fit1 &lt;- auto.arima(insurance[4:40,1], xreg=Advert[4:40,1],
+stationary=TRUE)
+fit1[["aicc"]]
+```
+
+```
+[1] 68.49968
+```
+
+```r
+fit2 &lt;- auto.arima(insurance[4:40,1], xreg=Advert[4:40,1:2],
+stationary=TRUE)
+fit2[["aicc"]]
+```
+
+```
+[1] 60.02357
+```
+
+```r
+fit3 &lt;- auto.arima(insurance[4:40,1], xreg=Advert[4:40,1:3],
+stationary=TRUE)
+fit3[["aicc"]]
+```
+
+```
+[1] 62.83253
+```
+
+```r
+fit4 &lt;- auto.arima(insurance[4:40,1], xreg=Advert[4:40,1:4],
+stationary=TRUE)
+fit4[["aicc"]]
+```
+
+```
+[1] 65.45747
+```
+
+---
+
+## Lagged predictors (cont.)
+
+Re-estimate the model
+
+
+```r
+fit &lt;- auto.arima(insurance[,1], xreg=Advert[,1:2],
+stationary=TRUE); fit
+```
+
+```
+Series: insurance[, 1] 
+Regression with ARIMA(3,0,0) errors 
+
+Coefficients:
+         ar1      ar2     ar3  intercept  AdLag0  AdLag1
+      1.4117  -0.9317  0.3591     2.0393  1.2564  0.1625
+s.e.  0.1698   0.2545  0.1592     0.9931  0.0667  0.0591
+
+sigma^2 estimated as 0.2165:  log likelihood=-23.89
+AIC=61.78   AICc=65.4   BIC=73.43
+```
+
+The fitted model is
+
+`$$y_t = 2.039 + 1.25x_t + 0.162x_{t-1}+\eta_t$$`
+`$$\eta_t=1.412\eta_{t-1}-0.932\eta_{t-2}+0.359\eta_{t-3}+\epsilon_t$$`
+
+`\(y_t\)` - the number of quotations provided in month `\(t\)`
+
+`\(x_t\)` - the advertising expenditure in month `\(t\)`
+
+`\(\epsilon_t\)` is white noise.
+
+---
+
+# Generate forecasts
+
+
+```r
+fc8 &lt;- forecast(fit, h=20,
+xreg=cbind(AdLag0 = rep(8,20),
+AdLag1 = c(Advert[40,1], rep(8,19))))
+autoplot(fc8) + ylab("Quotes") +
+ggtitle("Forecast quotes with future advertising set to 8")
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+checkresiduals(fc8)
+```
+
+![](timeseries5dynamicregression_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+```
+
+	Ljung-Box test
+
+data:  Residuals from Regression with ARIMA(3,0,0) errors
+Q* = 2.0324, df = 3, p-value = 0.5657
+
+Model df: 6.   Total lags used: 9
+```
+
+---
+
+# Other approaches
+
+- Neural network models
+
+- Machine learning approaches
+
+- TBATS models
+
+- Forecasting with decomposition
+
+- Vector autoregressions
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,8 +1,8 @@
 ---
 title: "IM532 3.0 Applied Time Series Forecasting"
-subtitle: "Dynamic Regression Models - Part 1"
+subtitle: "Time Series Regression Models"
 author: "Dr. Thiyanga Talagala"
-date: "20 May 2020"
+date: "21 June 2020"
 output:
   xaringan::moon_reader:
     chakra: libs/remark-latest.min.js
@@ -23,3 +23,545 @@ output:
 options(htmltools.dir.version = FALSE)
 ```
 
+# Introduction
+
+- The time series of interest $Y$ has a linear relationship with other time series $X$.
+
+- $Y$ - **Forecasting**/ Regressand/ Dependent/ Explained Variable
+
+- $X$ - **Predictor**/ Regressors/ Independent/ Explanatory Variables
+
+
+
+---
+
+# Simple linear regressin
+
+.pull-left[
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE}
+# Load the data
+library(forecast)
+library(fpp2)
+library(tidyverse)
+library(broom)
+data("marketing", package = "datarium")
+model <- lm(sales ~ youtube, data = marketing)
+model.diag.metrics <- augment(model)
+ggplot(model.diag.metrics, aes(youtube, sales)) +
+  geom_point() +
+  stat_smooth(method = lm, se = FALSE) +
+  geom_segment(aes(xend = youtube, yend = .fitted), color = "red", size = 0.3)
+
+```
+
+]
+
+.pull-left[
+
+$$Y=\beta_0+\beta_1X$$
+
+$$y_i = \beta_0 + \beta_1x_i + \epsilon_i \text{where  i=1, 2, 3, ...n}$$
+
+$\beta_0$ - predicted value of 
+$y$ when $x=0$.
+
+$\beta_1$ - average predicted change in  
+$y$ resulting from a one unit increase in $x$.
+ 
+ 
+<!--We can think of each observation  
+y
+t
+  as consisting of the systematic or explained part of the model,  
+β
+0
++
+β
+1
+x
+t
+ , and the random “error”,  
+ε
+t
+ . The “error” term does not imply a mistake, but a deviation from the underlying straight line model. It captures anything that may affect  
+y
+t
+  other than  
+x
+t
+ .-->
+]
+
+---
+
+# Assumptions
+
+- The relationship between the forecast variable and the predictor variables satisfies the linear equation.
+
+- Each predictor $X$ is not a random.
+
+<!--With observational data (including most data in business and economics), it is not possible to control the value of  
+x
+ , we simply observe it. Hence we make this an assumption.-->
+
+** Assumptions about the errors**
+
+- Zero mean
+
+- Not autocorrelated
+
+- Unrelated to the predictor variables
+
+- It is also useful to have the errors being normally distributed with a constant variance  $\sigma^2$ in order to easily produce prediction intervals.
+---
+# Least square estimation
+
+
+.pull-left[
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE}
+# Load the data
+library(forecast)
+library(fpp2)
+library(tidyverse)
+library(broom)
+data("marketing", package = "datarium")
+model <- lm(sales ~ youtube, data = marketing)
+model.diag.metrics <- augment(model)
+ggplot(model.diag.metrics, aes(youtube, sales)) +
+  geom_point() +
+  stat_smooth(method = lm, se = FALSE) +
+  geom_segment(aes(xend = youtube, yend = .fitted), color = "red", size = 0.3)
+
+```
+
+]
+
+
+
+Choose coefficients by minimizing the sum of squared errors (SSE); $\sum_{t=1}^T \epsilon_i^2$. 
+
+---
+# Example: US consumption expenditure
+
+```{r, comment=NA, message=FALSE}
+head(uschange)
+```
+
+---
+
+# Example: US consumption expenditure
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+autoplot(uschange, facets = TRUE, col=TRUE) 
+```
+
+---
+
+# Example: US consumption expenditure
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+uschange %>% as.data.frame() %>% GGally::ggpairs()
+```
+
+---
+# Example: US consumption expenditure
+
+```{r, comment=NA, message=FALSE}
+fit.consMR <- tslm(
+  Consumption ~ Income + Production + Unemployment + Savings,
+  data=uschange)
+summary(fit.consMR)
+```
+
+---
+# Example: US consumption expenditure
+
+## Fitted values
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+autoplot(uschange[,'Consumption'], series="Data") +
+  autolayer(fitted(fit.consMR), series="Fitted") +
+  xlab("Year") + ylab("") +
+  ggtitle("Percent change in US consumption expenditure") +
+  guides(colour=guide_legend(title=" "))
+```
+
+---
+# Example: US consumption expenditure
+
+## Fitted values
+
+```{r, comment=NA, message=FALSE, fig.height=5}
+df <- cbind(Data = uschange[,"Consumption"],
+      Fitted = fitted(fit.consMR)) %>%
+  as.data.frame() 
+ggplot(df, aes(x=Data, y=Fitted)) + geom_point() +
+    ylab("Fitted (predicted values)") +
+    xlab("Data (actual values)") +
+    ggtitle("Percent change in US consumption expenditure") + geom_abline(intercept=0, slope=1)
+```
+
+---
+# Example: US consumption expenditure
+
+## Goodness-of-fit
+
+- Coefficient of determination
+
+- Standard error of the regression
+
+---
+# Example: US consumption expenditure
+
+## Evaluating the model
+
+```{r, fig.height=4, comment=NA, message=FALSE, warning=FALSE}
+checkresiduals(fit.consMR)
+```
+
+The `checkresiduals()` function will use the Breusch-Godfrey test for regression models, but the Ljung-Box test otherwise.
+
+---
+
+# Example: US consumption expenditure
+
+## Residual plots
+
+```{r, echo=FALSE, comment=NA, message=FALSE, warning=FALSE}
+df <- as.data.frame(uschange)
+df[,"Residuals"]  <- as.numeric(residuals(fit.consMR))
+p1 <- ggplot(df, aes(x=Income, y=Residuals)) +
+  geom_point()
+p2 <- ggplot(df, aes(x=Production, y=Residuals)) +
+  geom_point()
+p3 <- ggplot(df, aes(x=Savings, y=Residuals)) +
+  geom_point()
+p4 <- ggplot(df, aes(x=Unemployment, y=Residuals)) +
+  geom_point()
+gridExtra::grid.arrange(p1, p2, p3, p4, nrow=2)
+
+```
+
+---
+
+## Residuals vs Fitted values
+
+```{r, comment=NA, fig.height=5}
+cbind(Fitted = fitted(fit.consMR),
+      Residuals=residuals(fit.consMR)) %>%
+  as.data.frame() %>%
+  ggplot(aes(x=Fitted, y=Residuals)) + geom_point()
+```
+
+---
+# Some useful predictors
+
+- Trend
+
+$$Y_t = \beta_0 + \beta_1t + \epsilon_t \text{where} t=1, 2, ... T$$
+
+- Dummy variables
+
+    - public holiday: yes, no
+    
+- Seasonal dummy variables
+
+|$d_{1t}$|$d_{2t}$|$d_{3t}$|$d_{4t}$|$d_{5t}$|$d_{6t}$
+---|---|---|---|---|---|---
+Monday|1|0|0|0|0|0
+Tuesday|0|1|0|0|0|0
+Wednesday|0|0|1|0|0|0
+Thursday|0|0|0|1|0|0
+Friday|0|0|0|0|1|0
+Saturday|0|0|0|0|0|1
+
+---
+# Australian quarterly beer production
+
+```{r, comment=NA, fig.height=5}
+beer2 <- window(ausbeer, start=1992)
+frequency(beer2)
+autoplot(beer2) + xlab("Year") + ylab("Megalitres")
+```
+---
+# Australian quarterly beer production
+
+## Fit a model
+
+```{r, comment=NA, fig.height=5}
+fit.beer <- tslm(beer2~trend+season)
+summary(fit.beer)
+```
+
+---
+
+# Australian quarterly beer production
+
+## Fit a model
+
+```{r}
+fit.beer
+```
+
+---
+# Australian quarterly beer production
+
+## Fitted model
+
+```{r, comment=NA, fig.height=5}
+autoplot(beer2, series="Data") +
+  autolayer(fitted(fit.beer), series="Fitted") +
+  xlab("Year") + ylab("Megalitres") +
+  ggtitle("Quarterly Beer Production")
+```
+
+---
+
+# Australian quarterly beer production
+
+## Fitted model
+
+```{r, comment=NA, message=FALSE, echo=FALSE, warning=FALSE}
+cbind(Data=beer2, Fitted=fitted(fit.beer)) %>%
+  as.data.frame() %>%
+  ggplot(aes(x = Data, y = Fitted,
+             colour = as.factor(cycle(beer2)))) +
+    geom_point() +
+    ylab("Fitted") + xlab("Actual values") +
+    ggtitle("Quarterly beer production") +
+    scale_colour_brewer(palette="Dark2", name="Quarter") +
+    geom_abline(intercept=0, slope=1)
+
+```
+---
+# Some useful predictors (cont)
+
+- Intervention variables
+
+- Trading days
+
+- Distributed lags
+
+- Holidays (eg: Easter)
+
+    - Dummy variable can be used with value one where the holiday falls in the particular time period and zero otherwise.
+
+---
+
+# Selecting predictors
+
+- Cross validation: smallest
+
+- Akaike's information criterion: smallest
+
+- Corrected Akaike's Information Criterion: smallest
+
+- Schwarz's Bayesian Information Criterion: smallest
+```{r, comment=NA}
+CV(fit.consMR)
+```
+
+
+- Adjusted $R^2$: largest
+
+---
+# Example: US consumption
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+fit.consMR2 <- tslm(
+  Consumption ~ Income +  Unemployment + Savings,data=uschange)
+CV(fit.consMR2)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+fit.consMR1 <- tslm(
+  Consumption ~ Income + Production +  Savings,data=uschange)
+CV(fit.consMR1)
+```
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+fit.consMR1 <- tslm(
+  Consumption ~ Income +  Savings,data=uschange)
+CV(fit.consMR1)
+```
+
+---
+
+# Ex-ante versus ex-post forecasts
+
+## Ex-ante forecasts
+
+- Use the **forecasts** of the predictors.
+
+## Ex-post forecasts
+
+- Use the **observed values** of the predictors.
+
+- Useful for evaluating the behaviour of forecast models.
+---
+## Ex-ante forecasts = Ex-post forecasts
+
+```{r, comment=NA, message=FALSE, eval=FALSE}
+beer2 <- window(ausbeer, start=1992)
+fit.beer <- tslm(beer2 ~ trend + season)
+fcast <- forecast(fit.beer)
+autoplot(fcast) +
+ggtitle("Forecasts of beer production using regression") +
+xlab("Year") + ylab("megalitres")
+```
+
+
+
+```{r, comment=NA, message=FALSE, echo=FALSE, fig.height=4}
+beer2 <- window(ausbeer, start=1992)
+fit.beer <- tslm(beer2 ~ trend + season)
+fcast <- forecast(fit.beer)
+autoplot(fcast) +
+ggtitle("Forecasts of beer production using regression") +
+xlab("Year") + ylab("megalitres")
+```
+
+
+---
+# Transformations
+
+- Transform the forecast variable and/or the predictor variables before estimating a
+regression model.
+
+---
+# Marathon data
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+h <- 10
+fit.lin <- tslm(marathon ~ trend)
+fcasts.lin <- forecast(fit.lin, h = h)
+autoplot(marathon) +
+autolayer(fitted(fit.lin), series = "Linear")
+```
+
+---
+# Marathon data
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+h <- 10
+fit.lin <- tslm(marathon ~ trend)
+fcasts.lin <- forecast(fit.lin, h = h)
+p <- autoplot(marathon) +
+autolayer(fitted(fit.lin), series = "Linear")+
+  autolayer(fcasts.lin, series="Linear", PI=FALSE)
+p
+```
+
+---
+# Marathon data + Transformation
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+fit.exp<- tslm(marathon ~ trend, lambda = 0)
+fcasts.exp <- forecast(fit.exp, h = h)
+p <- p +
+autolayer(fitted(fit.exp), series = "Exponential")+
+  autolayer(fcasts.exp, series="Exponential", PI=FALSE)
+p
+```
+
+
+---
+
+# Nonlinear regression
+
+$$Y = f(X) + \epsilon$$
+
+where $f$ is a non-linear function.
+
+- Piecewise linear regression
+
+- Natural cubic smoothing splines
+
+---
+
+# Marathon data + Piecewise linear
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+
+t <- time(marathon)
+t.break1 <- 1940
+t.break2 <- 1980
+tb1 <- ts(pmax(0, t - t.break1), start = 1897)
+tb2 <- ts(pmax(0, t - t.break2), start = 1897)
+```
+
+---
+# Marathon data + Piecewise linear (cont.)
+
+```{r, comment=NA, message=FALSE, warning=FALSE}
+tb1
+tb2
+```
+
+---
+# Marathon data + Piecewise linear (cont.)
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+
+fit.pw <- tslm(marathon ~ t + tb1 + tb2)
+t.new <- t[length(t)] + seq(h)
+tb1.new <- tb1[length(tb1)] + seq(h)
+tb2.new <- tb2[length(tb2)] + seq(h)
+newdata <- cbind(t=t.new, tb1=tb1.new, tb2=tb2.new) %>%
+as.data.frame()
+fcasts.pw <- forecast(fit.pw, newdata = newdata)
+p <- p +
+autolayer(fitted(fit.pw), series = "Piecewise")+
+  autolayer(fcasts.pw, series="Piecewise", PI=FALSE)
+p
+```
+
+
+---
+# Cubic spline
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=5}
+fit.spline <- tslm(marathon ~ t + I(t^2) + I(t^3) +
+I(tb1^3) + I(tb2^3))
+fcasts.spl <- forecast(fit.spline, newdata = newdata)
+p <- p +
+autolayer(fitted(fit.spline), series = "Cubic Spline")+
+  autolayer(fcasts.spl, series="Cubic Spline", PI=FALSE)
+p
+```
+
+---
+# Check Residuals: linear model
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=4}
+checkresiduals(fit.lin)
+
+```
+
+---
+# Check Residuals: Exponential model
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=4}
+checkresiduals(fit.exp)
+
+```
+
+---
+# Check Residuals: Piecewise model
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=4}
+checkresiduals(fit.pw)
+
+```
+
+---
+# Check Residuals: Cubic Spline
+
+```{r, comment=NA, message=FALSE, warning=FALSE, fig.height=4}
+checkresiduals(fit.spline)
+
+```
+---
+# References
+
+1. Forecasting: Principles and Practice - Chapter 5 
