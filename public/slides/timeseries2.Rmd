@@ -157,6 +157,8 @@ If $\{X_t\}$ is a sequence of uncorrelated random variables, each with zero mean
 
 Note: Every $IID(0, \sigma^2)$ sequence is $WN(0, \sigma^2)$ but not conversely.
 
+<!--Some times X_1 and X_2 are not identically distributed. http://personal.rhul.ac.uk/utah/113/dwi/StationaryTS_Slides.pdf-->
+
 ---
 # Simple time series models
 
